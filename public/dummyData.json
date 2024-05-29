@@ -1,0 +1,32 @@
+{
+  "CreateDate": "2024-05-26",
+  "SongTitle": "Example Song",
+  "Views": "8M",
+  "Layers": [
+    {
+      "title": "Drums",
+      "file": "/assets/mp3/drums.wav",
+      "isActive": false
+    },
+    {
+      "title": "Drums + Bass",
+      "file": "/assets/mp3/bass.wav",
+      "isActive": false
+    },
+    {
+      "title": "Drums + Bass + Instrumental",
+      "file": "/assets/mp3/instrumental.wav",
+      "isActive": false
+    },
+    {
+      "title": "Drums + Bass + Instrumental + Others",
+      "file": "/assets/mp3/other.wav",
+      "isActive": false
+    },
+    {
+      "title": "Drums + Bass + Instrumental + Others + Vocals",
+      "file": "/assets/mp3/vocals.wav",
+      "isActive": false
+    }
+  ]
+}
