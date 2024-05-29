@@ -6,6 +6,9 @@ import SongDetails from './Components/SongDetails/SongDetails';
 
 const App = () => {
   const [songData, setSongData] = useState(null);
+  console.log(songData);
+  const [song, setSong] = useState(null)
+  const [match, setMatch] = useState(false);
 
   useEffect(() => {
     fetch('/dummyData.json')
@@ -15,12 +18,14 @@ const App = () => {
         }
         return response.json();
       })
-      .then((data) => setSongData(data))
+      .then((data) => {
+        setSong(data.SongTitle);
+        setSongData(data)}
+      )
       .catch((error) => console.error('Error fetching the JSON:', error));
   }, []);
 
   if (!songData) return <div>Loading...</div>;
-
   return (
     <Box maxWidth="md" margin="auto">
       <AppBar position="static">
@@ -45,7 +50,7 @@ const App = () => {
           />
         </Box>
         <Box mt={4}>
-          <MusicPlayer layers={songData.Layers} />
+          <MusicPlayer layers={songData.Layers} songs={songData.Songs} song={song} />
         </Box>
       </Container>
     </Box>
