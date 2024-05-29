@@ -1,9 +1,11 @@
 // src/components/MusicPlayer.js
 import React, { useState, useEffect, useRef } from 'react';
-import { Card, CardContent, Typography, Box, List, ListItem, ListItemText } from '@mui/material';
+import { Card, CardContent, Typography, Box, List, ListItem, ListItemText, IconButton } from '@mui/material';
 import GuessSkip from '../GuessSkip/GuessSkip';
+import PlayArrowIcon from '@mui/icons-material/PlayArrow';
+import PauseIcon from '@mui/icons-material/Pause';
 
-const MusicPlayer = ({ layers }) => {
+const MusicPlayer = ({ layers, songs , song}) => {
   const [activeLayerIndex, setActiveLayerIndex] = useState(0);
   const [activeLayers, setActiveLayers] = useState([]);
   const [isPlaying, setIsPlaying] = useState(false);
@@ -53,6 +55,9 @@ const MusicPlayer = ({ layers }) => {
   };
 
   const handlePlayPause = () => {
+    if(!isFirstPlay){
+      setIsFirstPlay(true);
+    }
     if (audioRef.current) {
       if (isPlaying) {
         audioRef.current.pause();
@@ -86,7 +91,15 @@ const MusicPlayer = ({ layers }) => {
             </audio>
           </Box>
         )}
-        <GuessSkip onGuess={handleGuess} onSkip={handleSkip} onPlayPause={handlePlayPause} isPlaying={isPlaying} />
+        <Box display="flex" justifyContent="center" alignItems="center">
+        <IconButton color="success" onClick={handlePlayPause}>
+        {isPlaying ? <PauseIcon fontSize='large' /> : <PlayArrowIcon fontSize='large'/>}
+      </IconButton>
+        </Box>
+        {
+        isFirstPlay &&
+        <GuessSkip onGuess={handleGuess} onSkip={handleSkip} songs={songs} song={song}/>
+        }
       </CardContent>
     </Card>
   );

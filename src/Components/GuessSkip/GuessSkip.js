@@ -1,39 +1,62 @@
-// src/components/GuessSkip.js
 import React, { useState } from 'react';
-import { Box, Button, TextField, IconButton } from '@mui/material';
-import PlayArrowIcon from '@mui/icons-material/PlayArrow';
-import PauseIcon from '@mui/icons-material/Pause';
+import { Autocomplete, Box, Button, TextField, Alert } from '@mui/material';
+import { styled } from '@mui/material/styles';
 
-const GuessSkip = ({ onGuess, onSkip, onPlayPause, isPlaying }) => {
+const StyledAutoComplete = styled(TextField)({
+  '& .MuiInputLabel-root': {
+    textAlign: 'right',
+    right: '2rem',
+    direction: 'rtl',
+  },
+  '& .MuiInputLabel-root.Mui-focused': {
+    right: '2rem'
+  },
+  '& .MuiInputLabel-root.MuiInputLabel-shrink': {
+    transformOrigin: 'top right',
+    right: '2rem',
+  }
+});
+
+const GuessSkip = ({ onGuess, onSkip, songs, song }) => {
+  const [availableSongs, setAvailableSongs] = useState(songs);
   const [guess, setGuess] = useState('');
+  const [showError, setShowError] = useState(false);
 
-  const handleGuessChange = (event) => {
-    setGuess(event.target.value);
+  const handleSongChange = (event, newValue) => {
+    setGuess(newValue);
   };
 
   const handleGuessSubmit = () => {
-    onGuess(guess);
+    if (guess === song) {
+      onGuess(guess);
+    } else {
+      setShowError(true);
+      setAvailableSongs(prevSongs => prevSongs.filter(s => s !== guess));
+      setTimeout(() => {
+        setShowError(false);
+        onSkip();
+      }, 3000); // Display the error for 3 seconds before skipping
+    }
     setGuess('');
   };
 
   return (
     <Box sx={{ display: 'flex', alignItems: 'center', mt: 2 }}>
-      <TextField
-        label="Recognize it? Type the artist name or title"
-        variant="outlined"
-        value={guess}
-        onChange={handleGuessChange}
-        fullWidth
-      />
+      {showError && <Alert severity="error">Wrong guess! Moving to the next layer...</Alert>}
       <Button variant="contained" color="primary" onClick={handleGuessSubmit} sx={{ ml: 2 }}>
         Guess
       </Button>
-      <Button variant="contained" color="secondary" onClick={onSkip} sx={{ ml: 2 }}>
+      <Autocomplete
+        disablePortal
+        fullWidth
+        id="songsAutocomplete"
+        options={availableSongs}
+        renderInput={(params) => <TextField {...params} label="Choose a song" fullWidth />}
+        onChange={handleSongChange}
+      />
+      <Button variant="contained" color="secondary" onClick={onSkip} sx={{ mr: 2 }}>
         Skip
       </Button>
-      <IconButton color="success" onClick={onPlayPause} sx={{ ml: 2 }}>
-        {isPlaying ? <PauseIcon /> : <PlayArrowIcon />}
-      </IconButton>
     </Box>
   );
 };
