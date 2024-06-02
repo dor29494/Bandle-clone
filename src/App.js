@@ -6,8 +6,7 @@ import SongDetails from './Components/SongDetails/SongDetails';
 
 const App = () => {
   const [songData, setSongData] = useState(null);
-  console.log(songData);
-  const [song, setSong] = useState(null)
+  const [song, setSong] = useState({id: null, title: null})
   const [match, setMatch] = useState(false);
 
   useEffect(() => {
@@ -50,7 +49,7 @@ const App = () => {
           />
         </Box>
         <Box mt={4}>
-          <MusicPlayer layers={songData.Layers} songs={songData.Songs} song={song} />
+          <MusicPlayer layers={songData.Layers} songsList={songData.Songs} song={song} />
         </Box>
       </Container>
     </Box>
