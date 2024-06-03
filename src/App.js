@@ -20,11 +20,15 @@ const App = () => {
       })
       .then((data) => {
         setSong({id: data.SongId, title: data.SongTitle});
-        setSongData(data)}
+        setSongData(data)
+        const success = localStorage.getItem('success');
+        if (success) {
+          setSuccess(true);
+        }
+      }
       )
       .catch((error) => console.error('Error fetching the JSON:', error));
   }, []);
-
   if (!songData) return <div>Loading...</div>;
   return (
     <Box maxWidth="md" margin="auto">
@@ -48,11 +52,11 @@ const App = () => {
             views={songData.Views}
             difficulty="Medium (par 3)"
           />
-        </Box>
+        </Box> 
         <Box mt={4}>
           <MusicPlayer layers={songData.Layers} songsList={songData.Songs} song={song} setSuccess={setSuccess} />
           { success &&
-          <Success />
+          <Success songTitle={songData.SongTitle} songViews={songData.Views}/>
           }
         </Box>
       </Container>

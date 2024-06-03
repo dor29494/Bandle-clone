@@ -1,10 +1,9 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState, useEffect } from 'react';
 
 const Timer = () => {
-  const calculateTimeLeft = () => {
+  const calculateTimeLeft = (endTime) => {
     const now = new Date();
-    const nextDay = new Date(now.getFullYear(), now.getMonth(), now.getDate() + 1);
-    const difference = nextDay - now;
+    const difference = endTime - now;
     let timeLeft = {};
 
     if (difference > 0) {
@@ -18,15 +17,32 @@ const Timer = () => {
     return timeLeft;
   };
 
-  const [timeLeft, setTimeLeft] = useState(calculateTimeLeft());
+  const initializeTimer = () => {
+    const now = new Date();
+    const nextDay = new Date(now.getFullYear(), now.getMonth(), now.getDate() + 1);
+    localStorage.setItem('localStorageTimer', nextDay.toISOString());
+    return nextDay;
+  };
+
+  const getEndTime = () => {
+    const savedTime = localStorage.getItem('localStorageTimer');
+    if (savedTime) {
+      return new Date(savedTime);
+    } else {
+      return initializeTimer();
+    }
+  };
+
+  const [endTime, setEndTime] = useState(getEndTime());
+  const [timeLeft, setTimeLeft] = useState(calculateTimeLeft(endTime));
 
   useEffect(() => {
     const timer = setTimeout(() => {
-      setTimeLeft(calculateTimeLeft());
+      setTimeLeft(calculateTimeLeft(endTime));
     }, 1000);
 
     return () => clearTimeout(timer);
-  }, [timeLeft]);
+  }, [timeLeft, endTime]);
 
   return (
     <div>

@@ -32,6 +32,7 @@ const MusicPlayer = ({ layers, songsList , song, setSuccess}) => {
 
   const onGuessSuccess = () => {
     setSuccess(true);
+    localStorage.setItem("success", "true");
   };
 
   const handleSkip = () => {
