@@ -3,11 +3,12 @@ import React, { useState, useEffect } from 'react';
 import { Container, AppBar, Toolbar, Typography, Box, Button, Paper } from '@mui/material';
 import MusicPlayer from './Components/MusicPlayer/MusicPlayer';
 import SongDetails from './Components/SongDetails/SongDetails';
+import Success from './Components/Success/Success';
 
 const App = () => {
   const [songData, setSongData] = useState(null);
   const [song, setSong] = useState({id: null, title: null})
-  const [match, setMatch] = useState(false);
+  const [success, setSuccess] = useState(false);
 
   useEffect(() => {
     fetch('/dummyData.json')
@@ -18,7 +19,7 @@ const App = () => {
         return response.json();
       })
       .then((data) => {
-        setSong(data.SongTitle);
+        setSong({id: data.SongId, title: data.SongTitle});
         setSongData(data)}
       )
       .catch((error) => console.error('Error fetching the JSON:', error));
@@ -49,7 +50,10 @@ const App = () => {
           />
         </Box>
         <Box mt={4}>
-          <MusicPlayer layers={songData.Layers} songsList={songData.Songs} song={song} />
+          <MusicPlayer layers={songData.Layers} songsList={songData.Songs} song={song} setSuccess={setSuccess} />
+          { success &&
+          <Success />
+          }
         </Box>
       </Container>
     </Box>

@@ -5,7 +5,7 @@ import GuessSkip from '../GuessSkip/GuessSkip';
 import PlayArrowIcon from '@mui/icons-material/PlayArrow';
 import PauseIcon from '@mui/icons-material/Pause';
 
-const MusicPlayer = ({ layers, songsList , song}) => {
+const MusicPlayer = ({ layers, songsList , song, setSuccess}) => {
   const [activeLayerIndex, setActiveLayerIndex] = useState(0);
   const [activeLayers, setActiveLayers] = useState([]);
   const [isPlaying, setIsPlaying] = useState(false);
@@ -30,9 +30,8 @@ const MusicPlayer = ({ layers, songsList , song}) => {
     }
   }, [activeLayerIndex]);
 
-  const handleGuess = (guess) => {
-    console.log('Guess:', guess);
-    moveToNextLayer();
+  const onGuessSuccess = () => {
+    setSuccess(true);
   };
 
   const handleSkip = () => {
@@ -96,7 +95,7 @@ const MusicPlayer = ({ layers, songsList , song}) => {
         </Box>
         {
         isFirstPlay &&
-        <GuessSkip onGuess={handleGuess} onSkip={handleSkip} songsList={songsList} song={song}/>
+        <GuessSkip onGuessSuccess={onGuessSuccess} onSkip={handleSkip} songsList={songsList} song={song}/>
         }
       </CardContent>
     </Card>

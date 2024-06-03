@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { Autocomplete, Box, Button, TextField, Alert } from "@mui/material";
 import { styled } from "@mui/material/styles";
+import ErrorPopup from "../ErrorPopup/ErrorPopup";
 
 const StyledTextField = styled(TextField)({
   "& .MuiInputLabel-root": {
@@ -17,35 +18,31 @@ const StyledTextField = styled(TextField)({
   },
 });
 
-const GuessSkip = ({ onGuess, onSkip, songsList, song }) => {
-  console.log(songsList);
+const GuessSkip = ({ onGuessSuccess, onSkip, songsList, song }) => {
   const [availableSongs, setAvailableSongs] = useState(songsList.map(x => x.title));
   const [guess, setGuess] = useState({id: null, title: null});
   const [showError, setShowError] = useState(false);
 
   const handleSongChange = (event, newValue) => {
-    setGuess(newValue);
+    const guessObject = songsList.filter(x => x.title === newValue)[0];
+    setGuess(guessObject);
+    console.log(guessObject);
   };
 
   const handleGuessSubmit = () => {
-    console.log(guess,song);
-    // if (guess === song) {
-    //   onGuess(guess);
-    // } else {
-    //   setShowError(true);
-    //   setAvailableSongs((prevSongs) => prevSongs.filter((s) => s !== guess));
-    //   setTimeout(() => {
-    //     setShowError(false);
-    //     onSkip();
-    //   }, 3000); // Display the error for 3 seconds before skipping
-    // }
-    // setGuess("");
+    if (Number(guess.id) === Number(song.id)) {
+      onGuessSuccess();
+    } else {
+      setShowError(true);
+      setAvailableSongs((prevSongs) => prevSongs.filter((s) => s !== guess));
+      onSkip();
+    }
   };
 
   return (
     <>
       {showError && (
-        <Alert severity="error">שיר לא נכון!</Alert>
+      <ErrorPopup message={"test"} onClose={()=> setShowError(false)}/>
       )}
       <Box sx={{ display: "flex", alignItems: "center", mt: 2 }}>
         <Button
