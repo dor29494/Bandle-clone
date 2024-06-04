@@ -21,14 +21,29 @@ const App = () => {
       .then((data) => {
         setSong({id: data.SongId, title: data.SongTitle});
         setSongData(data)
-        const success = localStorage.getItem('success');
-        if (success) {
-          setSuccess(true);
-        }
+        successTest();
+      
       }
       )
       .catch((error) => console.error('Error fetching the JSON:', error));
   }, []);
+  const successTest = ()=>{
+    const dateStorage = localStorage.getItem('successTime');
+    if(dateStorage){
+      const successDate = new Date(dateStorage);
+      const now = new Date();
+      const compareDate = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 23, 59, 59);
+      const success = localStorage.getItem('success') === 'success';
+      if (successDate.getTime() === compareDate.getTime()) {
+        setSuccess(true);
+      }
+    }
+    else{
+      setSuccess(false);
+      localStorage.setItem("success", "false");
+    }
+  };
+
   if (!songData) return <div>Loading...</div>;
   return (
     <Box maxWidth="md" margin="auto">
@@ -54,7 +69,7 @@ const App = () => {
           />
         </Box> 
         <Box mt={4}>
-          <MusicPlayer layers={songData.Layers} songsList={songData.Songs} song={song} setSuccess={setSuccess} />
+          <MusicPlayer layers={songData.Layers} songsList={songData.Songs} song={song} setSuccess={setSuccess} success={success} />
           { success &&
           <Success songTitle={songData.SongTitle} songViews={songData.Views}/>
           }

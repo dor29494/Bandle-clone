@@ -1,3 +1,4 @@
+import { Typography } from '@mui/material';
 import React, { useState, useEffect } from 'react';
 
 const Timer = () => {
@@ -20,7 +21,6 @@ const Timer = () => {
   const initializeTimer = () => {
     const now = new Date();
     const nextDay = new Date(now.getFullYear(), now.getMonth(), now.getDate() + 1);
-    localStorage.setItem('localStorageTimer', nextDay.toISOString());
     return nextDay;
   };
 
@@ -43,13 +43,13 @@ const Timer = () => {
 
     return () => clearTimeout(timer);
   }, [timeLeft, endTime]);
-
+  const timerToShow = `השיר הבא בעוד ${String(timeLeft.hours).padStart(2, '0')}:${String(timeLeft.minutes).padStart(2, '0')}:${String(timeLeft.seconds).padStart(2, '0')}`
   return (
-    <div>
-      <span>{String(timeLeft.hours).padStart(2, '0')}:</span>
-      <span>{String(timeLeft.minutes).padStart(2, '0')}:</span>
-      <span>{String(timeLeft.seconds).padStart(2, '0')}</span>
-    </div>
+    <Typography variant="h6">
+      <span>
+        {timerToShow}
+      </span>
+    </Typography>
   );
 };
 

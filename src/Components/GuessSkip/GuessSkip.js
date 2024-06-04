@@ -19,14 +19,15 @@ const StyledTextField = styled(TextField)({
 });
 
 const GuessSkip = ({ onGuessSuccess, onSkip, songsList, song }) => {
-  const [availableSongs, setAvailableSongs] = useState(songsList.map(x => x.title));
-  const [guess, setGuess] = useState({id: null, title: null});
+  const [availableSongs, setAvailableSongs] = useState(
+    songsList.map((x) => x.title)
+  );
+  const [guess, setGuess] = useState({ id: null, title: null });
   const [showError, setShowError] = useState(false);
 
   const handleSongChange = (event, newValue) => {
-    const guessObject = songsList.filter(x => x.title === newValue)[0];
+    const guessObject = songsList.filter((x) => x.title === newValue)[0];
     setGuess(guessObject);
-    console.log(guessObject);
   };
 
   const handleGuessSubmit = () => {
@@ -34,15 +35,17 @@ const GuessSkip = ({ onGuessSuccess, onSkip, songsList, song }) => {
       onGuessSuccess();
     } else {
       setShowError(true);
+      setGuess({id: null, title: null});
       setAvailableSongs((prevSongs) => prevSongs.filter((s) => s !== guess));
       onSkip();
     }
   };
+ 
 
   return (
     <>
       {showError && (
-      <ErrorPopup message={"test"} onClose={()=> setShowError(false)}/>
+        <ErrorPopup message={"test"} onClose={() => setShowError(false)} />
       )}
       <Box sx={{ display: "flex", alignItems: "center", mt: 2 }}>
         <Button
