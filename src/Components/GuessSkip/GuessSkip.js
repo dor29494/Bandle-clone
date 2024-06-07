@@ -19,12 +19,11 @@ const StyledTextField = styled(TextField)({
   },
 });
 
-const GuessSkip = ({ onGuessSuccess, onSkip, songsList, song }) => {
+const GuessSkip = ({ showError, setShowError, onGuessSuccess, onSkip, songsList, song }) => {
   const [availableSongs, setAvailableSongs] = useState(
     songsList.map((x) => x.title)
   );
   const [guess, setGuess] = useState({ id: null, title: null });
-  const [showError, setShowError] = useState(false);
 
   const handleSongChange = (event, newValue) => {
     const guessObject = songsList.filter((x) => x.title === newValue)[0];

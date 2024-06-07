@@ -20,6 +20,8 @@ const MusicPlayer = ({ layers, songsList , song, setSuccess, success}) => {
   const [activeLayers, setActiveLayers] = useState([]);
   const [isPlaying, setIsPlaying] = useState(false);
   const [isFirstPlay, setIsFirstPlay] = useState(false);
+  const [showError, setShowError] = useState(false);
+
   const audioRef = useRef(null);
 
   useEffect(() => {
@@ -42,6 +44,7 @@ const MusicPlayer = ({ layers, songsList , song, setSuccess, success}) => {
 
   const onGuessSuccess = () => {
     setSuccess(true);
+    setShowError(false);
     localStorage.setItem("success", "true");
   };
 
@@ -143,7 +146,9 @@ const MusicPlayer = ({ layers, songsList , song, setSuccess, success}) => {
         </Box>
     
         {isFirstPlay && (
-          <GuessSkip onGuessSuccess={onGuessSuccess} onSkip={handleSkip} songsList={songsList} song={song}/>
+          <GuessSkip
+          showError={showError} setShowError={setShowError}
+          onGuessSuccess={onGuessSuccess} onSkip={handleSkip} songsList={songsList} song={song}/>
         )}
       </CardContent>
     </Card>

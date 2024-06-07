@@ -45,7 +45,7 @@ const App = () => {
 
   if (!songData) return <div>Loading...</div>;
   return (
-    <Box maxWidth="md" margin="auto">
+    <Box maxWidth="sm" margin="auto">
       <AppBar position="static">
         <Toolbar>
           <Typography variant="h6" sx={{ flexGrow: 1 }}>
