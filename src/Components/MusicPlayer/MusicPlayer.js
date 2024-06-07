@@ -1,4 +1,3 @@
-// src/components/MusicPlayer.js
 import React, { useState, useEffect, useRef } from 'react';
 import { Card, CardContent, Typography, Box, Grid, IconButton } from '@mui/material';
 import GuessSkip from '../GuessSkip/GuessSkip';
@@ -10,10 +9,11 @@ import MicIcon from '@mui/icons-material/Mic';
 import QueueMusicIcon from '@mui/icons-material/QueueMusic';
 import LibraryMusicIcon from '@mui/icons-material/LibraryMusic';
 import PlayCircleIcon from '@mui/icons-material/PlayCircle';
-// import DrumsIcon from '../Icons/DrumsIcon';
+import DrumsIcon from '../Icons/DrumsIcon';
 import ShareIcon from '@mui/icons-material/Share';
 import BarChartIcon from '@mui/icons-material/BarChart';
 import StraightenIcon from '@mui/icons-material/Straighten';
+import Success from '../Success/Success';
 
 const MusicPlayer = ({ layers, songsList , song, setSuccess, success}) => {
   const [activeLayerIndex, setActiveLayerIndex] = useState(0);
@@ -100,7 +100,7 @@ const MusicPlayer = ({ layers, songsList , song, setSuccess, success}) => {
         <Typography variant="h5" component="div">
           שכבות שיר נוכחיות
         </Typography>
-        <Grid container spacing={2}>
+        <Grid container spacing={{ xs: 0.5, md: 2 }}>
           {activeLayers.map((layer, index) => (
             <Grid item xs={2.4} key={index}>
               <Box
@@ -125,6 +125,9 @@ const MusicPlayer = ({ layers, songsList , song, setSuccess, success}) => {
             {activeLayer.title}
           </Typography>
         )}
+            { success &&
+          <Success songTitle={song.title} songViews={song.Views}/>
+          }
         {activeLayer && (
           <Box sx={{ display: 'flex', justifyContent: 'center', mt: 2 }}>
             <audio ref={audioRef} controls style={{ width: '100%' }}>
@@ -138,6 +141,7 @@ const MusicPlayer = ({ layers, songsList , song, setSuccess, success}) => {
             {isPlaying ? <PauseIcon fontSize='large' /> : <PlayCircleIcon fontSize='large' />}
           </IconButton>
         </Box>
+    
         {isFirstPlay && (
           <GuessSkip onGuessSuccess={onGuessSuccess} onSkip={handleSkip} songsList={songsList} song={song}/>
         )}

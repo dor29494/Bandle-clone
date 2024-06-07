@@ -1,9 +1,8 @@
+// src/components/GuessSkip.js
 import React, { useState } from "react";
-import { Autocomplete, Box, Button, TextField, Alert } from "@mui/material";
+import { Autocomplete, Box, Button, TextField } from "@mui/material";
 import { styled } from "@mui/material/styles";
 import ErrorPopup from "../ErrorPopup/ErrorPopup";
-import SkipPreviousIcon from '@mui/icons-material/SkipPrevious';
-import SkipNextIcon from '@mui/icons-material/SkipNext';
 
 const StyledTextField = styled(TextField)({
   "& .MuiInputLabel-root": {
@@ -42,12 +41,11 @@ const GuessSkip = ({ onGuessSuccess, onSkip, songsList, song }) => {
       onSkip();
     }
   };
- 
 
   return (
     <>
       {showError && (
-        <ErrorPopup message={"test"} onClose={() => setShowError(false)} />
+        <ErrorPopup message={"ניחוש שגוי"} onClose={() => setShowError(false)} />
       )}
       <Box sx={{ display: "flex", alignItems: "center", mt: 2 }}>
         <Button
@@ -56,7 +54,7 @@ const GuessSkip = ({ onGuessSuccess, onSkip, songsList, song }) => {
           onClick={handleGuessSubmit}
           sx={{ ml: 2 }}
         >
-          Guess
+          נחש
         </Button>
         <Autocomplete
           disablePortal
@@ -74,7 +72,7 @@ const GuessSkip = ({ onGuessSuccess, onSkip, songsList, song }) => {
           onClick={onSkip}
           sx={{ mr: 2 }}
         >
-          Skip
+          דלג
         </Button>
       </Box>
     </>

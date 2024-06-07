@@ -3,7 +3,6 @@ import React, { useState, useEffect } from 'react';
 import { Container, AppBar, Toolbar, Typography, Box, Button, Paper } from '@mui/material';
 import MusicPlayer from './Components/MusicPlayer/MusicPlayer';
 import SongDetails from './Components/SongDetails/SongDetails';
-import Success from './Components/Success/Success';
 
 const App = () => {
   const [songData, setSongData] = useState(null);
@@ -19,7 +18,7 @@ const App = () => {
         return response.json();
       })
       .then((data) => {
-        setSong({id: data.SongId, title: data.SongTitle});
+        setSong({id: data.SongId, title: data.SongTitle,views: data.Views});
         setSongData(data)
         successTest();
       
@@ -52,15 +51,9 @@ const App = () => {
           <Typography variant="h6" sx={{ flexGrow: 1 }}>
             Bandle Clone
           </Typography>
-          <Button color="inherit">Login</Button>
         </Toolbar>
       </AppBar>
       <Container sx={{ marginTop: '20px' }}>
-        <Paper elevation={3} sx={{ padding: '20px' }}>
-          <Typography variant="h4" gutterBottom>
-            Guess the song, one instrument at a time!
-          </Typography>
-        </Paper>
         <Box mt={4}>
           <SongDetails
             releaseDate={songData.CreateDate}
@@ -70,9 +63,7 @@ const App = () => {
         </Box> 
         <Box mt={4}>
           <MusicPlayer layers={songData.Layers} songsList={songData.Songs} song={song} setSuccess={setSuccess} success={success} />
-          { success &&
-          <Success songTitle={songData.SongTitle} songViews={songData.Views}/>
-          }
+        
         </Box>
       </Container>
     </Box>
