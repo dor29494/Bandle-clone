@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react';
 import Timer from '../Timer/Timer';
-import { Box } from '@mui/material';
+import { Box, Typography } from '@mui/material';
+import SocialNetwork from '../SocialNetwork/SocialNetwork';
 
 const Success = ({ songTitle, songViews }) => {
   useEffect(() => {
@@ -10,10 +11,17 @@ const Success = ({ songTitle, songViews }) => {
   }, []);
 
   return (
-    <Box display='flex' flexDirection='column' justifyContent='center' alignItems='center'>
-      <h1>Success!</h1>
-      <p>{`Song Title: ${songTitle}`}</p>
-      <p>{`Song Views: ${songViews}`}</p>
+    <Box display="flex" flexDirection="column" justifyContent="center" alignItems="center" p={2} bgcolor="#f5f5f5" borderRadius={2} boxShadow={3}>
+      <Typography variant="h4" gutterBottom>
+        Success!
+      </Typography>
+      <Typography variant="body1">
+        {`Song Title: ${songTitle}`}
+      </Typography>
+      <Typography variant="body1" gutterBottom>
+        {`Song Views: ${songViews}`}
+      </Typography>
+      <SocialNetwork/>
       <Timer />
     </Box>
   );

@@ -43,12 +43,12 @@ const Timer = () => {
 
     return () => clearTimeout(timer);
   }, [timeLeft, endTime]);
-  const timerToShow = `השיר הבא בעוד ${String(timeLeft.hours).padStart(2, '0')}:${String(timeLeft.minutes).padStart(2, '0')}:${String(timeLeft.seconds).padStart(2, '0')}`
+
+  const timerToShow = `השיר הבא בעוד ${String(timeLeft.hours).padStart(2, '0')}:${String(timeLeft.minutes).padStart(2, '0')}:${String(timeLeft.seconds).padStart(2, '0')}`;
+
   return (
     <Typography variant="h6">
-      <span>
-        {timerToShow}
-      </span>
+      <span>{timerToShow}</span>
     </Typography>
   );
 };

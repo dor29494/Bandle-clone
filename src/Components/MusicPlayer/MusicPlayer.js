@@ -1,9 +1,19 @@
 // src/components/MusicPlayer.js
 import React, { useState, useEffect, useRef } from 'react';
-import { Card, CardContent, Typography, Box, List, ListItem, ListItemText, IconButton } from '@mui/material';
+import { Card, CardContent, Typography, Box, Grid, IconButton } from '@mui/material';
 import GuessSkip from '../GuessSkip/GuessSkip';
 import PlayArrowIcon from '@mui/icons-material/PlayArrow';
 import PauseIcon from '@mui/icons-material/Pause';
+import AudiotrackIcon from '@mui/icons-material/Audiotrack';
+import MusicNoteIcon from '@mui/icons-material/MusicNote';
+import MicIcon from '@mui/icons-material/Mic';
+import QueueMusicIcon from '@mui/icons-material/QueueMusic';
+import LibraryMusicIcon from '@mui/icons-material/LibraryMusic';
+import PlayCircleIcon from '@mui/icons-material/PlayCircle';
+// import DrumsIcon from '../Icons/DrumsIcon';
+import ShareIcon from '@mui/icons-material/Share';
+import BarChartIcon from '@mui/icons-material/BarChart';
+import StraightenIcon from '@mui/icons-material/Straighten';
 
 const MusicPlayer = ({ layers, songsList , song, setSuccess, success}) => {
   const [activeLayerIndex, setActiveLayerIndex] = useState(0);
@@ -67,6 +77,22 @@ const MusicPlayer = ({ layers, songsList , song, setSuccess, success}) => {
   };
 
   const activeLayer = activeLayers[activeLayerIndex];
+  const getIcon = (layerIndex) => {
+    switch(layerIndex) {
+      case 0:
+        return <DrumsIcon sx={{ fontSize: 40 }} />;
+      case 1:
+        return <QueueMusicIcon sx={{ fontSize: 40 }} />;
+      case 2:
+        return <DrumsIcon sx={{ fontSize: 40 }} />;
+      case 3:
+        return <QueueMusicIcon sx={{ fontSize: 40 }} />;
+      case 4:
+        return <MicIcon sx={{ fontSize: 40 }} />;
+      default:
+        return <MusicNoteIcon sx={{ fontSize: 40 }} />;
+    }
+  };
 
   return (
     <Card>
@@ -74,13 +100,31 @@ const MusicPlayer = ({ layers, songsList , song, setSuccess, success}) => {
         <Typography variant="h5" component="div">
           שכבות שיר נוכחיות
         </Typography>
-        <List>
+        <Grid container spacing={2}>
           {activeLayers.map((layer, index) => (
-            <ListItem key={index} sx={{ backgroundColor: layer.isActive ? '#e0f7fa' : 'transparent' }}>
-              <ListItemText primary={layer.title} />
-            </ListItem>
+            <Grid item xs={2.4} key={index}>
+              <Box
+                sx={{
+                  display: 'flex',
+                  flexDirection: 'column',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  height: '100px',
+                  backgroundColor: layer.isActive ? '#e0f7fa' : 'transparent',
+                  borderRadius: 1,
+                  border: '1px solid #ccc'
+                }}
+              >
+                {getIcon(index)}
+              </Box>
+            </Grid>
           ))}
-        </List>
+        </Grid>
+        {activeLayer && (
+          <Typography variant="h6" component="div" sx={{ textAlign: 'center', mt: 2 }}>
+            {activeLayer.title}
+          </Typography>
+        )}
         {activeLayer && (
           <Box sx={{ display: 'flex', justifyContent: 'center', mt: 2 }}>
             <audio ref={audioRef} controls style={{ width: '100%' }}>
@@ -90,14 +134,13 @@ const MusicPlayer = ({ layers, songsList , song, setSuccess, success}) => {
           </Box>
         )}
         <Box display="flex" justifyContent="center" alignItems="center">
-        <IconButton disabled={success} color="success" onClick={handlePlayPause}>
-        {isPlaying ? <PauseIcon fontSize='large' /> : <PlayArrowIcon fontSize='large'/>}
-      </IconButton>
+          <IconButton disabled={success} color="success" onClick={handlePlayPause}>
+            {isPlaying ? <PauseIcon fontSize='large' /> : <PlayCircleIcon fontSize='large' />}
+          </IconButton>
         </Box>
-        {
-        isFirstPlay &&
-        <GuessSkip onGuessSuccess={onGuessSuccess} onSkip={handleSkip} songsList={songsList} song={song}/>
-        }
+        {isFirstPlay && (
+          <GuessSkip onGuessSuccess={onGuessSuccess} onSkip={handleSkip} songsList={songsList} song={song}/>
+        )}
       </CardContent>
     </Card>
   );

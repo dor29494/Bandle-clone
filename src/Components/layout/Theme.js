@@ -17,7 +17,7 @@ const theme = createTheme({
     },
     h6: {
       fontWeight: 600,
-      fontSize: "14px"
+      fontSize: '14px',
     },
   },
 });

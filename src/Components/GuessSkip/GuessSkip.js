@@ -2,6 +2,8 @@ import React, { useState } from "react";
 import { Autocomplete, Box, Button, TextField, Alert } from "@mui/material";
 import { styled } from "@mui/material/styles";
 import ErrorPopup from "../ErrorPopup/ErrorPopup";
+import SkipPreviousIcon from '@mui/icons-material/SkipPrevious';
+import SkipNextIcon from '@mui/icons-material/SkipNext';
 
 const StyledTextField = styled(TextField)({
   "& .MuiInputLabel-root": {
