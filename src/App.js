@@ -1,20 +1,12 @@
 // src/App.js
 import React, { useState, useEffect } from "react";
-import {
-  Container,
-  AppBar,
-  Toolbar,
-  Typography,
-  Box,
-  Button,
-  Paper,
-} from "@mui/material";
+import { Box } from "@mui/material";
 import MusicPlayer from "./Components/MusicPlayer/MusicPlayer";
 import SongDetails from "./Components/SongDetails/SongDetails";
 import Header from "./Components/Header/Header";
 import ErrorPopup from "./Components/ErrorPopup/ErrorPopup";
 
-const App = () => {
+const App = ({ setDarkMode, darkMode }) => {
   const [songData, setSongData] = useState(null);
   const [song, setSong] = useState({ id: null, title: null });
   const [success, setSuccess] = useState(false);
@@ -36,6 +28,7 @@ const App = () => {
       })
       .catch((error) => console.error("Error fetching the JSON:", error));
   }, []);
+
   const successTest = () => {
     const dateStorage = localStorage.getItem("successTime");
     if (dateStorage) {
@@ -59,10 +52,11 @@ const App = () => {
   };
 
   if (!songData) return <div>Loading...</div>;
+
   return (
     <>
       <Box maxWidth="sm" margin="auto">
-        <Header />
+        <Header setDarkMode={setDarkMode} darkMode={darkMode} />
         <Box sx={{ marginTop: "20px" }}>
           <Box mt={4}>
             <SongDetails

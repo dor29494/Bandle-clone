@@ -6,10 +6,17 @@ import SettingsIcon from '@mui/icons-material/Settings';
 import ShareIcon from '@mui/icons-material/Share';
 import HowToPlay from '../HowToPlay/HowToPlay';
 import UserStats from '../UserStats/UserStats';
-function Header() {
-  const [howToPlayOpen, setHowToPlayOpen] = useState(false);
-  const [statsOpen, setStatsOpen] = useState(false);
+import SettingsModal from '../SettingsModal/SettingsModal';
+import { useTheme } from '@mui/system';
 
+function Header({ setDarkMode, darkMode }) {
+  const [modalsOpen, setModalsOpen] = useState({
+    howToPlay: false,
+    stats: false,
+    settings: false
+  });
+
+  const theme = useTheme();
   const [stats, setStats] = useState({
     found: 0,
     currentStreak: 0,
@@ -19,50 +26,39 @@ function Header() {
   useEffect(() => {
     const hasSeenHowToPlay = localStorage.getItem('hasSeenHowToPlay');
     if (!hasSeenHowToPlay) {
-      setHowToPlayOpen(true);
+      setModalsOpen(prevState => ({ ...prevState, howToPlay: true }));
       localStorage.setItem('hasSeenHowToPlay', 'true');
     }
   }, []);
 
-  const handleHowToPlayOpen = () => {
-    setHowToPlayOpen(true);
-  };
-
-  const handleHowToPlayClose = () => {
-    setHowToPlayOpen(false);
-  };
-
-  const handleStatsOpen = () => {
-    setStatsOpen(true);
-  };
-
-  const handleStatsClose = () => {
-    setStatsOpen(false);
+  const toggleModal = (modalName) => {
+    setModalsOpen(prevState => ({ ...prevState, [modalName]: !prevState[modalName] }));
   };
 
   return (
     <>
-      <AppBar position="static" sx={{ backgroundColor: '#FFFFFF', color: '#000000' }}>
+      <AppBar position="static" sx={{ backgroundColor: theme.palette.primary.headerBg }}>
         <Toolbar>
-          <IconButton edge="start" color="inherit" aria-label="help" onClick={handleHowToPlayOpen}>
+          <IconButton edge="start" color={theme.palette.primary.headerIcons}  aria-label="help" onClick={() => toggleModal('howToPlay')}>
             <HelpOutlineIcon />
           </IconButton>
-          <IconButton color="inherit" aria-label="stats" onClick={handleStatsOpen}>
+          <IconButton color={theme.palette.primary.headerIcons}  aria-label="stats" onClick={() => toggleModal('stats')}>
             <BarChartIcon />
           </IconButton>
-          <Typography variant="h6" sx={{ flexGrow: 1, textAlign: 'center' }}>
+          <Typography variant="h6" color={theme.palette.primary.headerIcons} sx={{ flexGrow: 1, textAlign: 'center' }}>
             שירדל
           </Typography>
-          <IconButton color="inherit" aria-label="share">
+          <IconButton color={theme.palette.primary.headerIcons}  aria-label="share">
             <ShareIcon />
           </IconButton>
-          <IconButton edge="end" color="inherit" aria-label="settings">
+          <IconButton edge="end" color={theme.palette.primary.headerIcons}  aria-label="settings" onClick={() => toggleModal('settings')}>
             <SettingsIcon />
           </IconButton>
         </Toolbar>
       </AppBar>
-      <HowToPlay open={howToPlayOpen} onClose={handleHowToPlayClose} />
-      <UserStats open={statsOpen} onClose={handleStatsClose} stats={stats} />
+      <HowToPlay open={modalsOpen.howToPlay} onClose={() => toggleModal('howToPlay')} />
+      <UserStats open={modalsOpen.stats} onClose={() => toggleModal('stats')} stats={stats} />
+      <SettingsModal open={modalsOpen.settings} onClose={() => toggleModal('settings')} darkMode={darkMode} setDarkMode={setDarkMode} />
     </>
   );
 }
