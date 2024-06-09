@@ -3,7 +3,7 @@ import React, { useState, useEffect } from 'react';
 import { Container, AppBar, Toolbar, Typography, Box, Button, Paper } from '@mui/material';
 import MusicPlayer from './Components/MusicPlayer/MusicPlayer';
 import SongDetails from './Components/SongDetails/SongDetails';
-import Header from './Components/layout/Header/Header';
+import Header from './Components/Header/Header';
 
 const App = () => {
   const [songData, setSongData] = useState(null);
