@@ -8,7 +8,8 @@ const lightTheme = createTheme({
     primary: {
       main: '#1976d2',
       headerBg: '#FFFFFF',
-      headerIcons: '#000000'
+      headerIcons: '#000000',
+      successBg: '#f5f5f5'
     },
     secondary: {
       main: '#ff4081',
@@ -32,7 +33,8 @@ const darkTheme = createTheme({
     primary: {
       main: '#bb86fc',
       headerBg: '#202124',
-      headerIcons: '#E0E0E0'
+      headerIcons: '#E0E0E0',
+      successBg: '#2B2929'
     },
     secondary: {
       main: '#ff4081',

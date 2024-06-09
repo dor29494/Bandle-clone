@@ -146,7 +146,7 @@ const MusicPlayer = ({
               {activeLayer.title}
             </Typography>
           )}
-          {success && <Success songTitle={song.title} songViews={song.Views} />}
+          {success && <Success songTitle={song.title} songViews={song.views} />}
           {activeLayer && (
             <Box sx={{ display: "flex", justifyContent: "center", mt: 2 }}>
               <audio ref={audioRef} controls style={{ width: "100%" }}>

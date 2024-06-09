@@ -22,7 +22,7 @@ const App = ({ setDarkMode, darkMode }) => {
         return response.json();
       })
       .then((data) => {
-        setSong({ id: data.SongId, title: data.SongTitle, views: data.Views });
+        setSong({ id: data.songId, title: data.songTitle, views: data.views });
         setSongData(data);
         successTest();
       })
@@ -60,8 +60,8 @@ const App = ({ setDarkMode, darkMode }) => {
         <Box sx={{ marginTop: "20px" }}>
           <Box mt={4}>
             <SongDetails
-              releaseDate={songData.CreateDate}
-              views={songData.Views}
+              releaseDate={songData.releaseDate}
+              views={songData.views}
               difficulty="Medium (par 3)"
             />
           </Box>
