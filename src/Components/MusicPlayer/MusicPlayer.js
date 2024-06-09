@@ -8,27 +8,30 @@ import {
   IconButton,
 } from "@mui/material";
 import GuessSkip from "../GuessSkip/GuessSkip";
-import PlayArrowIcon from "@mui/icons-material/PlayArrow";
 import PauseIcon from "@mui/icons-material/Pause";
 import AudiotrackIcon from "@mui/icons-material/Audiotrack";
 import MusicNoteIcon from "@mui/icons-material/MusicNote";
 import MicIcon from "@mui/icons-material/Mic";
 import QueueMusicIcon from "@mui/icons-material/QueueMusic";
-import LibraryMusicIcon from "@mui/icons-material/LibraryMusic";
 import PlayCircleIcon from "@mui/icons-material/PlayCircle";
 import DrumsIcon from "../Icons/DrumsIcon";
-import ShareIcon from "@mui/icons-material/Share";
-import BarChartIcon from "@mui/icons-material/BarChart";
-import StraightenIcon from "@mui/icons-material/Straighten";
 import Success from "../Success/Success";
 
-const MusicPlayer = ({ layers, songsList, song, setSuccess, success }) => {
+const MusicPlayer = ({
+  layers,
+  songsList,
+  song,
+  setSuccess,
+  success,
+  showError,
+  setShowError,
+  showPlayer,
+  setShowPlayer
+}) => {
   const [activeLayerIndex, setActiveLayerIndex] = useState(0);
   const [activeLayers, setActiveLayers] = useState([]);
   const [isPlaying, setIsPlaying] = useState(false);
   const [isFirstPlay, setIsFirstPlay] = useState(false);
-  const [showError, setShowError] = useState(false);
-  const [showPlayer, setShowPlayer] = useState(false);
 
   const audioRef = useRef(null);
 
@@ -108,49 +111,50 @@ const MusicPlayer = ({ layers, songsList, song, setSuccess, success }) => {
   };
 
   return (
-    <Card>
-      <CardContent>
-        <Typography variant="h5" component="div">
-          שכבות שיר נוכחיות
-        </Typography>
-        <Grid container spacing={{ xs: 0.5, md: 2 }}>
-          {activeLayers.map((layer, index) => (
-            <Grid item xs={2.4} key={index}>
-              <Box
-                sx={{
-                  display: "flex",
-                  flexDirection: "column",
-                  alignItems: "center",
-                  justifyContent: "center",
-                  height: "100px",
-                  backgroundColor: layer.isActive ? "#e0f7fa" : "transparent",
-                  borderRadius: 1,
-                  border: "1px solid #ccc",
-                }}
-              >
-                {getIcon(index)}
-              </Box>
-            </Grid>
-          ))}
-        </Grid>
-        {activeLayer && (
-          <Typography
-            variant="h6"
-            component="div"
-            sx={{ textAlign: "center", mt: 2 }}
-          >
-            {activeLayer.title}
+    <>
+      <Card>
+        <CardContent>
+          <Typography variant="h5" component="div" textAlign="center" mb={2}>
+            שכבות שיר נוכחיות
           </Typography>
-        )}
-        {success && <Success songTitle={song.title} songViews={song.Views} />}
-        {activeLayer && (
-          <Box sx={{ display: "flex", justifyContent: "center", mt: 2 }}>
-            <audio ref={audioRef} controls style={{ width: "100%" }}>
-              <source src={activeLayer.file} type="audio/mpeg" />
-              הדפדפן שלך אינו תומך באלמנט שמע.
-            </audio>
-          </Box>
-        )}
+          <Grid container spacing={{ xs: 0.5, md: 2 }}>
+            {activeLayers.map((layer, index) => (
+              <Grid item xs={2.4} key={index}>
+                <Box
+                  sx={{
+                    display: "flex",
+                    flexDirection: "column",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    height: "100px",
+                    backgroundColor: layer.isActive ? "#e0f7fa" : "transparent",
+                    borderRadius: 1,
+                    border: "1px solid #ccc",
+                  }}
+                >
+                  {getIcon(index)}
+                </Box>
+              </Grid>
+            ))}
+          </Grid>
+          {activeLayer && (
+            <Typography
+              variant="h6"
+              component="div"
+              sx={{ textAlign: "center", mt: 2 }}
+            >
+              {activeLayer.title}
+            </Typography>
+          )}
+          {success && <Success songTitle={song.title} songViews={song.Views} />}
+          {activeLayer && (
+            <Box sx={{ display: "flex", justifyContent: "center", mt: 2 }}>
+              <audio ref={audioRef} controls style={{ width: "100%" }}>
+                <source src={activeLayer.file} type="audio/mpeg" />
+                הדפדפן שלך אינו תומך באלמנט שמע.
+              </audio>
+            </Box>
+          )}
           <Box display="flex" justifyContent="center" alignItems="center">
             <IconButton
               disabled={success}
@@ -164,19 +168,20 @@ const MusicPlayer = ({ layers, songsList, song, setSuccess, success }) => {
               )}
             </IconButton>
           </Box>
-        {isFirstPlay && showPlayer && (
-          <GuessSkip
-            showError={showError}
-            setShowError={setShowError}
-            onGuessSuccess={onGuessSuccess}
-            onSkip={handleSkip}
-            songsList={songsList}
-            song={song}
-            setShowPlayer={setShowPlayer}
-          />
-        )}
-      </CardContent>
-    </Card>
+          {isFirstPlay && showPlayer && (
+            <GuessSkip
+              showError={showError}
+              setShowError={setShowError}
+              onGuessSuccess={onGuessSuccess}
+              onSkip={handleSkip}
+              songsList={songsList}
+              song={song}
+              setShowPlayer={setShowPlayer}
+            />
+          )}
+        </CardContent>
+      </Card>
+    </>
   );
 };
 

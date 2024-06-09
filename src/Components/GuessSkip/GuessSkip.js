@@ -1,23 +1,7 @@
 // src/components/GuessSkip.js
 import React, { useState } from "react";
-import { Autocomplete, Box, Button, TextField } from "@mui/material";
-import { styled } from "@mui/material/styles";
-import ErrorPopup from "../ErrorPopup/ErrorPopup";
-
-const StyledTextField = styled(TextField)({
-  "& .MuiInputLabel-root": {
-    textAlign: "right",
-    right: "2rem",
-    direction: "rtl",
-  },
-  "& .MuiInputLabel-root.Mui-focused": {
-    right: "2rem",
-  },
-  "& .MuiInputLabel-root.MuiInputLabel-shrink": {
-    transformOrigin: "top right",
-    right: "2rem",
-  },
-});
+import { Box, Button } from "@mui/material";
+import SongAutocomplete from "../SongAutoComplete/SongAutoComplete";
 
 const GuessSkip = ({ showError, setShowError, onGuessSuccess, onSkip, songsList, song, setShowPlayer}) => {
   const [availableSongs, setAvailableSongs] = useState(
@@ -43,9 +27,6 @@ const GuessSkip = ({ showError, setShowError, onGuessSuccess, onSkip, songsList,
 
   return (
     <>
-      {showError && (
-        <ErrorPopup message={"ניחוש שגוי"} onClose={() => setShowError(false)} />
-      )}
       <Box sx={{ display: "flex", alignItems: "center", mt: 2 }}>
         <Button
           variant="contained"
@@ -55,16 +36,7 @@ const GuessSkip = ({ showError, setShowError, onGuessSuccess, onSkip, songsList,
         >
           נחש
         </Button>
-        <Autocomplete
-          disablePortal
-          fullWidth
-          id="songsAutocomplete"
-          options={availableSongs}
-          renderInput={(params) => (
-            <StyledTextField {...params} label="בחר שיר" fullWidth />
-          )}
-          onChange={handleSongChange}
-        />
+        <SongAutocomplete availableSongs={availableSongs} handleSongChange={handleSongChange} />
         <Button
           variant="contained"
           color="secondary"
