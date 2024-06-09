@@ -15,3 +15,7 @@ audio::-webkit-media-controls-play-button {
 audio::-webkit-media-controls-start-playback-button {
   display: none !important;
 }
+#drumsIcon{
+  height: auto;
+  width: 100%;
+}
