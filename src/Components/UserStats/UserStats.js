@@ -4,22 +4,22 @@ import CloseIcon from '@mui/icons-material/Close';
 
 function UserStats({ open, onClose, stats }) {
   return (
-    <Dialog open={open} onClose={onClose}>
+    <Dialog open={open} onClose={onClose} sx={{position: 'relative'}}>
       <DialogTitle>
         סטטיסטיקות
-        <IconButton
+      </DialogTitle>
+      <IconButton
           aria-label="close"
           onClick={onClose}
           sx={{
             position: 'absolute',
-            right: 8,
+            left: 8,
             top: 8,
             color: (theme) => theme.palette.grey[500],
           }}
         >
           <CloseIcon />
         </IconButton>
-      </DialogTitle>
       <DialogContent dividers>
         <Box>
           <Typography variant="body1" gutterBottom>1</Typography>
