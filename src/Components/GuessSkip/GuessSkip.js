@@ -19,7 +19,7 @@ const StyledTextField = styled(TextField)({
   },
 });
 
-const GuessSkip = ({ showError, setShowError, onGuessSuccess, onSkip, songsList, song }) => {
+const GuessSkip = ({ showError, setShowError, onGuessSuccess, onSkip, songsList, song, setShowPlayer}) => {
   const [availableSongs, setAvailableSongs] = useState(
     songsList.map((x) => x.title)
   );

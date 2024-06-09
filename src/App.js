@@ -3,6 +3,7 @@ import React, { useState, useEffect } from 'react';
 import { Container, AppBar, Toolbar, Typography, Box, Button, Paper } from '@mui/material';
 import MusicPlayer from './Components/MusicPlayer/MusicPlayer';
 import SongDetails from './Components/SongDetails/SongDetails';
+import Header from './Components/layout/Header/Header';
 
 const App = () => {
   const [songData, setSongData] = useState(null);
@@ -46,14 +47,8 @@ const App = () => {
   if (!songData) return <div>Loading...</div>;
   return (
     <Box maxWidth="sm" margin="auto">
-      <AppBar position="static">
-        <Toolbar>
-          <Typography variant="h6" sx={{ flexGrow: 1 }}>
-            Bandle Clone
-          </Typography>
-        </Toolbar>
-      </AppBar>
-      <Container sx={{ marginTop: '20px' }}>
+      <Header/>
+      <Box sx={{ marginTop: '20px' }}>
         <Box mt={4}>
           <SongDetails
             releaseDate={songData.CreateDate}
@@ -63,9 +58,8 @@ const App = () => {
         </Box> 
         <Box mt={4}>
           <MusicPlayer layers={songData.Layers} songsList={songData.Songs} song={song} setSuccess={setSuccess} success={success} />
-        
         </Box>
-      </Container>
+      </Box>
     </Box>
   );
 };
