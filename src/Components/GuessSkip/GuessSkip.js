@@ -10,11 +10,14 @@ const GuessSkip = ({ showError, setShowError, onGuessSuccess, onSkip, songsList,
   const [guess, setGuess] = useState({ id: null, title: null });
 
   const handleSongChange = (event, newValue) => {
-    const guessObject = songsList.filter((x) => x.title === newValue)[0];
-    setGuess(guessObject);
+      const guessObject = songsList.filter((x) => x.title === newValue)[0];
+      setGuess(guessObject);
   };
 
   const handleGuessSubmit = () => {
+    if(guess.id === null || guess.title === null){
+      return;
+    }
     if (Number(guess.id) === Number(song.id)) {
       onGuessSuccess();
     } else {

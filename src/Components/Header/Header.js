@@ -62,15 +62,13 @@ function Header({ setDarkMode, darkMode }) {
           <IconButton color={theme.palette.primary.headerIcons}  aria-label="share">
             <ShareIcon />
           </IconButton>
-          <IconButton edge="end" color={theme.palette.primary.headerIcons}  aria-label="settings" onClick={() => toggleModal('settings')}>
             {/* <SettingsIcon /> */}
             <IconButton
             sx={{ ml: 1 }}
-            onClick={handleDarkMode}
-            color="inherit"
+            onClick={()=> handleDarkMode()}
+            color={theme.palette.primary.headerIcons}
           >
             {darkMode ? <Brightness7Icon /> : <Brightness4Icon />}
-          </IconButton>
           </IconButton>
         </Toolbar>
       </AppBar>
