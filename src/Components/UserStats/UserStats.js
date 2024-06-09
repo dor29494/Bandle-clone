@@ -4,7 +4,7 @@ import CloseIcon from '@mui/icons-material/Close';
 
 function UserStats({ open, onClose, stats }) {
   return (
-    <Dialog open={open} onClose={onClose} sx={{position: 'relative'}}>
+    <Dialog open={open} onClose={onClose}>
       <DialogTitle>
         סטטיסטיקות
       </DialogTitle>

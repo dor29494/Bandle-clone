@@ -9,13 +9,12 @@ import {
 } from "@mui/material";
 import GuessSkip from "../GuessSkip/GuessSkip";
 import PauseIcon from "@mui/icons-material/Pause";
-import AudiotrackIcon from "@mui/icons-material/Audiotrack";
 import MusicNoteIcon from "@mui/icons-material/MusicNote";
 import MicIcon from "@mui/icons-material/Mic";
 import QueueMusicIcon from "@mui/icons-material/QueueMusic";
 import PlayCircleIcon from "@mui/icons-material/PlayCircle";
 import DrumsIcon from "../Icons/DrumsIcon";
-import Success from "../Success/Success";
+import Result from "../Result/Result";
 
 const MusicPlayer = ({
   layers,
@@ -23,18 +22,20 @@ const MusicPlayer = ({
   song,
   setSuccess,
   success,
+  setFailed,
+  failed,
   showError,
   setShowError,
   showPlayer,
-  setShowPlayer
+  setShowPlayer,
 }) => {
   const [activeLayerIndex, setActiveLayerIndex] = useState(0);
   const [activeLayers, setActiveLayers] = useState([]);
   const [isPlaying, setIsPlaying] = useState(false);
   const [isFirstPlay, setIsFirstPlay] = useState(false);
-
+  const isShow = !success && !failed;
   const audioRef = useRef(null);
-
+  const levelsCounter = useRef(0);
   useEffect(() => {
     if (layers) {
       const initializedLayers = layers.map((layer, index) => ({
@@ -56,11 +57,12 @@ const MusicPlayer = ({
   const onGuessSuccess = () => {
     setSuccess(true);
     setShowError(false);
-    localStorage.setItem("success", "true");
   };
 
   const handleSkip = () => {
     setShowPlayer(false);
+    levelsCounter.current++;
+    setFailed(levelsCounter.current === 5);
     moveToNextLayer();
   };
 
@@ -109,7 +111,6 @@ const MusicPlayer = ({
         return <MusicNoteIcon sx={{ fontSize: 40 }} />;
     }
   };
-
   return (
     <>
       <Card>
@@ -146,7 +147,7 @@ const MusicPlayer = ({
               {activeLayer.title}
             </Typography>
           )}
-          {success && <Success songTitle={song.title} songViews={song.views} />}
+          {success && <Result songTitle={song.title} songViews={song.views} isSuccess={true}/>}
           {activeLayer && (
             <Box sx={{ display: "flex", justifyContent: "center", mt: 2 }}>
               <audio ref={audioRef} controls style={{ width: "100%" }}>
@@ -155,21 +156,25 @@ const MusicPlayer = ({
               </audio>
             </Box>
           )}
-          <Box display="flex" justifyContent="center" alignItems="center">
-            <IconButton
-              disabled={success}
-              color="success"
-              onClick={handlePlayPause}
-            >
-              {isPlaying ? (
-                <PauseIcon fontSize="large" />
-              ) : (
-                <PlayCircleIcon fontSize="large" />
-              )}
-            </IconButton>
-          </Box>
+          {failed && <Result songTitle={song.title} songViews={song.views} isSuccess={false}/>}
+          {isShow && (
+            <Box display="flex" justifyContent="center" alignItems="center">
+              <IconButton
+                disabled={success}
+                color="success"
+                onClick={handlePlayPause}
+              >
+                {isPlaying ? (
+                  <PauseIcon fontSize="large" />
+                ) : (
+                  <PlayCircleIcon fontSize="large" />
+                )}
+              </IconButton>
+            </Box>
+          )}
           {isFirstPlay && showPlayer && (
             <GuessSkip
+              show={isShow}
               showError={showError}
               setShowError={setShowError}
               onGuessSuccess={onGuessSuccess}

@@ -34,7 +34,7 @@ function SongAutocomplete({ availableSongs, handleSongChange }) {
   };
 
   return (
-    <StyledAutocomplete
+      <StyledAutocomplete
       noOptionsText="אנא בחר שיר"
       disablePortal
       fullWidth
