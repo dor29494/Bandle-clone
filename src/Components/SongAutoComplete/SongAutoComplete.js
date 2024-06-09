@@ -13,10 +13,6 @@ const StyledTextField = styled(TextField)({
   "& .MuiInputLabel-root.Mui-focused": {
     visibility: "hidden",
   },
-//   "& .MuiInputLabel-root.MuiInputLabel-shrink": {
-//     transformOrigin: "top right",
-//     right: "1rem",
-//   },
   '& .MuiInputBase-root': {
     '& .MuiAutocomplete-popupIndicator': {
       display: 'none',
@@ -31,6 +27,12 @@ const StyledAutocomplete = styled(Autocomplete)({
 });
 
 function SongAutocomplete({ availableSongs, handleSongChange }) {
+  const filterOptions = (options, { inputValue }) => {
+    return options.filter((option) =>
+      option.toLowerCase().includes(inputValue.toLowerCase())
+    );
+  };
+
   return (
     <StyledAutocomplete
       noOptionsText="אנא בחר שיר"
@@ -39,9 +41,7 @@ function SongAutocomplete({ availableSongs, handleSongChange }) {
       id="songsAutocomplete"
       options={availableSongs}
       disableClearable
-      filterOptions={(options, state) =>
-        state.inputValue.length >= 1 ? options : []
-      }
+      filterOptions={filterOptions}
       renderInput={(params) => (
         <StyledTextField {...params} label="בחר שיר" fullWidth />
       )}
