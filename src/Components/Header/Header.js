@@ -7,6 +7,8 @@ import ShareIcon from '@mui/icons-material/Share';
 import HowToPlay from '../HowToPlay/HowToPlay';
 import UserStats from '../UserStats/UserStats';
 import SettingsModal from '../SettingsModal/SettingsModal';
+import Brightness4Icon from '@mui/icons-material/Brightness4';
+import Brightness7Icon from '@mui/icons-material/Brightness7';
 import { useTheme } from '@mui/system';
 
 function Header({ setDarkMode, darkMode }) {
@@ -23,6 +25,15 @@ function Header({ setDarkMode, darkMode }) {
     maxStreak: 0
   });
 
+  const handleDarkMode = ()=>{
+    setDarkMode(!darkMode);
+    if(!darkMode){
+      localStorage.setItem('darkMode', 'true');
+    }
+    else{
+      localStorage.removeItem('darkMode');
+    }
+  }
   useEffect(() => {
     const hasSeenHowToPlay = localStorage.getItem('hasSeenHowToPlay');
     if (!hasSeenHowToPlay) {
@@ -52,13 +63,20 @@ function Header({ setDarkMode, darkMode }) {
             <ShareIcon />
           </IconButton>
           <IconButton edge="end" color={theme.palette.primary.headerIcons}  aria-label="settings" onClick={() => toggleModal('settings')}>
-            <SettingsIcon />
+            {/* <SettingsIcon /> */}
+            <IconButton
+            sx={{ ml: 1 }}
+            onClick={handleDarkMode}
+            color="inherit"
+          >
+            {darkMode ? <Brightness7Icon /> : <Brightness4Icon />}
+          </IconButton>
           </IconButton>
         </Toolbar>
       </AppBar>
       <HowToPlay open={modalsOpen.howToPlay} onClose={() => toggleModal('howToPlay')} />
       <UserStats open={modalsOpen.stats} onClose={() => toggleModal('stats')} stats={stats} />
-      <SettingsModal open={modalsOpen.settings} onClose={() => toggleModal('settings')} darkMode={darkMode} setDarkMode={setDarkMode} />
+      {/* <SettingsModal open={modalsOpen.settings} onClose={() => toggleModal('settings')} darkMode={darkMode} setDarkMode={setDarkMode} /> */}
     </>
   );
 }
