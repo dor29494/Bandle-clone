@@ -8,11 +8,12 @@ import ErrorPopup from "./Components/ErrorPopup/ErrorPopup";
 
 const App = ({ setDarkMode, darkMode }) => {
   const [songData, setSongData] = useState(null);
-  const [song, setSong] = useState({ id: null, title: null, difficulty: null});
+  const [song, setSong] = useState({ id: null, title: null, difficulty: null });
   const [success, setSuccess] = useState(false);
+  const [failed, setFailed] = useState(false);
   const [showError, setShowError] = useState(false);
   const [showPlayer, setShowPlayer] = useState(false);
-  const difficultyEnum = {1 : "קל", 2: "בינוני", 3: "קשה"};
+  const difficultyEnum = { 1: "קל", 2: "בינוני", 3: "קשה" };
   useEffect(() => {
     fetch("/dummyData.json")
       .then((response) => {
@@ -22,9 +23,8 @@ const App = ({ setDarkMode, darkMode }) => {
         return response.json();
       })
       .then((data) => {
-        console.log(difficultyEnum[data.difficulty]);
         data.difficulty = difficultyEnum[data.difficulty];
-        setSong({ id: data.songId, title: data.songTitle, views: data.views});
+        setSong({ id: data.songId, title: data.songTitle, views: data.views });
         setSongData(data);
         successTest();
       })
@@ -32,24 +32,32 @@ const App = ({ setDarkMode, darkMode }) => {
   }, []);
 
   const successTest = () => {
-    const dateStorage = localStorage.getItem("successTime");
-    if (dateStorage) {
-      const successDate = new Date(dateStorage);
-      const now = new Date();
-      const compareDate = new Date(
-        now.getFullYear(),
-        now.getMonth(),
-        now.getDate(),
-        23,
-        59,
-        59
-      );
-      if (successDate.getTime() === compareDate.getTime()) {
+    const resultTime = localStorage.getItem("lastResultTime");
+    const isSuccess = localStorage.getItem("lastResult") === "true";
+    const resultDate = new Date(resultTime);
+    const now = new Date();
+    const compareDate = new Date(
+      now.getFullYear(),
+      now.getMonth(),
+      now.getDate(),
+      23,
+      59,
+      59
+    );
+    if (resultDate && isSuccess) {
+      if (resultDate.getTime() === compareDate.getTime() && isSuccess) {
         setSuccess(true);
+        setFailed(false);
       }
     } else {
-      setSuccess(false);
-      localStorage.setItem("success", "false");
+      const isFailed = localStorage.getItem("lastResult") === "false";
+      if (resultDate.getTime() === compareDate.getTime() && isFailed) {
+        setSuccess(false);
+        setFailed(true);
+      } else {
+        setFailed(false);
+        setSuccess(false);
+      }
     }
   };
 
@@ -74,6 +82,8 @@ const App = ({ setDarkMode, darkMode }) => {
               song={song}
               setSuccess={setSuccess}
               success={success}
+              setFailed={setFailed}
+              failed={failed}
               showError={showError}
               setShowError={setShowError}
               setShowPlayer={setShowPlayer}
@@ -92,5 +102,4 @@ const App = ({ setDarkMode, darkMode }) => {
     </>
   );
 };
-
 export default App;
