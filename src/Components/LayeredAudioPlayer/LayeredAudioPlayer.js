@@ -6,7 +6,6 @@ import {
   Box,
   Grid,
   IconButton,
-  Slider,
 } from "@mui/material";
 import GuessSkip from "../GuessSkip/GuessSkip";
 import PauseIcon from "@mui/icons-material/Pause";
@@ -16,6 +15,7 @@ import QueueMusicIcon from "@mui/icons-material/QueueMusic";
 import PlayCircleIcon from "@mui/icons-material/PlayCircle";
 import DrumsIcon from "../Icons/DrumsIcon";
 import Result from "../Result/Result";
+import AudioPlayer from "../AudioPlayer/AudioPlayer"; // Import the new AudioPlayer component
 
 const LayeredAudioPlayer = ({
   layers,
@@ -36,7 +36,6 @@ const LayeredAudioPlayer = ({
   const [isFirstPlay, setIsFirstPlay] = useState(false);
   const [progress, setProgress] = useState(0); // State for progress
   const isShow = !success.state && !failed.state;
-  const audioRef = useRef(null);
   const levelsCounter = useRef(0);
 
   useEffect(() => {
@@ -48,29 +47,6 @@ const LayeredAudioPlayer = ({
       setActiveLayers(initializedLayers);
     }
   }, [layers]);
-
-  useEffect(() => {
-    const audio = audioRef.current;
-    const updateProgress = () => {
-      if (audio.duration > 0) {
-        setProgress((audio.currentTime / audio.duration) * 100);
-      }
-    };
-    if (audio) {
-      audio.addEventListener('timeupdate', updateProgress);
-      return () => {
-        audio.removeEventListener('timeupdate', updateProgress);
-      };
-    }
-  }, [audioRef]);
-
-  useEffect(() => {
-    if (audioRef.current) {
-      audioRef.current.pause();
-      audioRef.current.load();
-      setIsPlaying(false);
-    }
-  }, [activeLayerIndex]);
 
   const onGuessSuccess = () => {
     setSuccess(prev => ({ ...prev, state: true, index: activeLayerIndex }));
@@ -124,14 +100,11 @@ const LayeredAudioPlayer = ({
     if (!isFirstPlay) {
       setIsFirstPlay(true);
     }
-    if (audioRef.current) {
-      if (isPlaying) {
-        audioRef.current.pause();
-      } else {
-        audioRef.current.play();
-        setShowPlayer(true);
-      }
-      setIsPlaying(!isPlaying);
+    if (isPlaying) {
+      setIsPlaying(false);
+    } else {
+      setIsPlaying(true);
+      setShowPlayer(true);
     }
   };
 
@@ -191,24 +164,13 @@ const LayeredAudioPlayer = ({
           )}
           {success.state && <Result song={song} isSuccess={true} />}
           {activeLayer && isShow && (
-            <Box sx={{ display: "flex", flexDirection: "column", alignItems: "center", mt: 2, width: "100%" }}>
-              <audio ref={audioRef} style={{ width: "100%" }} controls>
-                <source src={activeLayer.file} type="audio/mpeg" />
-                הדפדפן שלך אינו תומך באלמנט שמע.
-              </audio>
-              <Box sx={{ width: "100%", mt: 2 }}>
-                <Slider
-                  value={progress}
-                  onChange={(event, newValue) => {
-                    const audio = audioRef.current;
-                    audio.currentTime = (newValue / 100) * audio.duration;
-                    setProgress(newValue);
-                  }}
-                  aria-labelledby="continuous-slider"
-                  sx={{ width: "90%", mt: 2 }}
-                />
-              </Box>
-            </Box>
+            <AudioPlayer 
+              file={activeLayer.file}
+              progress={progress}
+              setProgress={setProgress}
+              isPlaying={isPlaying}
+              setIsPlaying={setIsPlaying}
+            />
           )}
           {failed.state && <Result song={song} isSuccess={false} />}
           {isShow && (
