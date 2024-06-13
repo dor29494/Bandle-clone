@@ -15,8 +15,11 @@ import QueueMusicIcon from "@mui/icons-material/QueueMusic";
 import PlayCircleIcon from "@mui/icons-material/PlayCircle";
 import DrumsIcon from "../Icons/DrumsIcon";
 import Result from "../Result/Result";
+import AudioPlayer from "../AudioPlayer/AudioPlayer"; // Import the new AudioPlayer component
+import BassIcon from "../Icons/BassIcon";
+import PianoGuitarIcon from "../Icons/PianoGuitarIcon";
 
-const MusicPlayer = ({
+const LayeredAudioPlayer = ({
   layers,
   songsList,
   song,
@@ -33,9 +36,10 @@ const MusicPlayer = ({
   const [activeLayers, setActiveLayers] = useState([]);
   const [isPlaying, setIsPlaying] = useState(false);
   const [isFirstPlay, setIsFirstPlay] = useState(false);
-  const isShow = !success && !failed;
-  const audioRef = useRef(null);
+  const [progress, setProgress] = useState(0); // State for progress
+  const isShow = !success.state && !failed.state;
   const levelsCounter = useRef(0);
+
   useEffect(() => {
     if (layers) {
       const initializedLayers = layers.map((layer, index) => ({
@@ -46,24 +50,39 @@ const MusicPlayer = ({
     }
   }, [layers]);
 
-  useEffect(() => {
-    if (audioRef.current) {
-      audioRef.current.pause();
-      audioRef.current.load();
-      setIsPlaying(false);
-    }
-  }, [activeLayerIndex]);
-
   const onGuessSuccess = () => {
-    setSuccess(true);
+    setSuccess(prev => ({ ...prev, state: true, index: activeLayerIndex }));
     setShowError(false);
   };
 
   const handleSkip = () => {
     setShowPlayer(false);
+    setIsPlaying(false); // Ensure audio does not start automatically
     levelsCounter.current++;
-    setFailed(levelsCounter.current === 5);
+    setFailed(prev => ({ ...prev, state: levelsCounter.current === 5, index: activeLayerIndex }));
     moveToNextLayer();
+  };
+
+  const getLayersColors = (index) => {
+    if (success.state && index === success.index) {
+      return { border: "#6A9D6A", background: "#DBEDDD" }; // Green for success
+    }
+    if (failed.state && index === failed.index) {
+      return { border: "#974C50", background: "#F0D7DA" }; // Red for failure
+    }
+    if (success.state || failed.state) {
+      if (index < (success.state ? success.index : failed.index)) {
+        return { border: "#FFD700", background: "#FBF6D7" }; // Yellow for layers before the success or failure index
+      }
+      return { border: "#FFFFFF", background: "#D3D3D3" }; // White for all other layers when there's a success or failure
+    }
+    if (index < activeLayerIndex) {
+      return { border: "#FFD700", background: "#FBF6D7" }; // Yellow for previous layers
+    }
+    if (index === activeLayerIndex) {
+      return { border: "#ADD8E6", background: "#87CEEB" }; // Light blue for the current layer
+    }
+    return { border: "#A9A9A9", background: "#D3D3D3" }; // White for future layers
   };
 
   const moveToNextLayer = () => {
@@ -76,6 +95,7 @@ const MusicPlayer = ({
       });
       setActiveLayers(updatedLayers);
       setActiveLayerIndex(activeLayerIndex + 1);
+      localStorage.setItem('layerIndex', activeLayerIndex + 1);
     }
   };
 
@@ -83,14 +103,9 @@ const MusicPlayer = ({
     if (!isFirstPlay) {
       setIsFirstPlay(true);
     }
-    if (audioRef.current) {
-      if (isPlaying) {
-        audioRef.current.pause();
-      } else {
-        audioRef.current.play();
-        setShowPlayer(true);
-      }
-      setIsPlaying(!isPlaying);
+    setIsPlaying(!isPlaying);
+    if (!isPlaying) {
+      setShowPlayer(true);
     }
   };
 
@@ -100,9 +115,9 @@ const MusicPlayer = ({
       case 0:
         return <DrumsIcon sx={{ fontSize: 40 }} />;
       case 1:
-        return <QueueMusicIcon sx={{ fontSize: 40 }} />;
+        return <BassIcon sx={{ fontSize: 40 }} />;
       case 2:
-        return <DrumsIcon sx={{ fontSize: 40 }} />;
+        return <PianoGuitarIcon sx={{ fontSize: 40 }} />;
       case 3:
         return <QueueMusicIcon sx={{ fontSize: 40 }} />;
       case 4:
@@ -111,6 +126,7 @@ const MusicPlayer = ({
         return <MusicNoteIcon sx={{ fontSize: 40 }} />;
     }
   };
+
   return (
     <>
       <Card>
@@ -128,9 +144,9 @@ const MusicPlayer = ({
                     alignItems: "center",
                     justifyContent: "center",
                     height: "100px",
-                    backgroundColor: layer.isActive ? "#e0f7fa" : "transparent",
                     borderRadius: 1,
-                    border: "1px solid #ccc",
+                    backgroundColor: getLayersColors(index).background,
+                    border: `3px solid ${getLayersColors(index).border}`
                   }}
                 >
                   {getIcon(index)}
@@ -147,20 +163,21 @@ const MusicPlayer = ({
               {activeLayer.title}
             </Typography>
           )}
-          {success && <Result songTitle={song.title} songViews={song.views} isSuccess={true}/>}
-          {activeLayer && (
-            <Box sx={{ display: "flex", justifyContent: "center", mt: 2 }}>
-              <audio ref={audioRef} controls style={{ width: "100%" }}>
-                <source src={activeLayer.file} type="audio/mpeg" />
-                הדפדפן שלך אינו תומך באלמנט שמע.
-              </audio>
-            </Box>
+          {success.state && <Result song={song} isSuccess={true} />}
+          {activeLayer && isShow && (
+            <AudioPlayer 
+              file={activeLayer.file}
+              progress={progress}
+              setProgress={setProgress}
+              isPlaying={isPlaying}
+              setIsPlaying={setIsPlaying}
+            />
           )}
-          {failed && <Result songTitle={song.title} songViews={song.views} isSuccess={false}/>}
+          {failed.state && <Result song={song} isSuccess={false} />}
           {isShow && (
             <Box display="flex" justifyContent="center" alignItems="center">
               <IconButton
-                disabled={success}
+                disabled={success.state}
                 color="success"
                 onClick={handlePlayPause}
               >
@@ -190,4 +207,4 @@ const MusicPlayer = ({
   );
 };
 
-export default MusicPlayer;
+export default LayeredAudioPlayer;
