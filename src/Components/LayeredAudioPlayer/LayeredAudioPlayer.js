@@ -16,6 +16,8 @@ import PlayCircleIcon from "@mui/icons-material/PlayCircle";
 import DrumsIcon from "../Icons/DrumsIcon";
 import Result from "../Result/Result";
 import AudioPlayer from "../AudioPlayer/AudioPlayer"; // Import the new AudioPlayer component
+import BassIcon from "../Icons/BassIcon";
+import PianoGuitarIcon from "../Icons/PianoGuitarIcon";
 
 const LayeredAudioPlayer = ({
   layers,
@@ -113,9 +115,9 @@ const LayeredAudioPlayer = ({
       case 0:
         return <DrumsIcon sx={{ fontSize: 40 }} />;
       case 1:
-        return <QueueMusicIcon sx={{ fontSize: 40 }} />;
+        return <BassIcon sx={{ fontSize: 40 }} />;
       case 2:
-        return <DrumsIcon sx={{ fontSize: 40 }} />;
+        return <PianoGuitarIcon sx={{ fontSize: 40 }} />;
       case 3:
         return <QueueMusicIcon sx={{ fontSize: 40 }} />;
       case 4:
