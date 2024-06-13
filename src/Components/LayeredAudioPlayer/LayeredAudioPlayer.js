@@ -6,6 +6,7 @@ import {
   Box,
   Grid,
   IconButton,
+  Slider,
 } from "@mui/material";
 import GuessSkip from "../GuessSkip/GuessSkip";
 import PauseIcon from "@mui/icons-material/Pause";
@@ -16,7 +17,7 @@ import PlayCircleIcon from "@mui/icons-material/PlayCircle";
 import DrumsIcon from "../Icons/DrumsIcon";
 import Result from "../Result/Result";
 
-const MusicPlayer = ({
+const LayeredAudioPlayer = ({
   layers,
   songsList,
   song,
@@ -33,9 +34,11 @@ const MusicPlayer = ({
   const [activeLayers, setActiveLayers] = useState([]);
   const [isPlaying, setIsPlaying] = useState(false);
   const [isFirstPlay, setIsFirstPlay] = useState(false);
-  const isShow = !success && !failed;
+  const [progress, setProgress] = useState(0); // State for progress
+  const isShow = !success.state && !failed.state;
   const audioRef = useRef(null);
   const levelsCounter = useRef(0);
+
   useEffect(() => {
     if (layers) {
       const initializedLayers = layers.map((layer, index) => ({
@@ -47,6 +50,21 @@ const MusicPlayer = ({
   }, [layers]);
 
   useEffect(() => {
+    const audio = audioRef.current;
+    const updateProgress = () => {
+      if (audio.duration > 0) {
+        setProgress((audio.currentTime / audio.duration) * 100);
+      }
+    };
+    if (audio) {
+      audio.addEventListener('timeupdate', updateProgress);
+      return () => {
+        audio.removeEventListener('timeupdate', updateProgress);
+      };
+    }
+  }, [audioRef]);
+
+  useEffect(() => {
     if (audioRef.current) {
       audioRef.current.pause();
       audioRef.current.load();
@@ -55,15 +73,37 @@ const MusicPlayer = ({
   }, [activeLayerIndex]);
 
   const onGuessSuccess = () => {
-    setSuccess(true);
+    setSuccess(prev => ({ ...prev, state: true, index: activeLayerIndex }));
     setShowError(false);
   };
 
   const handleSkip = () => {
     setShowPlayer(false);
     levelsCounter.current++;
-    setFailed(levelsCounter.current === 5);
+    setFailed(prev => ({ ...prev, state: levelsCounter.current === 5, index: activeLayerIndex }));
     moveToNextLayer();
+  };
+
+  const getLayersColors = (index) => {
+    if (success.state && index === success.index) {
+      return { border: "#6A9D6A", background: "#DBEDDD" }; // Green for success
+    }
+    if (failed.state && index === failed.index) {
+      return { border: "#974C50", background: "#F0D7DA" }; // Red for failure
+    }
+    if (success.state || failed.state) {
+      if (index < (success.state ? success.index : failed.index)) {
+        return { border: "#FFD700", background: "#FBF6D7" }; // Yellow for layers before the success or failure index
+      }
+      return { border: "#FFFFFF", background: "#D3D3D3" }; // White for all other layers when there's a success or failure
+    }
+    if (index < activeLayerIndex) {
+      return { border: "#FFD700", background: "#FBF6D7" }; // Yellow for previous layers
+    }
+    if (index === activeLayerIndex) {
+      return { border: "#ADD8E6", background: "#87CEEB" }; // Light blue for the current layer
+    }
+    return { border: "#A9A9A9", background: "#D3D3D3" }; // White for future layers
   };
 
   const moveToNextLayer = () => {
@@ -76,6 +116,7 @@ const MusicPlayer = ({
       });
       setActiveLayers(updatedLayers);
       setActiveLayerIndex(activeLayerIndex + 1);
+      localStorage.setItem('layerIndex', activeLayerIndex + 1);
     }
   };
 
@@ -111,6 +152,7 @@ const MusicPlayer = ({
         return <MusicNoteIcon sx={{ fontSize: 40 }} />;
     }
   };
+
   return (
     <>
       <Card>
@@ -128,9 +170,9 @@ const MusicPlayer = ({
                     alignItems: "center",
                     justifyContent: "center",
                     height: "100px",
-                    backgroundColor: layer.isActive ? "#e0f7fa" : "transparent",
                     borderRadius: 1,
-                    border: "1px solid #ccc",
+                    backgroundColor: getLayersColors(index).background,
+                    border: `3px solid ${getLayersColors(index).border}`
                   }}
                 >
                   {getIcon(index)}
@@ -147,20 +189,32 @@ const MusicPlayer = ({
               {activeLayer.title}
             </Typography>
           )}
-          {success && <Result song={song} isSuccess={true}/>}
-          {(activeLayer && isShow) && (
-            <Box sx={{ display: "flex", justifyContent: "center", mt: 2 }}>
-              <audio ref={audioRef} controls style={{ width: "100%" }}>
+          {success.state && <Result song={song} isSuccess={true} />}
+          {activeLayer && isShow && (
+            <Box sx={{ display: "flex", flexDirection: "column", alignItems: "center", mt: 2, width: "100%" }}>
+              <audio ref={audioRef} style={{ width: "100%" }} controls>
                 <source src={activeLayer.file} type="audio/mpeg" />
                 הדפדפן שלך אינו תומך באלמנט שמע.
               </audio>
+              <Box sx={{ width: "100%", mt: 2 }}>
+                <Slider
+                  value={progress}
+                  onChange={(event, newValue) => {
+                    const audio = audioRef.current;
+                    audio.currentTime = (newValue / 100) * audio.duration;
+                    setProgress(newValue);
+                  }}
+                  aria-labelledby="continuous-slider"
+                  sx={{ width: "90%", mt: 2 }}
+                />
+              </Box>
             </Box>
           )}
-          {failed && <Result song={song} isSuccess={false}/>}
+          {failed.state && <Result song={song} isSuccess={false} />}
           {isShow && (
             <Box display="flex" justifyContent="center" alignItems="center">
               <IconButton
-                disabled={success}
+                disabled={success.state}
                 color="success"
                 onClick={handlePlayPause}
               >
@@ -190,4 +244,4 @@ const MusicPlayer = ({
   );
 };
 
-export default MusicPlayer;
+export default LayeredAudioPlayer;

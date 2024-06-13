@@ -1,7 +1,7 @@
 // src/App.js
 import React, { useState, useEffect } from "react";
 import { Box } from "@mui/material";
-import MusicPlayer from "./Components/MusicPlayer/MusicPlayer";
+import LayeredAudioPlayer from "./Components/LayeredAudioPlayer/LayeredAudioPlayer";
 import SongDetails from "./Components/SongDetails/SongDetails";
 import Header from "./Components/Header/Header";
 import ErrorPopup from "./Components/ErrorPopup/ErrorPopup";
@@ -9,8 +9,8 @@ import ErrorPopup from "./Components/ErrorPopup/ErrorPopup";
 const App = ({ setDarkMode, darkMode }) => {
   const [songData, setSongData] = useState(null);
   const [song, setSong] = useState({ id: null, title: null, views: null, spotifyId: null, youtubeId: null});
-  const [success, setSuccess] = useState(false);
-  const [failed, setFailed] = useState(false);
+  const [success, setSuccess] = useState({index: 0, state: false});
+  const [failed, setFailed] = useState({index: 0, state: false});
   const [showError, setShowError] = useState(false);
   const [showPlayer, setShowPlayer] = useState(false);
   const difficultyEnum = { 1: "קל", 2: "בינוני", 3: "קשה" };
@@ -24,7 +24,6 @@ const App = ({ setDarkMode, darkMode }) => {
       })
       .then((data) => {
         data.difficulty = difficultyEnum[data.difficulty];
-        console.log(data, data.media.spotifyId);
         setSong({ id: data.songId, title: data.songTitle, views: data.views, spotifyId: data.media.spotifyId, youtubeId: data.media.youtubeId });
         setSongData(data);
         successTest();
@@ -35,6 +34,7 @@ const App = ({ setDarkMode, darkMode }) => {
   const successTest = () => {
     const resultTime = localStorage.getItem("lastResultTime");
     const isSuccess = localStorage.getItem("lastResult") === "true";
+    const lastLayerIndex = localStorage.getItem("layerIndex") != null ? Number(localStorage.getItem("layerIndex")): 0;
     const resultDate = new Date(resultTime);
     const now = new Date();
     const compareDate = new Date(
@@ -47,17 +47,17 @@ const App = ({ setDarkMode, darkMode }) => {
     );
     if (resultDate && isSuccess) {
       if (resultDate.getTime() === compareDate.getTime() && isSuccess) {
-        setSuccess(true);
-        setFailed(false);
+        setSuccess(prev => ({...prev, state: true, index: lastLayerIndex}));
+        setFailed(prev => ({...prev, state: false, index: lastLayerIndex}));
       }
     } else {
       const isFailed = localStorage.getItem("lastResult") === "false";
       if (resultDate.getTime() === compareDate.getTime() && isFailed) {
-        setSuccess(false);
-        setFailed(true);
+        setSuccess(prev => ({...prev, state: false, index: lastLayerIndex}));
+        setFailed(prev => ({...prev, state: true, index: lastLayerIndex}));
       } else {
-        setFailed(false);
-        setSuccess(false);
+        setFailed(prev => ({...prev, state: false, index: lastLayerIndex}));
+        setSuccess(prev => ({...prev, state: false, index: lastLayerIndex}));
       }
     }
   };
@@ -77,7 +77,7 @@ const App = ({ setDarkMode, darkMode }) => {
             />
           </Box>
           <Box mt={4}>
-            <MusicPlayer
+            <LayeredAudioPlayer
               layers={songData.Layers}
               songsList={songData.Songs}
               song={song}

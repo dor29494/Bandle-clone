@@ -11,6 +11,7 @@ function SocialNetwork({youTubeId, spotifyId}) {
     youtubeLink.current = process.env.REACT_APP_YOUTUBE_BASE + youTubeId;
   }, [youTubeId, spotifyId]);
 
+
   return (
     <Box display="flex" justifyContent="center" mb={2}>
     <IconButton href={youtubeLink.current} color="primary" aria-label="YouTube">
