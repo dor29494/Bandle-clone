@@ -24,15 +24,23 @@ const AudioPlayer = ({ file, progress, setProgress, isPlaying, setIsPlaying }) =
     if (audioRef.current) {
       audioRef.current.pause();
       audioRef.current.load();
+    }
+  }, [file]);
+
+  useEffect(() => {
+    const audio = audioRef.current;
+    if (audio) {
       if (isPlaying) {
-        audioRef.current.play();
+        audio.play();
+      } else {
+        audio.pause();
       }
     }
-  }, [file, isPlaying]);
+  }, [isPlaying]);
 
   return (
     <Box sx={{ display: "flex", flexDirection: "column", alignItems: "center", mt: 2, width: "100%" }}>
-      <audio ref={audioRef} style={{ width: "100%", display: 'none'}} controls>
+      <audio ref={audioRef} style={{ width: "100%" }} controls>
         <source src={file} type="audio/mpeg" />
         הדפדפן שלך אינו תומך באלמנט שמע.
       </audio>

@@ -55,6 +55,7 @@ const LayeredAudioPlayer = ({
 
   const handleSkip = () => {
     setShowPlayer(false);
+    setIsPlaying(false); // Ensure audio does not start automatically
     levelsCounter.current++;
     setFailed(prev => ({ ...prev, state: levelsCounter.current === 5, index: activeLayerIndex }));
     moveToNextLayer();
@@ -100,10 +101,8 @@ const LayeredAudioPlayer = ({
     if (!isFirstPlay) {
       setIsFirstPlay(true);
     }
-    if (isPlaying) {
-      setIsPlaying(false);
-    } else {
-      setIsPlaying(true);
+    setIsPlaying(!isPlaying);
+    if (!isPlaying) {
       setShowPlayer(true);
     }
   };
