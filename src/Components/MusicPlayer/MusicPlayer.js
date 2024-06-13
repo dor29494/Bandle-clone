@@ -147,8 +147,8 @@ const MusicPlayer = ({
               {activeLayer.title}
             </Typography>
           )}
-          {success && <Result songTitle={song.title} songViews={song.views} isSuccess={true}/>}
-          {activeLayer && (
+          {success && <Result song={song} isSuccess={true}/>}
+          {(activeLayer && isShow) && (
             <Box sx={{ display: "flex", justifyContent: "center", mt: 2 }}>
               <audio ref={audioRef} controls style={{ width: "100%" }}>
                 <source src={activeLayer.file} type="audio/mpeg" />
@@ -156,7 +156,7 @@ const MusicPlayer = ({
               </audio>
             </Box>
           )}
-          {failed && <Result songTitle={song.title} songViews={song.views} isSuccess={false}/>}
+          {failed && <Result song={song} isSuccess={false}/>}
           {isShow && (
             <Box display="flex" justifyContent="center" alignItems="center">
               <IconButton

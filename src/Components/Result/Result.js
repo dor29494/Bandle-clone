@@ -4,7 +4,7 @@ import { Box, Typography } from "@mui/material";
 import SocialNetwork from "../SocialNetwork/SocialNetwork";
 import { useTheme } from "@emotion/react";
 
-const Result = ({ isSuccess, songTitle, songViews }) => {
+const Result = ({ isSuccess, song }) => {
   useEffect(() => {
     const now = new Date();
     const lastResultTime = new Date(
@@ -18,9 +18,7 @@ const Result = ({ isSuccess, songTitle, songViews }) => {
     localStorage.setItem("lastResultTime", lastResultTime);
     localStorage.setItem('lastResult', isSuccess ? 'true' : 'false');
   }, []);
-
   const theme = useTheme();
-
   return (
     <Box
       display="flex"
@@ -42,11 +40,11 @@ const Result = ({ isSuccess, songTitle, songViews }) => {
           Success!
         </Typography>
       )}
-      <Typography variant="body1">{`Song Title: ${songTitle}`}</Typography>
+      <Typography variant="body1">{`Song Title: ${song.title}`}</Typography>
       <Typography variant="body1" gutterBottom>
-        {`Song Views: ${songViews}`}
+        {`Song Views: ${song.views}`}
       </Typography>
-      <SocialNetwork />
+      <SocialNetwork spotifyId={song.spotifyId} youTubeId={song.youtubeId} />
       <Timer />
     </Box>
   );

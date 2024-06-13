@@ -1,7 +1,6 @@
 // src/components/SongDetails.js
 import React from 'react';
 import { Box, Typography, Paper, IconButton } from '@mui/material';
-import CloseIcon from '@mui/icons-material/Close';
 
 const SongDetails = ({ releaseDate, views, difficulty }) => {
   return (

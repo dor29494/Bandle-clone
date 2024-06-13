@@ -1,21 +1,23 @@
 import { Box, IconButton } from '@mui/material'
 import { YouTube, MusicNote, PlayArrow, Language } from '@mui/icons-material';
-import React from 'react'
+import React, { useEffect, useRef } from 'react'
 
-function SocialNetwork() {
+function SocialNetwork({youTubeId, spotifyId}) {
+  const spotifyLink = useRef(null);
+  const youtubeLink = useRef(null);
+
+  useEffect(() => {
+    spotifyLink.current = process.env.REACT_APP_SPOTIFY_BASE + spotifyId;
+    youtubeLink.current = process.env.REACT_APP_YOUTUBE_BASE + youTubeId;
+  }, [youTubeId, spotifyId]);
+
   return (
     <Box display="flex" justifyContent="center" mb={2}>
-    <IconButton color="primary" aria-label="YouTube">
-      <YouTube />
+    <IconButton href={youtubeLink.current} color="primary" aria-label="YouTube">
+      <YouTube fontSize="medium" />
     </IconButton>
-    <IconButton color="primary" aria-label="Music">
-      <MusicNote />
-    </IconButton>
-    <IconButton color="primary" aria-label="Play">
-      <PlayArrow />
-    </IconButton>
-    <IconButton color="primary" aria-label="Language">
-      <Language />
+    <IconButton href={spotifyLink.current} color="primary" aria-label="Music">
+      <MusicNote fontSize="medium"/>
     </IconButton>
   </Box>
   )

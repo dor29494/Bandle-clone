@@ -8,7 +8,7 @@ import ErrorPopup from "./Components/ErrorPopup/ErrorPopup";
 
 const App = ({ setDarkMode, darkMode }) => {
   const [songData, setSongData] = useState(null);
-  const [song, setSong] = useState({ id: null, title: null, difficulty: null });
+  const [song, setSong] = useState({ id: null, title: null, views: null, spotifyId: null, youtubeId: null});
   const [success, setSuccess] = useState(false);
   const [failed, setFailed] = useState(false);
   const [showError, setShowError] = useState(false);
@@ -24,7 +24,8 @@ const App = ({ setDarkMode, darkMode }) => {
       })
       .then((data) => {
         data.difficulty = difficultyEnum[data.difficulty];
-        setSong({ id: data.songId, title: data.songTitle, views: data.views });
+        console.log(data, data.media.spotifyId);
+        setSong({ id: data.songId, title: data.songTitle, views: data.views, spotifyId: data.media.spotifyId, youtubeId: data.media.youtubeId });
         setSongData(data);
         successTest();
       })
