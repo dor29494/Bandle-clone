@@ -6,7 +6,7 @@ import ErrorIcon from '@mui/icons-material/Error';
 
 const ErrorPopup = ({ message, onClose, setShowPlayer }) => {
   const theme = useTheme();
-  const isMobile = useMediaQuery(theme.breakpoints.down('xs'));
+  const isMobile = useMediaQuery(theme.breakpoints.down('sm')); // Adjusted breakpoint
 
   useEffect(() => {
     if (isMobile) {
@@ -20,20 +20,22 @@ const ErrorPopup = ({ message, onClose, setShowPlayer }) => {
   }, [isMobile, onClose, setShowPlayer]);
 
   return (
-<Box
+    <Box
       sx={{
-        position: isMobile ? 'relative' : 'fixed',
-        bottom: isMobile ? 'auto' : '115px',
-        right: isMobile ? 'auto' : '35px',
+        position: 'fixed',
+        bottom: isMobile ? '20px' : '115px',
+        left: isMobile ? '10px' : 'auto',
+        right: isMobile ? '10px' : '35px',
         backgroundColor: '#ffebee',
         padding: '10px',
         borderRadius: '4px',
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'space-between',
-        width: isMobile ? 'auto' : '400px',
-        margin: isMobile ? '10px' : '0 10px 10px 10px',
-        boxShadow: isMobile ? 'none' : '0 0 10px rgba(0,0,0,0.1)',
+        width: isMobile ? 'calc(100% - 20px)' : '400px',
+        margin: isMobile ? '0' : '0 10px 10px 10px',
+        boxShadow: '0 0 10px rgba(0,0,0,0.1)',
+        zIndex: 1000,
       }}
     >
       <Box sx={{ display: 'flex', alignItems: 'center' }}>
