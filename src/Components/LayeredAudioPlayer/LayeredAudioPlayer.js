@@ -42,7 +42,6 @@ const LayeredAudioPlayer = ({
   const [progress, setProgress] = useState(0); // State for progress
   const isShow = !success.state && !failed.state;
   const levelsCounter = useRef(0);
-  const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
 
   useEffect(() => {
     if (layers) {
@@ -147,7 +146,7 @@ const LayeredAudioPlayer = ({
                     flexDirection: 'column',
                     alignItems: 'center',
                     justifyContent: 'center',
-                    height: isMobile ? '70px' : '100px',
+                    height: '76px' ,
                     borderRadius: 1,
                     backgroundColor: getLayersColors(index).background,
                     border: `3px solid ${getLayersColors(index).border}`,
@@ -195,7 +194,6 @@ const LayeredAudioPlayer = ({
           )}
           {isFirstPlay && showPlayer && (
             <GuessSkip
-              isMobile={isMobile}
               show={isShow}
               showError={showError}
               setShowError={setShowError}

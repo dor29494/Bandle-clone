@@ -9,7 +9,6 @@ const GuessSkip = ({
   songsList,
   song,
   show,
-  isMobile
 }) => {
   const [availableSongs, setAvailableSongs] = useState(
     songsList.map((x) => x.title)
@@ -53,14 +52,14 @@ const GuessSkip = ({
           <SongAutocomplete
             availableSongs={availableSongs}
             handleSongChange={handleSongChange}
-            sx={{ width: isMobile ? "100%" : "80%", mb: isMobile ? 2 : 0 }}
+            sx={{ width: "100%" , mb:  2  }}
           />
-          <Box sx={{ display: "flex", justifyContent: "space-between", width: "100%" , gap: isMobile ? '45%' : '0', mt: 3}}>
+          <Box sx={{ display: "flex", justifyContent: "space-between", width: "100%" , gap:  '45%', mt: 3}}>
             <Button
               variant="contained"
               color="primary"
               onClick={handleGuessSubmit}
-              sx={{ ml: isMobile ? 0 : 2, flexGrow: isMobile ? 1 : 0}}
+              sx={{ ml:  0 , flexGrow:  1}}
             >
               נחש
             </Button>
@@ -68,7 +67,7 @@ const GuessSkip = ({
               variant="contained"
               color="secondary"
               onClick={onSkip}
-              sx={{ mr: isMobile ? 0 : 2, flexGrow: isMobile ? 1 : 0 }}
+              sx={{ mr:  0  ,flexGrow: 1}}
             >
               דלג
             </Button>
