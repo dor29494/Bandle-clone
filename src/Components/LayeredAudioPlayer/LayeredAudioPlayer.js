@@ -92,9 +92,6 @@ const LayeredAudioPlayer = ({
     if (index < activeLayerIndex) {
       return { border: "#FFD700", background: "#FBF6D7" };
     }
-    if (index === activeLayerIndex) {
-      return { border: "#ADD8E6", background: "#87CEEB" };
-    }
     return { border: "#A9A9A9", background: "#D3D3D3" };
   };
 
@@ -132,9 +129,9 @@ const LayeredAudioPlayer = ({
       case 2:
         return <PianoGuitarIcon sx={{ fontSize: 40 }} />;
       case 3:
-        return <QueueMusicIcon sx={{ fontSize: 40 }} />;
+        return <QueueMusicIcon sx={{ fontSize: 40, padding: '2px' }} />;
       case 4:
-        return <MicIcon sx={{ fontSize: 40 }} />;
+        return <MicIcon sx={{ fontSize: 40, padding: '2px' }} />;
       default:
         return <MusicNoteIcon sx={{ fontSize: 40 }} />;
     }
