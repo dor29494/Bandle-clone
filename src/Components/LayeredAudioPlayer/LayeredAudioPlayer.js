@@ -6,6 +6,7 @@ import {
   Box,
   Grid,
   IconButton,
+  useMediaQuery,
 } from "@mui/material";
 import GuessSkip from "../GuessSkip/GuessSkip";
 import PauseIcon from "@mui/icons-material/Pause";
@@ -15,9 +16,10 @@ import QueueMusicIcon from "@mui/icons-material/QueueMusic";
 import PlayCircleIcon from "@mui/icons-material/PlayCircle";
 import DrumsIcon from "../Icons/DrumsIcon";
 import Result from "../Result/Result";
-import AudioPlayer from "../AudioPlayer/AudioPlayer"; 
+import AudioPlayer from "../AudioPlayer/AudioPlayer";
 import BassIcon from "../Icons/BassIcon";
 import PianoGuitarIcon from "../Icons/PianoGuitarIcon";
+import { useTheme } from "@emotion/react";
 
 const LayeredAudioPlayer = ({
   layers,
@@ -32,6 +34,7 @@ const LayeredAudioPlayer = ({
   showPlayer,
   setShowPlayer,
 }) => {
+  const theme = useTheme();
   const [activeLayerIndex, setActiveLayerIndex] = useState(0);
   const [activeLayers, setActiveLayers] = useState([]);
   const [isPlaying, setIsPlaying] = useState(false);
@@ -39,6 +42,7 @@ const LayeredAudioPlayer = ({
   const [progress, setProgress] = useState(0); // State for progress
   const isShow = !success.state && !failed.state;
   const levelsCounter = useRef(0);
+  const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
 
   useEffect(() => {
     if (layers) {
@@ -129,7 +133,7 @@ const LayeredAudioPlayer = ({
   };
   return (
     <>
-      <Card>
+      <Box sx={{minHeight: '100%'}}>
         <CardContent>
           <Typography variant="h5" component="div" textAlign="center" mb={2}>
             שכבות שיר נוכחיות
@@ -139,14 +143,14 @@ const LayeredAudioPlayer = ({
               <Grid item xs={2.4} key={index}>
                 <Box
                   sx={{
-                    display: "flex",
-                    flexDirection: "column",
-                    alignItems: "center",
-                    justifyContent: "center",
-                    height: "100px",
+                    display: 'flex',
+                    flexDirection: 'column',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    height: isMobile ? '70px' : '100px',
                     borderRadius: 1,
                     backgroundColor: getLayersColors(index).background,
-                    border: `3px solid ${getLayersColors(index).border}`
+                    border: `3px solid ${getLayersColors(index).border}`,
                   }}
                 >
                   {getIcon(index)}
@@ -165,7 +169,7 @@ const LayeredAudioPlayer = ({
           )}
           {success.state && <Result song={song} isSuccess={true} />}
           {activeLayer && isShow && (
-            <AudioPlayer 
+            <AudioPlayer
               file={activeLayer.file}
               progress={progress}
               setProgress={setProgress}
@@ -191,6 +195,7 @@ const LayeredAudioPlayer = ({
           )}
           {isFirstPlay && showPlayer && (
             <GuessSkip
+              isMobile={isMobile}
               show={isShow}
               showError={showError}
               setShowError={setShowError}
@@ -201,7 +206,7 @@ const LayeredAudioPlayer = ({
             />
           )}
         </CardContent>
-      </Card>
+      </Box>
     </>
   );
 };

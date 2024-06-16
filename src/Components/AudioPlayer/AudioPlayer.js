@@ -40,8 +40,8 @@ const AudioPlayer = ({ file, isPlaying, setIsPlaying }) => {
   }, [isPlaying]);
 
   return (
-    <Box sx={{ display: "flex", flexDirection: "column", alignItems: "center", mt: 2, width: "100%" }}>
-      <audio ref={audioRef} style={{ width: "100%" }} controls>
+    <Box sx={{ display: "flex", flexDirection: "column", alignItems: "center", width: "100%" }}>
+      <audio ref={audioRef} style={{ display: 'none' }} controls>
         <source src={file} type="audio/mpeg" />
         הדפדפן שלך אינו תומך באלמנט שמע.
       </audio>

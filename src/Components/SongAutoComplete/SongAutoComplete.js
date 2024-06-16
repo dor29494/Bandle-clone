@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useCallback } from 'react';
 import { Autocomplete, TextField, Popper } from '@mui/material';
 import { styled } from '@mui/system';
 
@@ -26,29 +26,42 @@ const StyledAutocomplete = styled(Autocomplete)({
   },
 });
 
-function SongAutocomplete({ availableSongs, handleSongChange }) {
+function SongAutocomplete({ availableSongs, handleSongChange, sx }) {
   const filterOptions = (options, { inputValue }) => {
     return options.filter((option) =>
       option.toLowerCase().includes(inputValue.toLowerCase())
     );
   };
 
+  const [inputValue, setInputValue] = useState('');
+
+  const handleInputChange = useCallback((event, newInputValue) => {
+    setInputValue(newInputValue);
+  }, []);
+
+  const handleChange = (event, newValue) => {
+    handleSongChange(newValue);
+  };
+
   return (
-      <StyledAutocomplete
+    <StyledAutocomplete
       noOptionsText="אנא בחר שיר"
       disablePortal
       fullWidth
       id="songsAutocomplete"
-      options={availableSongs}
+      options={inputValue.length > 0 ? availableSongs : []}
       disableClearable
       filterOptions={filterOptions}
       renderInput={(params) => (
         <StyledTextField {...params} label="בחר שיר" fullWidth />
       )}
-      onChange={handleSongChange}
+      inputValue={inputValue}
+      onInputChange={handleInputChange}
+      onChange={handleChange}
       PopperComponent={(props) => (
         <Popper {...props} placement="top-start" />
       )}
+      sx={sx}
     />
   );
 }
