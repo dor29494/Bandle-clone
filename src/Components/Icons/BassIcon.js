@@ -1,6 +1,8 @@
+import { useTheme } from "@emotion/react";
 import React from "react";
 
 function BassIcon() {
+  const theme = useTheme();
   return (
     <svg
       version="1.0"
@@ -9,6 +11,11 @@ function BassIcon() {
       height="637.000000pt"
       viewBox="0 0 247.000000 637.000000"
       preserveAspectRatio="xMidYMid meet"
+      style={{
+        paddingTop: theme.breakpoints.down('sm') ? '10px' : '5px',
+        paddingBottom: theme.breakpoints.down('sm') ? '10px' : '5px',
+        padding: '10px'
+      }}
     >
       <g
         transform="translate(0.000000,637.000000) scale(0.100000,-0.100000)"

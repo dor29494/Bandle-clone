@@ -132,9 +132,9 @@ const LayeredAudioPlayer = ({
       case 2:
         return <PianoGuitarIcon sx={{ fontSize: 40 }} />;
       case 3:
-        return <QueueMusicIcon sx={{ fontSize: 40 }} />;
+        return <QueueMusicIcon sx={{ fontSize: 40, padding: '2px' }} />;
       case 4:
-        return <MicIcon sx={{ fontSize: 40 }} />;
+        return <MicIcon sx={{ fontSize: 40, padding: '2px' }} />;
       default:
         return <MusicNoteIcon sx={{ fontSize: 40 }} />;
     }
