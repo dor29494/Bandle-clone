@@ -6,7 +6,7 @@ import ErrorIcon from '@mui/icons-material/Error';
 
 const ErrorPopup = ({ message, onClose, setShowPlayer }) => {
   const theme = useTheme();
-  const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
+  const isMobile = useMediaQuery(theme.breakpoints.down('xs'));
 
   useEffect(() => {
     if (isMobile) {

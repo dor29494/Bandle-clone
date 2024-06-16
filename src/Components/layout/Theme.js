@@ -16,6 +16,12 @@ const lightTheme = createTheme({
     },
   },
   typography: {
+    h1: {
+      fontSize: '22px',
+      fontWeight: 500,
+      margin: 0,
+      padding: 0
+    },
     h4: {
       fontWeight: 600,
     },

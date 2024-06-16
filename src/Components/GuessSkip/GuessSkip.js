@@ -54,7 +54,7 @@ const GuessSkip = ({
             handleSongChange={handleSongChange}
             sx={{ width: "100%" , mb:  2  }}
           />
-          <Box sx={{ display: "flex", justifyContent: "space-between", width: "100%" , gap:  '45%', mt: 3}}>
+          <Box sx={{ display: "flex", justifyContent: "space-between", width: "100%" , gap:  '55%', mt: 3}}>
             <Button
               variant="contained"
               color="primary"

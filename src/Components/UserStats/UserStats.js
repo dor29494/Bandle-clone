@@ -1,14 +1,28 @@
-import React from 'react';
-import { Dialog, DialogTitle, DialogContent, DialogActions, Button, Typography, IconButton, Box, Grid, Paper } from '@mui/material';
+import React, { useEffect, useState } from 'react';
+import { Dialog, DialogTitle, DialogContent, Typography, IconButton, Box, Grid, LinearProgress } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
 
-function UserStats({ open, onClose, stats }) {
+function UserStats({ open, onClose }) {
+  const [stats, setStats] = useState({ 1: 0, 2: 0, 3: 0, 4: 0, 5: 0, 6: 0 });
+
+  useEffect(() => {
+    if (open) {
+      const storedStats = JSON.parse(localStorage.getItem('userStats')) || { 1: 0, 2: 0, 3: 0, 4: 0, 5: 0, 6: 0 };
+      setStats(storedStats);
+    }
+  }, [open]);
+
+  const totalGuesses = Object.values(stats).reduce((a, b) => a + b, 0);
+
+  const getProgressBarColor = (value) => {
+    return value > 0 ? '#3f51b5' : 'lightgrey';
+  };
+
   return (
     <Dialog open={open} onClose={onClose}>
       <DialogTitle>
         סטטיסטיקות
-      </DialogTitle>
-      <IconButton
+        <IconButton
           aria-label="close"
           onClick={onClose}
           sx={{
@@ -20,42 +34,54 @@ function UserStats({ open, onClose, stats }) {
         >
           <CloseIcon />
         </IconButton>
+      </DialogTitle>
       <DialogContent dividers>
-        <Box>
-          <Typography variant="body1" gutterBottom>1</Typography>
-          <Typography variant="body1" gutterBottom>2</Typography>
-          <Typography variant="body1" gutterBottom>3</Typography>
-          <Typography variant="body1" gutterBottom>4</Typography>
-          <Typography variant="body1" gutterBottom>5</Typography>
-          <Typography variant="body1" gutterBottom>6</Typography>
-          <Typography variant="body1" gutterBottom>X</Typography>
-        </Box>
         <Box mt={2}>
-          <Paper variant="outlined">
-            <Grid container spacing={2} justifyContent="center" alignItems="center">
-              <Grid item xs={4}>
-                <Typography align="center">
-                  {stats.found}/0<br />(0%)
-                </Typography>
-                <Typography align="center">נמצאו</Typography>
+          <Grid container spacing={2}>
+            {Object.keys(stats).map((key) => (
+              <Grid item xs={12} key={key} sx={{paddingLeft: '0 !important', paddingTop: '0 !important'}} >
+                <Box display="flex" alignItems="center" sx={{ py: 1, paddingTop: '1px !important',  paddingBottom: '1px !important'}}>
+                  <Typography variant="body1" sx={{ width: '30px' }}>
+                    {key === '6' ? 'X' : key}
+                  </Typography>
+                  <Box sx={{ width: '100%', mr: 1,ml: 1, position: 'relative'}}>
+                    <LinearProgress
+                      variant="determinate"
+                      value={(stats[key] / totalGuesses) * 100}
+                      sx={{
+                        height: 15,
+                        borderRadius: 5,
+                        backgroundColor: 'lightgrey',
+                        '& .MuiLinearProgress-bar': {
+                          backgroundColor: getProgressBarColor(stats[key]),
+                        },
+                      }}
+                    />
+                    <Box
+                      sx={{
+                        position: 'absolute',
+                        top: 0,
+                        left: '50%',
+                        transform: 'translateX(-50%)',
+                        width: '100%',
+                        textAlign: 'center',
+                        color: (stats[key] / totalGuesses) * 100 > 0 ? '#FFFFFF' : '#000000',
+                      }}
+                    >
+                      <Typography variant="body2" sx={{ fontSize: '0.75rem' }}>
+                        {totalGuesses > 0 ? ((stats[key] / totalGuesses) * 100).toFixed(2) + '%' : '0%'}
+                      </Typography>
+                    </Box>
+                  </Box>
+                  <Typography variant="body1" sx={{ width: '30px', fontSize: '14px'}}>
+                    {`(${stats[key]})`}
+                  </Typography>
+                </Box>
               </Grid>
-              <Grid item xs={4}>
-                <Typography align="center">{stats.currentStreak}</Typography>
-                <Typography align="center">רצף נוכחי</Typography>
-              </Grid>
-              <Grid item xs={4}>
-                <Typography align="center">{stats.maxStreak}</Typography>
-                <Typography align="center">רצף מקסימלי</Typography>
-              </Grid>
-            </Grid>
-          </Paper>
+            ))}
+          </Grid>
         </Box>
       </DialogContent>
-      <DialogActions>
-        <Button variant="contained" color="primary">
-          ייבוא או ייצוא של הסטטיסטיקות שלך
-        </Button>
-      </DialogActions>
     </Dialog>
   );
 }

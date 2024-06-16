@@ -38,9 +38,6 @@ function HowToPlay({ open, onClose }) {
         <Typography gutterBottom>
           ענו עם כמה שפחות מוזיקאים מנגנים ושתפו את התוצאה שלכם!
         </Typography>
-        <Typography gutterBottom>
-          לרמזים יומיים, עקבו אחר @BandleGame בטוויטר.
-        </Typography>
       </DialogContent>
       <DialogActions>
         <Button onClick={onClose} variant="contained" color="primary">
