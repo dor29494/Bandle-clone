@@ -32,27 +32,27 @@
   ],
   "Layers": [
     {
-      "title": "Drums",
+      "title": "תופים",
       "file": "/assets/mp3/drums.wav",
       "isActive": false
     },
     {
-      "title": "Drums + Bass",
+      "title": "תופים + בס",
       "file": "/assets/mp3/bass.wav",
       "isActive": false
     },
     {
-      "title": "Drums + Bass + Instrumental",
+      "title": "תופים + בס + ליווי מוזיקלי",
       "file": "/assets/mp3/instrumental.wav",
       "isActive": false
     },
     {
-      "title": "Drums + Bass + Instrumental + Others",
+      "title": "תופים + בס + ליווי מוזיקלי + מלודיות נוספות",
       "file": "/assets/mp3/other.wav",
       "isActive": false
     },
     {
-      "title": "Drums + Bass + Instrumental + Others + Vocals",
+      "title": "תופים + בס + ליווי מוזיקלי + מלודיות נוספות + שירה",
       "file": "/assets/mp3/vocals.wav",
       "isActive": false
     }

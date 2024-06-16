@@ -66,10 +66,10 @@ const App = ({ setDarkMode, darkMode }) => {
 
   return (
     <>
-      <Box maxWidth="sm" margin="auto">
+      <Box maxWidth="480px" margin="auto" minHeight='100%'>
         <Header setDarkMode={setDarkMode} darkMode={darkMode} />
         <Box sx={{ marginTop: "20px" }}>
-          <Box mt={4}>
+          <Box>
             <SongDetails
               releaseDate={songData.releaseDate}
               views={songData.views}

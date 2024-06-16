@@ -65,24 +65,25 @@ function Header({ setDarkMode, darkMode }) {
     <>
       <AppBar position="static" sx={{ backgroundColor: theme.palette.primary.headerBg }}>
         <Toolbar>
-          <IconButton edge="start" color={theme.palette.primary.headerIcons} aria-label="help" onClick={() => toggleModal('howToPlay')}>
-            <HelpOutlineIcon />
-          </IconButton>
-          <IconButton color={theme.palette.primary.headerIcons} aria-label="stats" onClick={() => toggleModal('stats')}>
-            <BarChartIcon />
-          </IconButton>
-          <Typography variant="h6" color={theme.palette.primary.headerIcons} sx={{ flexGrow: 1, textAlign: 'center' }}>
-            שירדל
-          </Typography>
-          <IconButton color={theme.palette.primary.headerIcons} aria-label="share" onClick={handleShareClick}>
-            <ShareIcon />
-          </IconButton>
-          <IconButton
+        <IconButton
             sx={{ ml: 1 }}
             onClick={handleDarkMode}
             color={theme.palette.primary.headerIcons}
           >
             {darkMode ? <Brightness7Icon /> : <Brightness4Icon />}
+          </IconButton>
+          <IconButton edge="start" color={theme.palette.primary.headerIcons} aria-label="help" onClick={() => toggleModal('howToPlay')}>
+            <HelpOutlineIcon />
+          </IconButton>
+       
+          <Typography variant="h1" color={theme.palette.primary.headerIcons} sx={{ flexGrow: 1, textAlign: 'center' }}>
+            שירדל
+          </Typography>
+          <IconButton color={theme.palette.primary.headerIcons} aria-label="stats" onClick={() => toggleModal('stats')}>
+            <BarChartIcon />
+          </IconButton>
+          <IconButton color={theme.palette.primary.headerIcons} aria-label="share" onClick={handleShareClick}>
+            <ShareIcon />
           </IconButton>
         </Toolbar>
       </AppBar>

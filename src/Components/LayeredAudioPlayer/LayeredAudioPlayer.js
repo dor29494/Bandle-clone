@@ -1,6 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
 import {
-  Card,
   CardContent,
   Typography,
   Box,
@@ -15,9 +14,10 @@ import QueueMusicIcon from "@mui/icons-material/QueueMusic";
 import PlayCircleIcon from "@mui/icons-material/PlayCircle";
 import DrumsIcon from "../Icons/DrumsIcon";
 import Result from "../Result/Result";
-import AudioPlayer from "../AudioPlayer/AudioPlayer"; 
+import AudioPlayer from "../AudioPlayer/AudioPlayer";
 import BassIcon from "../Icons/BassIcon";
 import PianoGuitarIcon from "../Icons/PianoGuitarIcon";
+import { useTheme } from "@emotion/react";
 
 const LayeredAudioPlayer = ({
   layers,
@@ -32,11 +32,12 @@ const LayeredAudioPlayer = ({
   showPlayer,
   setShowPlayer,
 }) => {
+  const theme = useTheme();
   const [activeLayerIndex, setActiveLayerIndex] = useState(0);
   const [activeLayers, setActiveLayers] = useState([]);
   const [isPlaying, setIsPlaying] = useState(false);
   const [isFirstPlay, setIsFirstPlay] = useState(false);
-  const [progress, setProgress] = useState(0); // State for progress
+  const [progress, setProgress] = useState(0);
   const isShow = !success.state && !failed.state;
   const levelsCounter = useRef(0);
 
@@ -50,39 +51,51 @@ const LayeredAudioPlayer = ({
     }
   }, [layers]);
 
+  const updateStatistics = (isSuccess) => {
+    const stats = JSON.parse(localStorage.getItem('userStats')) || {1: 0, 2: 0, 3: 0, 4: 0, 5: 0, 6: 0};
+    if (isSuccess) {
+      stats[activeLayerIndex + 1]++; // Adjust index to match keys 1-5
+    } else {
+      stats[6]++; // Failure
+    }
+    localStorage.setItem('userStats', JSON.stringify(stats));
+  };
+
   const onGuessSuccess = () => {
     setSuccess(prev => ({ ...prev, state: true, index: activeLayerIndex }));
     setShowError(false);
+    updateStatistics(true);
   };
 
   const handleSkip = () => {
     setShowPlayer(false);
-    setIsPlaying(false); // Ensure audio does not start automatically
+    setIsPlaying(false); 
     levelsCounter.current++;
     setFailed(prev => ({ ...prev, state: levelsCounter.current === 5, index: activeLayerIndex }));
+    updateStatistics(false);
     moveToNextLayer();
   };
 
   const getLayersColors = (index) => {
     if (success.state && index === success.index) {
-      return { border: "#6A9D6A", background: "#DBEDDD" }; // Green for success
+      return { border: "#6A9D6A", background: "#DBEDDD" };
     }
     if (failed.state && index === failed.index) {
-      return { border: "#974C50", background: "#F0D7DA" }; // Red for failure
+      return { border: "#974C50", background: "#F0D7DA" };
     }
     if (success.state || failed.state) {
       if (index < (success.state ? success.index : failed.index)) {
-        return { border: "#FFD700", background: "#FBF6D7" }; // Yellow for layers before the success or failure index
+        return { border: "#FFD700", background: "#FBF6D7" };
       }
-      return { border: "#FFFFFF", background: "#D3D3D3" }; // White for all other layers when there's a success or failure
+      return { border: "#FFFFFF", background: "#D3D3D3" };
     }
     if (index < activeLayerIndex) {
-      return { border: "#FFD700", background: "#FBF6D7" }; // Yellow for previous layers
+      return { border: "#FFD700", background: "#FBF6D7" };
     }
     if (index === activeLayerIndex) {
-      return { border: "#ADD8E6", background: "#87CEEB" }; // Light blue for the current layer
+      return { border: "#ADD8E6", background: "#87CEEB" };
     }
-    return { border: "#A9A9A9", background: "#D3D3D3" }; // White for future layers
+    return { border: "#A9A9A9", background: "#D3D3D3" };
   };
 
   const moveToNextLayer = () => {
@@ -109,7 +122,6 @@ const LayeredAudioPlayer = ({
     }
   };
 
-
   const activeLayer = activeLayers[activeLayerIndex];
   const getIcon = (layerIndex) => {
     switch (layerIndex) {
@@ -129,7 +141,7 @@ const LayeredAudioPlayer = ({
   };
   return (
     <>
-      <Card>
+      <Box sx={{minHeight: '100%'}}>
         <CardContent>
           <Typography variant="h5" component="div" textAlign="center" mb={2}>
             שכבות שיר נוכחיות
@@ -139,14 +151,14 @@ const LayeredAudioPlayer = ({
               <Grid item xs={2.4} key={index}>
                 <Box
                   sx={{
-                    display: "flex",
-                    flexDirection: "column",
-                    alignItems: "center",
-                    justifyContent: "center",
-                    height: "100px",
+                    display: 'flex',
+                    flexDirection: 'column',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    height: '76px' ,
                     borderRadius: 1,
                     backgroundColor: getLayersColors(index).background,
-                    border: `3px solid ${getLayersColors(index).border}`
+                    border: `3px solid ${getLayersColors(index).border}`,
                   }}
                 >
                   {getIcon(index)}
@@ -165,7 +177,7 @@ const LayeredAudioPlayer = ({
           )}
           {success.state && <Result song={song} isSuccess={true} />}
           {activeLayer && isShow && (
-            <AudioPlayer 
+            <AudioPlayer
               file={activeLayer.file}
               progress={progress}
               setProgress={setProgress}
@@ -201,7 +213,7 @@ const LayeredAudioPlayer = ({
             />
           )}
         </CardContent>
-      </Card>
+      </Box>
     </>
   );
 };

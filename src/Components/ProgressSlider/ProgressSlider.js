@@ -9,7 +9,7 @@ const ProgressSlider = ({ audioRef, progress, setProgress }) => {
   };
 
   return (
-    <Box sx={{ width: "100%", mt: 2, display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+    <Box sx={{ width: "100%", display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
       <Slider
         
         value={progress}
