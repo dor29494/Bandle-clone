@@ -20,16 +20,30 @@ const lightTheme = createTheme({
       fontSize: '22px',
       fontWeight: 500,
       margin: 0,
-      padding: 0
+      padding: 0,
+      '@media (max-width:600px)': {
+        fontSize: '18px',
+      },
     },
     h4: {
       fontWeight: 600,
+      fontSize: '20px',
+      '@media (max-width:600px)': {
+        fontSize: '16px',
+      },
     },
     h6: {
       fontWeight: 600,
       fontSize: '14px',
+      '@media (max-width:600px)': {
+        fontSize: '12px',
+      },
     },
   },
+  icons: {
+    large: '40px',
+    medium: '30px',
+  }
 });
 
 const darkTheme = createTheme({
@@ -49,12 +63,23 @@ const darkTheme = createTheme({
   typography: {
     h4: {
       fontWeight: 600,
+      fontSize: '20px',
+      '@media (max-width:600px)': {
+        fontSize: '16px',
+      },
     },
     h6: {
       fontWeight: 600,
       fontSize: '14px',
+      '@media (max-width:600px)': {
+        fontSize: '12px',
+      },
     },
   },
+  icons: {
+    large: '40px',
+    medium: '20px',
+  }
 });
 
 export { lightTheme, darkTheme };
