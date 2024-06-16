@@ -10,7 +10,7 @@ const ErrorPopup = ({ message, onClose, setShowPlayer }) => {
 
   useEffect(() => {
     if (isMobile) {
-      setShowPlayer(false);
+      // setShowPlayer(false);
     }
     const timer = setTimeout(() => {
       onClose();

@@ -1,9 +1,10 @@
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { Box } from "@mui/material";
 import ProgressSlider from "../ProgressSlider/ProgressSlider";
 
-const AudioPlayer = ({ file, progress, setProgress, isPlaying, setIsPlaying }) => {
+const AudioPlayer = ({ file, isPlaying, setIsPlaying }) => {
   const audioRef = useRef(null);
+  const [progress, setProgress] = useState(0);
 
   useEffect(() => {
     const audio = audioRef.current;

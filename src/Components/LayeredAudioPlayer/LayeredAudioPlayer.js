@@ -15,7 +15,7 @@ import QueueMusicIcon from "@mui/icons-material/QueueMusic";
 import PlayCircleIcon from "@mui/icons-material/PlayCircle";
 import DrumsIcon from "../Icons/DrumsIcon";
 import Result from "../Result/Result";
-import AudioPlayer from "../AudioPlayer/AudioPlayer"; // Import the new AudioPlayer component
+import AudioPlayer from "../AudioPlayer/AudioPlayer"; 
 import BassIcon from "../Icons/BassIcon";
 import PianoGuitarIcon from "../Icons/PianoGuitarIcon";
 
@@ -103,11 +103,12 @@ const LayeredAudioPlayer = ({
     if (!isFirstPlay) {
       setIsFirstPlay(true);
     }
-    setIsPlaying(!isPlaying);
+    setIsPlaying(prev => !prev);
     if (!isPlaying) {
-      setShowPlayer(true);
+      setShowPlayer(prev => true);
     }
   };
+
 
   const activeLayer = activeLayers[activeLayerIndex];
   const getIcon = (layerIndex) => {
@@ -126,7 +127,6 @@ const LayeredAudioPlayer = ({
         return <MusicNoteIcon sx={{ fontSize: 40 }} />;
     }
   };
-
   return (
     <>
       <Card>
@@ -198,7 +198,6 @@ const LayeredAudioPlayer = ({
               onSkip={handleSkip}
               songsList={songsList}
               song={song}
-              setShowPlayer={setShowPlayer}
             />
           )}
         </CardContent>

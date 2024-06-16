@@ -11,10 +11,18 @@ const ProgressSlider = ({ audioRef, progress, setProgress }) => {
   return (
     <Box sx={{ width: "100%", mt: 2, display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
       <Slider
+        
         value={progress}
         onChange={handleSliderChange}
         aria-labelledby="continuous-slider"
-        sx={{ width: "90%", mt: 2 }}
+        sx={{
+          width: "90%",
+          mt: 2,
+          '& .MuiSlider-thumb': {
+            width: 0,
+            height: 0,
+          },
+        }}
       />
     </Box>
   );
