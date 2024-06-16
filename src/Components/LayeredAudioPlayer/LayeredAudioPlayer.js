@@ -92,9 +92,6 @@ const LayeredAudioPlayer = ({
     if (index < activeLayerIndex) {
       return { border: "#FFD700", background: "#FBF6D7" };
     }
-    if (index === activeLayerIndex) {
-      return { border: "#ADD8E6", background: "#87CEEB" };
-    }
     return { border: "#A9A9A9", background: "#D3D3D3" };
   };
 
