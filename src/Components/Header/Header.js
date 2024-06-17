@@ -12,7 +12,7 @@ import Brightness7Icon from '@mui/icons-material/Brightness7';
 import { useTheme } from '@mui/system';
 import CustomSnackbar from '../CustomSnackbar/CustomSnackbar';
 
-function Header({ setDarkMode, darkMode }) {
+function Header({ setDarkMode, darkMode, setTooltipMessage}) {
   const [modalsOpen, setModalsOpen] = useState({
     howToPlay: false,
     stats: false,
@@ -46,6 +46,9 @@ function Header({ setDarkMode, darkMode }) {
 
   const toggleModal = (modalName) => {
     setModalsOpen(prevState => ({ ...prevState, [modalName]: !prevState[modalName] }));
+    if(modalName === 'howToPlay'){
+      setTooltipMessage("הגבר את השמע ולחץ על הפעל כדאי לנחש את השיר");
+    }
   };
 
   const handleShareClick = () => {
@@ -87,7 +90,7 @@ function Header({ setDarkMode, darkMode }) {
           </IconButton>
         </Toolbar>
       </AppBar>
-      <HowToPlay open={modalsOpen.howToPlay} onClose={() => toggleModal('howToPlay')} />
+      <HowToPlay open={modalsOpen.howToPlay} onClose={() => toggleModal('howToPlay')}  />
       <UserStats open={modalsOpen.stats} onClose={() => toggleModal('stats')} stats={stats} />
       {/* <SettingsModal open={modalsOpen.settings} onClose={() => toggleModal('settings')} darkMode={darkMode} setDarkMode={setDarkMode} /> */}
       <CustomSnackbar

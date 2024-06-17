@@ -26,6 +26,8 @@ const LayeredAudioPlayer = ({
   setShowError,
   showPlayer,
   setShowPlayer,
+  setTooltipMessage,
+  tooltipMessage
 }) => {
   const theme = useTheme();
   const [activeLayerIndex, setActiveLayerIndex] = useState(0);
@@ -35,10 +37,9 @@ const LayeredAudioPlayer = ({
   const [progress, setProgress] = useState(0);
   const [layerClickAlert, setLayerClickAlert] = useState(false); // State for the alert
   const [showTooltip, setShowTooltip] = useState(true); // State for tooltip
-  const [tooltipMessage, setTooltipMessage] = useState("הגבר את השמע ולחץ על הפעל כדאי לנחש את השיר"); // Tooltip message state
   const isShow = !success.state && !failed.state;
   const levelsCounter = useRef(0);
-
+  console.log(tooltipMessage)
   useEffect(() => {
     if (layers) {
       const initializedLayers = layers.map((layer, index) => ({
