@@ -61,6 +61,15 @@ const darkTheme = createTheme({
     },
   },
   typography: {
+    h1: {
+      fontSize: '22px',
+      fontWeight: 500,
+      margin: 0,
+      padding: 0,
+      '@media (max-width:600px)': {
+        fontSize: '18px',
+      },
+    },
     h4: {
       fontWeight: 600,
       fontSize: '20px',
@@ -78,7 +87,7 @@ const darkTheme = createTheme({
   },
   icons: {
     large: '40px',
-    medium: '20px',
+    medium: '30px',
   }
 });
 
