@@ -1,20 +1,36 @@
 // src/App.js
-import React, { useState, useEffect } from "react";
-import { Box } from "@mui/material";
-import LayeredAudioPlayer from "./Components/LayeredAudioPlayer/LayeredAudioPlayer";
-import SongDetails from "./Components/SongDetails/SongDetails";
-import Header from "./Components/Header/Header";
-import ErrorPopup from "./Components/ErrorPopup/ErrorPopup";
+import React, { useEffect } from 'react';
+import { Box } from '@mui/material';
+import { useRecoilState } from 'recoil';
+import {
+  songDataState,
+  songState,
+  tooltipMessageState,
+  successState,
+  failedState,
+  showErrorState,
+  showPlayerState,
+  layersState,
+  songsListState,
+} from './state';
+import LayeredAudioPlayer from './Components/LayeredAudioPlayer/LayeredAudioPlayer';
+import SongDetails from './Components/SongDetails/SongDetails';
+import Header from './Components/Header/Header';
+import ErrorPopup from './Components/ErrorPopup/ErrorPopup';
 
 const App = ({ setDarkMode, darkMode }) => {
-  const [songData, setSongData] = useState(null);
-  const [song, setSong] = useState({ id: null, title: null, views: null, spotifyId: null, youtubeId: null});
-  const [tooltipMessage, setTooltipMessage] = useState(""); // Tooltip message state
-  const [success, setSuccess] = useState({index: 0, state: false});
-  const [failed, setFailed] = useState({index: 0, state: false});
-  const [showError, setShowError] = useState(false);
-  const [showPlayer, setShowPlayer] = useState(false);
+  const [songData, setSongData] = useRecoilState(songDataState);
+  const [song, setSong] = useRecoilState(songState);
+  const [tooltipMessage, setTooltipMessage] = useRecoilState(tooltipMessageState);
+  const [success, setSuccess] = useRecoilState(successState);
+  const [failed, setFailed] = useRecoilState(failedState);
+  const [showError, setShowError] = useRecoilState(showErrorState);
+  const [showPlayer, setShowPlayer] = useRecoilState(showPlayerState);
+  const [layers, setLayers] = useRecoilState(layersState);
+  const [songsList, setSongsList] = useRecoilState(songsListState);
+
   const difficultyEnum = { 1: "קל", 2: "בינוני", 3: "קשה" };
+
   useEffect(() => {
     fetch("/dummyData.json")
       .then((response) => {
@@ -27,10 +43,12 @@ const App = ({ setDarkMode, darkMode }) => {
         data.difficulty = difficultyEnum[data.difficulty];
         setSong({ id: data.songId, title: data.songTitle, views: data.views, spotifyId: data.media.spotifyId, youtubeId: data.media.youtubeId });
         setSongData(data);
+        setLayers(data.layers);
+        setSongsList(data.songsList);
         successTest();
       })
       .catch((error) => console.error("Error fetching the JSON:", error));
-  }, []);
+  }, [setSong, setSongData, setLayers, setSongsList]);
 
   const successTest = () => {
     const resultTime = localStorage.getItem("lastResultTime");
@@ -78,21 +96,7 @@ const App = ({ setDarkMode, darkMode }) => {
             />
           </Box>
           <Box mt={4}>
-            <LayeredAudioPlayer
-              layers={songData.Layers}
-              songsList={songData.Songs}
-              song={song}
-              setSuccess={setSuccess}
-              success={success}
-              setFailed={setFailed}
-              failed={failed}
-              showError={showError}
-              setShowError={setShowError}
-              setShowPlayer={setShowPlayer}
-              showPlayer={showPlayer}
-              setTooltipMessage={setTooltipMessage}
-              tooltipMessage={tooltipMessage}
-            />
+            <LayeredAudioPlayer />
           </Box>
         </Box>
       </Box>
@@ -106,4 +110,5 @@ const App = ({ setDarkMode, darkMode }) => {
     </>
   );
 };
+
 export default App;

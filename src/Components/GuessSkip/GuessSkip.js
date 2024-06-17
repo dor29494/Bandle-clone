@@ -1,20 +1,27 @@
-import React, { useState, useCallback } from "react";
+// src/Components/GuessSkip/GuessSkip.js
+import React, { useCallback } from "react";
+import { useRecoilState, useSetRecoilState } from 'recoil';
 import { Box, Button, Tooltip } from "@mui/material";
 import SongAutocomplete from "../SongAutoComplete/SongAutoComplete";
+import {
+  songState,
+  availableSongsState,
+  guessState,
+  showErrorState,
+  songsListState
+} from '../../state';
 
 const GuessSkip = ({
-  setShowError,
   onGuessSuccess,
   onSkip,
-  songsList,
-  song,
   show,
-  activeLayer, // Add activeLayer as a prop
+  activeLayer
 }) => {
-  const [availableSongs, setAvailableSongs] = useState(
-    songsList.map((x) => x.title)
-  );
-  const [guess, setGuess] = useState({ id: null, title: null });
+  const [availableSongs, setAvailableSongs] = useRecoilState(availableSongsState);
+  const [songsList] = useRecoilState(songsListState);
+  const [guess, setGuess] = useRecoilState(guessState);
+  const [song] = useRecoilState(songState);
+  const setShowError = useSetRecoilState(showErrorState);
   const handleGuessSubmit = () => {
     if (guess.id === null || guess.title === null) {
       return;

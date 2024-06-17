@@ -1,3 +1,4 @@
+// src/Components/LayeredAudioPlayer/LayeredAudioPlayer.js
 import React, { useState, useEffect, useRef } from "react";
 import { CardContent, Typography, Box, Grid, IconButton, Tooltip } from "@mui/material";
 import GuessSkip from "../GuessSkip/GuessSkip";
@@ -12,34 +13,41 @@ import AudioPlayer from "../AudioPlayer/AudioPlayer";
 import BassIcon from "../Icons/BassIcon";
 import PianoGuitarIcon from "../Icons/PianoGuitarIcon";
 import { useTheme } from "@emotion/react";
-import CustomSnackbar from "../CustomSnackbar/CustomSnackbar"; // Import the CustomSnackbar component
+import CustomSnackbar from "../CustomSnackbar/CustomSnackbar";
+import {
+  songDataState,
+  songState,
+  successState,
+  failedState,
+  showErrorState,
+  showPlayerState,
+  tooltipMessageState,
+  availableSongsState,
+  layersState,
+  songsListState
+} from '../../state';
+import { useRecoilState, useSetRecoilState } from "recoil";
 
-const LayeredAudioPlayer = ({
-  layers,
-  songsList,
-  song,
-  setSuccess,
-  success,
-  setFailed,
-  failed,
-  showError,
-  setShowError,
-  showPlayer,
-  setShowPlayer,
-  setTooltipMessage,
-  tooltipMessage
-}) => {
+const LayeredAudioPlayer = () => {
   const theme = useTheme();
+  const [layers] = useRecoilState(layersState);
+  const [songsList] = useRecoilState(songsListState);
+  const [song] = useRecoilState(songState);
+  const [success, setSuccess] = useRecoilState(successState);
+  const [failed, setFailed] = useRecoilState(failedState);
+  const [setShowError] = useRecoilState(showErrorState);
+  const [showPlayer, setShowPlayer] = useRecoilState(showPlayerState);
+  const [tooltipMessage, setTooltipMessage] = useRecoilState(tooltipMessageState);
+  const setAvailableSongs = useSetRecoilState(availableSongsState);
   const [activeLayerIndex, setActiveLayerIndex] = useState(0);
   const [activeLayers, setActiveLayers] = useState([]);
   const [isPlaying, setIsPlaying] = useState(false);
   const [isFirstPlay, setIsFirstPlay] = useState(false);
   const [progress, setProgress] = useState(0);
-  const [layerClickAlert, setLayerClickAlert] = useState(false); // State for the alert
-  const [showTooltip, setShowTooltip] = useState(true); // State for tooltip
+  const [layerClickAlert, setLayerClickAlert] = useState(false);
+  const [showTooltip, setShowTooltip] = useState(true);
   const isShow = !success.state && !failed.state;
   const levelsCounter = useRef(0);
-  console.log(tooltipMessage)
   useEffect(() => {
     if (layers) {
       const initializedLayers = layers.map((layer, index) => ({
@@ -49,20 +57,21 @@ const LayeredAudioPlayer = ({
       setActiveLayers(initializedLayers);
     }
 
-    // Hide the tooltip after a few seconds
+    setAvailableSongs(songsList.map((x) => x.title));
+
     const tooltipTimeout = setTimeout(() => {
       setShowTooltip(false);
-    }, 5000); // Tooltip shown for 5 seconds
+    }, 5000);
 
     return () => clearTimeout(tooltipTimeout);
-  }, [layers]);
+  }, [layers, songsList, setAvailableSongs]);
 
   const updateStatistics = (isSuccess) => {
     const stats = JSON.parse(localStorage.getItem('userStats')) || { 1: 0, 2: 0, 3: 0, 4: 0, 5: 0, 6: 0 };
     if (isSuccess) {
-      stats[activeLayerIndex + 1]++; // Adjust index to match keys 1-5
+      stats[activeLayerIndex + 1]++;
     } else {
-      stats[6]++; // Failure
+      stats[6]++;
     }
     localStorage.setItem('userStats', JSON.stringify(stats));
   };
@@ -81,7 +90,6 @@ const LayeredAudioPlayer = ({
     updateStatistics(false);
     moveToNextLayer();
     
-    // Show tooltip with different message after first layer
     if (activeLayerIndex === 0) {
       setTooltipMessage("לחץ כאן על מנת לשמוע את השכבה החדשה");
     }
@@ -242,13 +250,9 @@ const LayeredAudioPlayer = ({
           {isFirstPlay && showPlayer && (
             <GuessSkip
               show={isShow}
-              showError={showError}
-              setShowError={setShowError}
               onGuessSuccess={onGuessSuccess}
               onSkip={handleSkip}
-              songsList={songsList}
-              song={song}
-              activeLayer={activeLayerIndex} // Pass activeLayerIndex as a prop
+              activeLayer={activeLayerIndex}
             />
           )}
         </CardContent>
