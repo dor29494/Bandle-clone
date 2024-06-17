@@ -46,6 +46,7 @@ const LayeredAudioPlayer = () => {
   const [progress, setProgress] = useState(0);
   const [layerClickAlert, setLayerClickAlert] = useState(false);
   const [showTooltip, setShowTooltip] = useState(true);
+  const [skipMessage, setSkipMessage] = useState("");
   const isShow = !success.state && !failed.state;
   const levelsCounter = useRef(0);
   useEffect(() => {
@@ -97,9 +98,15 @@ const LayeredAudioPlayer = () => {
   };
 
   const handleLayerClick = (index) => {
+    if(!isPlaying){
+      setSkipMessage("אנא הפעל את הרצועה לפני דילוג");
+      setLayerClickAlert(true);
+      return;
+    }
     if (index === activeLayerIndex + 1) {
       handleSkip();
     } else {
+      setSkipMessage("אפשר לדלג רק על רצועה אחת");
       setLayerClickAlert(true);
     }
   };
@@ -260,7 +267,7 @@ const LayeredAudioPlayer = () => {
       <CustomSnackbar
         alertOpen={layerClickAlert}
         handleCloseAlert={handleCloseAlert}
-        message="אנא בחר בשכבה הבאה בלבד"
+        message={skipMessage}
       />
     </>
   );
