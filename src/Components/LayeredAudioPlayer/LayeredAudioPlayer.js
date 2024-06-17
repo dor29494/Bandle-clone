@@ -241,6 +241,7 @@ const LayeredAudioPlayer = ({
               onSkip={handleSkip}
               songsList={songsList}
               song={song}
+              activeLayer={activeLayerIndex}
             />
           )}
         </CardContent>
