@@ -63,8 +63,8 @@ function Header({ setDarkMode, darkMode }) {
 
   return (
     <>
-      <AppBar position="static" sx={{ backgroundColor: theme.palette.primary.headerBg }}>
-        <Toolbar>
+      <AppBar position="static" sx={{ backgroundColor: theme.palette.primary.headerBg, boxShadow: 'none', borderBottom: '1px solid #ccc2c2' }}>
+      <Toolbar>
         <IconButton
             sx={{ ml: 1 }}
             onClick={handleDarkMode}

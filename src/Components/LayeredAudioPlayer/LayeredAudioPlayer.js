@@ -35,6 +35,7 @@ const LayeredAudioPlayer = ({
   const [progress, setProgress] = useState(0);
   const [layerClickAlert, setLayerClickAlert] = useState(false); // State for the alert
   const [showTooltip, setShowTooltip] = useState(true); // State for tooltip
+  const [tooltipMessage, setTooltipMessage] = useState("הגבר את השמע ולחץ על הפעל כדאי לנחש את השיר"); // Tooltip message state
   const isShow = !success.state && !failed.state;
   const levelsCounter = useRef(0);
 
@@ -78,12 +79,17 @@ const LayeredAudioPlayer = ({
     setFailed(prev => ({ ...prev, state: levelsCounter.current === 5, index: activeLayerIndex }));
     updateStatistics(false);
     moveToNextLayer();
+    
+    // Show tooltip with different message after first layer
+    if (activeLayerIndex === 0) {
+      setTooltipMessage("לחץ כאן על מנת לשמוע את השכבה החדשה");
+    }
+    setShowTooltip(true);
   };
 
   const handleLayerClick = (index) => {
     if (index === activeLayerIndex + 1) {
       handleSkip();
-      handlePlayPause(true); // Always play when layer is clicked
     } else {
       setLayerClickAlert(true);
     }
@@ -213,7 +219,7 @@ const LayeredAudioPlayer = ({
             <Box display="flex" justifyContent="center" alignItems="center">
               <Tooltip
                 open={showTooltip}
-                title="הגבר את הווליום ולחץ על הפעל על מנת לשמוע את השכבה הנבחרת"
+                title={tooltipMessage}
                 arrow
                 placement="top"
                 onClose={() => setShowTooltip(false)}
@@ -241,7 +247,7 @@ const LayeredAudioPlayer = ({
               onSkip={handleSkip}
               songsList={songsList}
               song={song}
-              activeLayer={activeLayerIndex}
+              activeLayer={activeLayerIndex} // Pass activeLayerIndex as a prop
             />
           )}
         </CardContent>
