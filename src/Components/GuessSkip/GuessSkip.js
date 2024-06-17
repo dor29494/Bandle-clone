@@ -1,29 +1,31 @@
 // src/Components/GuessSkip/GuessSkip.js
-import React, { useCallback } from "react";
-import { useRecoilState, useSetRecoilState } from 'recoil';
+import React, { useCallback, useState } from "react";
+import { useRecoilState } from 'recoil';
 import { Box, Button, Tooltip } from "@mui/material";
 import SongAutocomplete from "../SongAutoComplete/SongAutoComplete";
+import CustomSnackbar from "../CustomSnackbar/CustomSnackbar";
 import {
-  songState,
   availableSongsState,
   guessState,
   showErrorState,
-  songsListState
+  songState,
 } from '../../state';
 
 const GuessSkip = ({
   onGuessSuccess,
   onSkip,
   show,
-  activeLayer
+  activeLayer, // Add activeLayer as a prop
 }) => {
-  const [availableSongs, setAvailableSongs] = useRecoilState(availableSongsState);
-  const [songsList] = useRecoilState(songsListState);
+  const [availableSongs] = useRecoilState(availableSongsState);
   const [guess, setGuess] = useRecoilState(guessState);
   const [song] = useRecoilState(songState);
-  const setShowError = useSetRecoilState(showErrorState);
+  const setShowError = useRecoilState(showErrorState);
+  const [alertOpen, setAlertOpen] = useState(false); // State for CustomSnackbar
+
   const handleGuessSubmit = () => {
     if (guess.id === null || guess.title === null) {
+      setAlertOpen(true); // Show alert if the guess is empty
       return;
     }
     if (Number(guess.id) === Number(song.id)) {
@@ -31,18 +33,21 @@ const GuessSkip = ({
     } else {
       setShowError(true);
       setGuess({ id: null, title: null });
-      setAvailableSongs((prevSongs) => prevSongs.filter((s) => s !== guess.title));
       onSkip();
     }
   };
 
   const handleSongChange = useCallback(
     (newValue) => {
-      const guessObject = songsList.find((x) => x.title === newValue) || { id: null, title: null };
+      const guessObject = availableSongs.find((x) => x === newValue) || { id: null, title: null };
       setGuess(guessObject);
     },
-    [songsList]
+    [availableSongs]
   );
+
+  const handleCloseAlert = () => {
+    setAlertOpen(false);
+  };
 
   return (
     <>
@@ -87,6 +92,11 @@ const GuessSkip = ({
           </Box>
         </Box>
       )}
+      <CustomSnackbar
+        alertOpen={alertOpen}
+        handleCloseAlert={handleCloseAlert}
+        message="אנא בחר ערך מהרשימה"
+      />
     </>
   );
 };
