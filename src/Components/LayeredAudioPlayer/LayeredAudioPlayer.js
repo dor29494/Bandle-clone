@@ -1,11 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
-import {
-  CardContent,
-  Typography,
-  Box,
-  Grid,
-  IconButton,
-} from "@mui/material";
+import { CardContent, Typography, Box, Grid, IconButton, Tooltip } from "@mui/material";
 import GuessSkip from "../GuessSkip/GuessSkip";
 import PauseIcon from "@mui/icons-material/Pause";
 import MusicNoteIcon from "@mui/icons-material/MusicNote";
@@ -18,6 +12,7 @@ import AudioPlayer from "../AudioPlayer/AudioPlayer";
 import BassIcon from "../Icons/BassIcon";
 import PianoGuitarIcon from "../Icons/PianoGuitarIcon";
 import { useTheme } from "@emotion/react";
+import CustomSnackbar from "../CustomSnackbar/CustomSnackbar"; // Import the CustomSnackbar component
 
 const LayeredAudioPlayer = ({
   layers,
@@ -38,6 +33,8 @@ const LayeredAudioPlayer = ({
   const [isPlaying, setIsPlaying] = useState(false);
   const [isFirstPlay, setIsFirstPlay] = useState(false);
   const [progress, setProgress] = useState(0);
+  const [layerClickAlert, setLayerClickAlert] = useState(false); // State for the alert
+  const [showTooltip, setShowTooltip] = useState(true); // State for tooltip
   const isShow = !success.state && !failed.state;
   const levelsCounter = useRef(0);
 
@@ -49,10 +46,17 @@ const LayeredAudioPlayer = ({
       }));
       setActiveLayers(initializedLayers);
     }
+
+    // Hide the tooltip after a few seconds
+    const tooltipTimeout = setTimeout(() => {
+      setShowTooltip(false);
+    }, 5000); // Tooltip shown for 5 seconds
+
+    return () => clearTimeout(tooltipTimeout);
   }, [layers]);
 
   const updateStatistics = (isSuccess) => {
-    const stats = JSON.parse(localStorage.getItem('userStats')) || {1: 0, 2: 0, 3: 0, 4: 0, 5: 0, 6: 0};
+    const stats = JSON.parse(localStorage.getItem('userStats')) || { 1: 0, 2: 0, 3: 0, 4: 0, 5: 0, 6: 0 };
     if (isSuccess) {
       stats[activeLayerIndex + 1]++; // Adjust index to match keys 1-5
     } else {
@@ -69,11 +73,36 @@ const LayeredAudioPlayer = ({
 
   const handleSkip = () => {
     setShowPlayer(false);
-    setIsPlaying(false); 
+    setIsPlaying(false);
     levelsCounter.current++;
     setFailed(prev => ({ ...prev, state: levelsCounter.current === 5, index: activeLayerIndex }));
     updateStatistics(false);
     moveToNextLayer();
+  };
+
+  const handleLayerClick = (index) => {
+    if (index === activeLayerIndex + 1) {
+      handleSkip();
+      handlePlayPause(true); // Always play when layer is clicked
+    } else {
+      setLayerClickAlert(true);
+    }
+  };
+
+  const handlePlayPause = (forcePlay = false) => {
+    if (forcePlay) {
+      setIsFirstPlay(true);
+      setIsPlaying(true);
+      setShowPlayer(true);
+    } else {
+      if (!isFirstPlay) {
+        setIsFirstPlay(true);
+      }
+      setIsPlaying(prev => !prev);
+      if (!isPlaying) {
+        setShowPlayer(prev => true);
+      }
+    }
   };
 
   const getLayersColors = (index) => {
@@ -89,7 +118,7 @@ const LayeredAudioPlayer = ({
       }
       return { border: "#FFFFFF", background: "#D3D3D3" };
     }
-    if (index < activeLayerIndex) {
+    if (index <= activeLayerIndex) {
       return { border: "#FFD700", background: "#FBF6D7" };
     }
     return { border: "#A9A9A9", background: "#D3D3D3" };
@@ -109,14 +138,8 @@ const LayeredAudioPlayer = ({
     }
   };
 
-  const handlePlayPause = () => {
-    if (!isFirstPlay) {
-      setIsFirstPlay(true);
-    }
-    setIsPlaying(prev => !prev);
-    if (!isPlaying) {
-      setShowPlayer(prev => true);
-    }
+  const handleCloseAlert = () => {
+    setLayerClickAlert(false);
   };
 
   const activeLayer = activeLayers[activeLayerIndex];
@@ -136,9 +159,10 @@ const LayeredAudioPlayer = ({
         return <MusicNoteIcon sx={{ fontSize: 40 }} />;
     }
   };
+
   return (
     <>
-      <Box sx={{minHeight: '100%'}}>
+      <Box sx={{ minHeight: '100%' }}>
         <CardContent>
           <Typography variant="h5" component="div" textAlign="center" mb={2}>
             שכבות שיר נוכחיות
@@ -147,15 +171,17 @@ const LayeredAudioPlayer = ({
             {activeLayers.map((layer, index) => (
               <Grid item xs={2.4} key={index}>
                 <Box
+                  onClick={() => handleLayerClick(index)}
                   sx={{
                     display: 'flex',
                     flexDirection: 'column',
                     alignItems: 'center',
                     justifyContent: 'center',
-                    height: '76px' ,
+                    height: '76px',
                     borderRadius: 1,
                     backgroundColor: getLayersColors(index).background,
                     border: `3px solid ${getLayersColors(index).border}`,
+                    cursor: index === activeLayerIndex + 1 ? 'pointer' : 'default',
                   }}
                 >
                   {getIcon(index)}
@@ -185,17 +211,25 @@ const LayeredAudioPlayer = ({
           {failed.state && <Result song={song} isSuccess={false} />}
           {isShow && (
             <Box display="flex" justifyContent="center" alignItems="center">
-              <IconButton
-                disabled={success.state}
-                color="success"
-                onClick={handlePlayPause}
+              <Tooltip
+                open={showTooltip}
+                title="הגבר את הווליום ולחץ על הפעל על מנת לשמוע את השכבה הנבחרת"
+                arrow
+                placement="top"
+                onClose={() => setShowTooltip(false)}
               >
-                {isPlaying ? (
-                  <PauseIcon fontSize="large" />
-                ) : (
-                  <PlayCircleIcon fontSize="large" />
-                )}
-              </IconButton>
+                <IconButton
+                  disabled={success.state}
+                  color="success"
+                  onClick={() => handlePlayPause()}
+                >
+                  {isPlaying ? (
+                    <PauseIcon fontSize="large" />
+                  ) : (
+                    <PlayCircleIcon fontSize="large" />
+                  )}
+                </IconButton>
+              </Tooltip>
             </Box>
           )}
           {isFirstPlay && showPlayer && (
@@ -211,6 +245,11 @@ const LayeredAudioPlayer = ({
           )}
         </CardContent>
       </Box>
+      <CustomSnackbar
+        alertOpen={layerClickAlert}
+        handleCloseAlert={handleCloseAlert}
+        message="אנא בחר בשכבה הבאה בלבד"
+      />
     </>
   );
 };
