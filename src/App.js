@@ -21,7 +21,6 @@ import ErrorPopup from './Components/ErrorPopup/ErrorPopup';
 const App = ({ setDarkMode, darkMode }) => {
   const [songData, setSongData] = useRecoilState(songDataState);
   const [song, setSong] = useRecoilState(songState);
-  const [tooltipMessage, setTooltipMessage] = useRecoilState(tooltipMessageState);
   const [success, setSuccess] = useRecoilState(successState);
   const [failed, setFailed] = useRecoilState(failedState);
   const [showError, setShowError] = useRecoilState(showErrorState);
@@ -86,7 +85,7 @@ const App = ({ setDarkMode, darkMode }) => {
   return (
     <>
       <Box maxWidth="480px" margin="auto" minHeight='100%'>
-        <Header setDarkMode={setDarkMode} darkMode={darkMode} setTooltipMessage={setTooltipMessage} />
+        <Header setDarkMode={setDarkMode} darkMode={darkMode}  />
         <Box sx={{ marginTop: "20px" }}>
           <Box>
             <SongDetails

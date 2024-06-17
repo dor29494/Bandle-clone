@@ -90,10 +90,6 @@ const LayeredAudioPlayer = () => {
     setFailed(prev => ({ ...prev, state: levelsCounter.current === 5, index: activeLayerIndex }));
     updateStatistics(false);
     moveToNextLayer();
-    
-    if (activeLayerIndex === 0) {
-      setTooltipMessage("לחץ כאן על מנת לשמוע את השכבה החדשה");
-    }
     setShowTooltip(true);
   };
 

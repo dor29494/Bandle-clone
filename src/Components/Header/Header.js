@@ -11,8 +11,10 @@ import Brightness4Icon from '@mui/icons-material/Brightness4';
 import Brightness7Icon from '@mui/icons-material/Brightness7';
 import { useTheme } from '@mui/system';
 import CustomSnackbar from '../CustomSnackbar/CustomSnackbar';
-
-function Header({ setDarkMode, darkMode, setTooltipMessage}) {
+import { tooltipMessageState } from '../../state';
+import { useRecoilState } from 'recoil';
+function Header({ setDarkMode, darkMode}) {
+  const [tooltipMessage, setTooltipMessage] = useRecoilState(tooltipMessageState);
   const [modalsOpen, setModalsOpen] = useState({
     howToPlay: false,
     stats: false,
@@ -47,7 +49,7 @@ function Header({ setDarkMode, darkMode, setTooltipMessage}) {
   const toggleModal = (modalName) => {
     setModalsOpen(prevState => ({ ...prevState, [modalName]: !prevState[modalName] }));
     if(modalName === 'howToPlay'){
-      setTooltipMessage("הגבר את השמע ולחץ על הפעל כדאי לנחש את השיר");
+      setTooltipMessage("הגבר את השמע ולחץ על הפעל כדאי לנחש את השיר")
     }
   };
 
