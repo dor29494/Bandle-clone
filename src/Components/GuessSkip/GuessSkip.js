@@ -1,22 +1,31 @@
-import React, { useState, useCallback } from "react";
+// src/Components/GuessSkip/GuessSkip.js
+import React, { useCallback, useState } from "react";
+import { useRecoilState } from 'recoil';
 import { Box, Button, Tooltip } from "@mui/material";
 import SongAutocomplete from "../SongAutoComplete/SongAutoComplete";
+import CustomSnackbar from "../CustomSnackbar/CustomSnackbar";
+import {
+  availableSongsState,
+  guessState,
+  showErrorState,
+  songState,
+} from '../../state';
 
 const GuessSkip = ({
-  setShowError,
   onGuessSuccess,
   onSkip,
-  songsList,
-  song,
   show,
   activeLayer, // Add activeLayer as a prop
 }) => {
-  const [availableSongs, setAvailableSongs] = useState(
-    songsList.map((x) => x.title)
-  );
-  const [guess, setGuess] = useState({ id: null, title: null });
+  const [availableSongs] = useRecoilState(availableSongsState);
+  const [guess, setGuess] = useRecoilState(guessState);
+  const [song] = useRecoilState(songState);
+  const setShowError = useRecoilState(showErrorState);
+  const [alertOpen, setAlertOpen] = useState(false); // State for CustomSnackbar
+
   const handleGuessSubmit = () => {
     if (guess.id === null || guess.title === null) {
+      setAlertOpen(true); // Show alert if the guess is empty
       return;
     }
     if (Number(guess.id) === Number(song.id)) {
@@ -24,18 +33,21 @@ const GuessSkip = ({
     } else {
       setShowError(true);
       setGuess({ id: null, title: null });
-      setAvailableSongs((prevSongs) => prevSongs.filter((s) => s !== guess.title));
       onSkip();
     }
   };
 
   const handleSongChange = useCallback(
     (newValue) => {
-      const guessObject = songsList.find((x) => x.title === newValue) || { id: null, title: null };
+      const guessObject = availableSongs.find((x) => x === newValue) || { id: null, title: null };
       setGuess(guessObject);
     },
-    [songsList]
+    [availableSongs]
   );
+
+  const handleCloseAlert = () => {
+    setAlertOpen(false);
+  };
 
   return (
     <>
@@ -80,6 +92,11 @@ const GuessSkip = ({
           </Box>
         </Box>
       )}
+      <CustomSnackbar
+        alertOpen={alertOpen}
+        handleCloseAlert={handleCloseAlert}
+        message="אנא בחר ערך מהרשימה"
+      />
     </>
   );
 };

@@ -5,6 +5,7 @@ import App from './App';
 import { ThemeProvider, CssBaseline } from '@mui/material';
 import { lightTheme, darkTheme } from './Components/layout/Theme';
 import './index.css';
+import { RecoilRoot } from 'recoil';
 
 const Root = () => {
   const [darkMode, setDarkMode] = useState(false);
@@ -14,10 +15,12 @@ const Root = () => {
     setDarkMode(darkMode);
   },[])
   return (
+    <RecoilRoot>
     <ThemeProvider theme={theme}>
       <CssBaseline />
       <App setDarkMode={setDarkMode} darkMode={darkMode} />
     </ThemeProvider>
+    </RecoilRoot>
   );
 };
 

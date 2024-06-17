@@ -8,7 +8,7 @@
     "youtubeId": "19qoWmBJVRc",
     "spotifyId": "0Xz0yXSiYaC2nyxwjZGTd5"
   },
-  "Songs":  [
+  "songsList":  [
     { "id": 1, "title": "דמיון חופשי - יצחק קלפטר" },
     { "id": 2, "title": "ראיתי עולם (חדש) - עומר אדם, שרק" },
     { "id": 3, "title": "רוז (חדש) - פאר טסי" },
@@ -30,7 +30,7 @@
     { "id": 19, "title": "עוד יום בעזה - נועם צוריאלי" },
     { "id": 20, "title": "Hurricane - עדן גולן" }
   ],
-  "Layers": [
+  "layers": [
     {
       "title": "תופים",
       "file": "/assets/mp3/drums.wav",
