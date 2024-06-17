@@ -1,5 +1,5 @@
 import React, { useState, useCallback } from "react";
-import { Box, Button } from "@mui/material";
+import { Box, Button, Tooltip } from "@mui/material";
 import SongAutocomplete from "../SongAutoComplete/SongAutoComplete";
 
 const GuessSkip = ({
@@ -9,12 +9,12 @@ const GuessSkip = ({
   songsList,
   song,
   show,
+  activeLayer, // Add activeLayer as a prop
 }) => {
   const [availableSongs, setAvailableSongs] = useState(
     songsList.map((x) => x.title)
   );
   const [guess, setGuess] = useState({ id: null, title: null });
-
   const handleGuessSubmit = () => {
     if (guess.id === null || guess.title === null) {
       return;
@@ -43,7 +43,7 @@ const GuessSkip = ({
         <Box
           sx={{
             display: "flex",
-            flexDirection: "column" ,
+            flexDirection: "column",
             alignItems: "center",
             mt: 2,
             width: "100%",
@@ -52,25 +52,31 @@ const GuessSkip = ({
           <SongAutocomplete
             availableSongs={availableSongs}
             handleSongChange={handleSongChange}
-            sx={{ width: "100%" , mb:  2  }}
+            sx={{ width: "100%", mb: 2 }}
           />
-          <Box sx={{ display: "flex", justifyContent: "space-between", width: "100%" , gap:  '55%', mt: 3}}>
+          <Box sx={{ display: "flex", justifyContent: "space-between", width: "100%", gap: '55%', mt: 3 }}>
             <Button
               variant="contained"
               color="primary"
               onClick={handleGuessSubmit}
-              sx={{ ml:  0 , flexGrow:  1}}
+              sx={{ ml: 0, flexGrow: 1 }}
             >
               נחש
             </Button>
-            <Button
-              variant="contained"
-              color="secondary"
-              onClick={onSkip}
-              sx={{ mr:  0  ,flexGrow: 1}}
+            <Tooltip
+              title="אם לא הצלחת לנחש יש ללחוץ על דלג על מנת לגלות את השיר"
+              open={activeLayer === 4} // Show tooltip only when activeLayer is 5
+              arrow
             >
-              דלג
-            </Button>
+              <Button
+                variant="contained"
+                color="secondary"
+                onClick={onSkip}
+                sx={{ mr: 0, flexGrow: 1 }}
+              >
+                דלג
+              </Button>
+            </Tooltip>
           </Box>
         </Box>
       )}

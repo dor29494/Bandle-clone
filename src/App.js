@@ -9,6 +9,7 @@ import ErrorPopup from "./Components/ErrorPopup/ErrorPopup";
 const App = ({ setDarkMode, darkMode }) => {
   const [songData, setSongData] = useState(null);
   const [song, setSong] = useState({ id: null, title: null, views: null, spotifyId: null, youtubeId: null});
+  const [tooltipMessage, setTooltipMessage] = useState(""); // Tooltip message state
   const [success, setSuccess] = useState({index: 0, state: false});
   const [failed, setFailed] = useState({index: 0, state: false});
   const [showError, setShowError] = useState(false);
@@ -67,7 +68,7 @@ const App = ({ setDarkMode, darkMode }) => {
   return (
     <>
       <Box maxWidth="480px" margin="auto" minHeight='100%'>
-        <Header setDarkMode={setDarkMode} darkMode={darkMode} />
+        <Header setDarkMode={setDarkMode} darkMode={darkMode} setTooltipMessage={setTooltipMessage} />
         <Box sx={{ marginTop: "20px" }}>
           <Box>
             <SongDetails
@@ -89,6 +90,8 @@ const App = ({ setDarkMode, darkMode }) => {
               setShowError={setShowError}
               setShowPlayer={setShowPlayer}
               showPlayer={showPlayer}
+              setTooltipMessage={setTooltipMessage}
+              tooltipMessage={tooltipMessage}
             />
           </Box>
         </Box>

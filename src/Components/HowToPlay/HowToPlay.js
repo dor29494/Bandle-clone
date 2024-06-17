@@ -26,7 +26,7 @@ function HowToPlay({ open, onClose }) {
           </IconButton>
         </Box>
       </DialogTitle>
-      <DialogContent dividers>
+      <DialogContent dividers sx={{zIndex: '55'}}>
         <Grid container spacing={2} alignItems="center">
           <Grid item>
             <QueueMusicIcon
