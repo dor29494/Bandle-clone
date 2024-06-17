@@ -15,7 +15,6 @@ const GuessSkip = ({
     songsList.map((x) => x.title)
   );
   const [guess, setGuess] = useState({ id: null, title: null });
-  console.log(activeLayer)
   const handleGuessSubmit = () => {
     if (guess.id === null || guess.title === null) {
       return;
