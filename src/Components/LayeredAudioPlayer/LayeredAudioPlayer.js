@@ -181,7 +181,7 @@ const LayeredAudioPlayer = () => {
   return (
     <>
       <Box sx={{ minHeight: '100%' }}>
-        <CardContent>
+        <CardContent sx={{paddingTop: '0'}}>
           <Typography variant="h5" component="div" textAlign="center" mb={2}>
             שכבות שיר נוכחיות
           </Typography>
