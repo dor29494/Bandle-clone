@@ -6,6 +6,10 @@ import { ThemeProvider, CssBaseline } from '@mui/material';
 import { lightTheme, darkTheme } from './Components/layout/Theme';
 import './index.css';
 import { RecoilRoot } from 'recoil';
+import analytics from './analytics';
+
+// Initialize the analytics instance
+analytics.page();
 
 const Root = () => {
   const [darkMode, setDarkMode] = useState(false);
