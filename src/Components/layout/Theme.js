@@ -9,7 +9,10 @@ const lightTheme = createTheme({
       main: '#1976d2',
       headerBg: '#FFFFFF',
       headerIcons: '#000000',
-      successBg: '#f5f5f5'
+      successBg: '#f5f5f5',
+      progressSliderBG: '#1976d2',
+      snackBarBG: '#fff',
+      songDetailsBoxShadow: '#0000001F'
     },
     secondary: {
       main: '#ff4081',
@@ -54,7 +57,11 @@ const darkTheme = createTheme({
       main: '#bb86fc',
       headerBg: '#202124',
       headerIcons: '#E0E0E0',
-      successBg: '#2B2929'
+      successBg: '#2B2929',
+      progressSliderBG: '#FBF6D7',
+      snackBarBG: '#D3D3D3',
+      songDetailsBoxShadow: '#666060'
+      
     },
     secondary: {
       main: '#ff4081',
