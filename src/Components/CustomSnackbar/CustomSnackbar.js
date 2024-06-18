@@ -1,43 +1,46 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { Snackbar, Alert as MuiAlert, IconButton } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
 import { styled } from '@mui/system';
+import { useTheme } from '@emotion/react';
 
-const CustomAlert = styled(MuiAlert)`
-  width: 100%;
-  background-color: #ffffff;
-  color: #4caf50;
-  display: flex;
-  align-items: center;
-  justify-content: space-around;
-  padding: 10px 15px;
-  padding-left: 25px;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-  position: relative;
-   .MuiAlert-message {
-        display: flex;
-        flex-direction: row-reverse;
-        justify-content: center;
-        align-items: center;
-        margin-right: 10px;
-        gap: 2px;
-        text-align: center;
-        flex-grow: 1;
-        position: relative;
-   }
-`;
+const CustomAlert = styled(MuiAlert)(({ theme }) => ({
+  width: '100%',
+  backgroundColor: theme.palette.background.default, // Use theme color here
+  color: '#4caf50',
+  display: 'flex',
+  alignItems: 'center',
+  justifyContent: 'space-around',
+  padding: '10px 15px',
+  paddingLeft: '25px',
+  boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)',
+  position: 'relative',
+  '.MuiAlert-message': {
+    display: 'flex',
+    flexDirection: 'row-reverse',
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginRight: '10px',
+    gap: '2px',
+    textAlign: 'center',
+    flexGrow: 1,
+    position: 'relative',
+  },
+}));
 
 const CloseButton = styled(IconButton)`
   margin-left: -5px;
 `;
 
-const AlertSnackbar = styled(Snackbar)`
-.MuiPaper-root {
-    padding-left: 15px;
-  }
-`
+const AlertSnackbar = styled(Snackbar)(({ theme }) => ({
+  '.MuiPaper-root': {
+    paddingLeft: '15px',
+    backgroundColor: theme.palette.primary.snackBarBG, // Use theme color here
+  },
+}));
 
 function CustomSnackbar({ alertOpen, handleCloseAlert, message }) {
+  const theme = useTheme();
   return (
     <AlertSnackbar
       open={alertOpen}

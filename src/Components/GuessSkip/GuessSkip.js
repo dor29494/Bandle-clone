@@ -1,6 +1,6 @@
 // src/Components/GuessSkip/GuessSkip.js
 import React, { useCallback, useState } from "react";
-import { useRecoilState } from 'recoil';
+import { useRecoilState, useRecoilValue } from 'recoil';
 import { Box, Button, Tooltip } from "@mui/material";
 import SongAutocomplete from "../SongAutoComplete/SongAutoComplete";
 import CustomSnackbar from "../CustomSnackbar/CustomSnackbar";
@@ -9,6 +9,7 @@ import {
   guessState,
   showErrorState,
   songState,
+  songsListState
 } from '../../state';
 
 const GuessSkip = ({
@@ -17,13 +18,15 @@ const GuessSkip = ({
   show,
   activeLayer, // Add activeLayer as a prop
 }) => {
-  const [availableSongs] = useRecoilState(availableSongsState);
+  const availableSongs = useRecoilValue(availableSongsState); // Use useRecoilValue for read-only state
+  const songsList = useRecoilValue(songsListState); // Use useRecoilValue for read-only state
   const [guess, setGuess] = useRecoilState(guessState);
-  const [song] = useRecoilState(songState);
-  const setShowError = useRecoilState(showErrorState);
+  const song = useRecoilValue(songState); // Use useRecoilValue for read-only state
+  const setShowError = useRecoilState(showErrorState)[1];
   const [alertOpen, setAlertOpen] = useState(false); // State for CustomSnackbar
 
   const handleGuessSubmit = () => {
+    // console.log(song, guess);
     if (guess.id === null || guess.title === null) {
       setAlertOpen(true); // Show alert if the guess is empty
       return;
@@ -39,10 +42,11 @@ const GuessSkip = ({
 
   const handleSongChange = useCallback(
     (newValue) => {
-      const guessObject = availableSongs.find((x) => x === newValue) || { id: null, title: null };
+      const guessObject = songsList.find((x) => x.title === newValue) || { id: null, title: null };
+      console.log(guessObject, songsList);
       setGuess(guessObject);
     },
-    [availableSongs]
+    [songsList, setGuess]
   );
 
   const handleCloseAlert = () => {

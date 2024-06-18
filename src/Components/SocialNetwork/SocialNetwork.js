@@ -13,7 +13,7 @@ function SocialNetwork({youTubeId, spotifyId}) {
 
 
   return (
-    <Box display="flex" justifyContent="center" mb={2}>
+    <Box display="flex" justifyContent="center" mb={2} sx={{flexBasis: "80%", margin: 'auto'}}>
     <IconButton href={youtubeLink.current} color="primary" aria-label="YouTube">
       <YouTube fontSize="medium" />
     </IconButton>

@@ -12,10 +12,8 @@ import Result from "../Result/Result";
 import AudioPlayer from "../AudioPlayer/AudioPlayer";
 import BassIcon from "../Icons/BassIcon";
 import PianoGuitarIcon from "../Icons/PianoGuitarIcon";
-import { useTheme } from "@emotion/react";
 import CustomSnackbar from "../CustomSnackbar/CustomSnackbar";
 import {
-  songDataState,
   songState,
   successState,
   failedState,
@@ -29,13 +27,12 @@ import {
 import { useRecoilState, useSetRecoilState } from "recoil";
 
 const LayeredAudioPlayer = () => {
-  const theme = useTheme();
   const [layers] = useRecoilState(layersState);
   const [songsList] = useRecoilState(songsListState);
   const [song] = useRecoilState(songState);
   const [success, setSuccess] = useRecoilState(successState);
   const [failed, setFailed] = useRecoilState(failedState);
-  const [setShowError] = useRecoilState(showErrorState);
+  const [showError,setShowError] = useRecoilState(showErrorState);
   const [showPlayer, setShowPlayer] = useRecoilState(showPlayerState);
   const [tooltipMessage, setTooltipMessage] = useRecoilState(tooltipMessageState);
   const setAvailableSongs = useSetRecoilState(availableSongsState);
@@ -95,9 +92,17 @@ const LayeredAudioPlayer = () => {
 
   const handleLayerClick = (index) => {
     if(!isPlaying){
-      setSkipMessage("אנא הפעל את הרצועה לפני דילוג");
-      setLayerClickAlert(true);
-      return;
+      console.log(levelsCounter.current);
+      if(levelsCounter.current === 4){
+        setSkipMessage("אנא הפעל את הרצועה");
+        setLayerClickAlert(true);
+        return;
+      }
+      else{
+        setSkipMessage("אנא הפעל את הרצועה לפני דילוג");
+        setLayerClickAlert(true);
+        return;
+      }
     }
     if (index === activeLayerIndex + 1) {
       handleSkip();
@@ -159,7 +164,6 @@ const LayeredAudioPlayer = () => {
   const handleCloseAlert = () => {
     setLayerClickAlert(false);
   };
-
   const activeLayer = activeLayers[activeLayerIndex];
   const getIcon = (layerIndex) => {
     switch (layerIndex) {
@@ -170,9 +174,9 @@ const LayeredAudioPlayer = () => {
       case 2:
         return <PianoGuitarIcon sx={{ fontSize: 40 }} />;
       case 3:
-        return <QueueMusicIcon sx={{ fontSize: 40, padding: '2px' }} />;
+        return <QueueMusicIcon sx={{ fontSize: 40, padding: '2px', color: 'black'}} />;
       case 4:
-        return <MicIcon sx={{ fontSize: 40, padding: '2px' }} />;
+        return <MicIcon sx={{ fontSize: 40, padding: '2px', color: 'black'}} />;
       default:
         return <MusicNoteIcon sx={{ fontSize: 40 }} />;
     }
@@ -207,7 +211,7 @@ const LayeredAudioPlayer = () => {
               </Grid>
             ))}
           </Grid>
-          {activeLayer && (
+          {activeLayer && (!failed.state && !success.state) && (
             <Typography
               variant="h6"
               component="div"

@@ -47,7 +47,7 @@ const Timer = () => {
   const timerToShow = `השיר הבא בעוד ${String(timeLeft.hours).padStart(2, '0')}:${String(timeLeft.minutes).padStart(2, '0')}:${String(timeLeft.seconds).padStart(2, '0')}`;
 
   return (
-    <Typography variant="h6">
+    <Typography variant="h6" sx={{flexBasis: "80%", margin: 'auto', textAlign: 'center'}}>
       <span>{timerToShow}</span>
     </Typography>
   );
