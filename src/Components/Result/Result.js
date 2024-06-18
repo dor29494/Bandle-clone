@@ -3,9 +3,8 @@ import Timer from "../Timer/Timer";
 import { Box, Grid, Typography } from "@mui/material";
 import SocialNetwork from "../SocialNetwork/SocialNetwork";
 import { useTheme } from "@emotion/react";
-import SentimentVeryDissatisfiedIcon from '@mui/icons-material/SentimentVeryDissatisfied';
-import InsertEmoticonIcon from '@mui/icons-material/InsertEmoticon';
-import SuccessIcon from "../Icons/SuccessIcon";
+import Confetti from "react-confetti";
+import zIndex from "@mui/material/styles/zIndex";
 
 const Result = ({ isSuccess, song }) => {
   useEffect(() => {
@@ -40,18 +39,25 @@ const Result = ({ isSuccess, song }) => {
       }
       borderRadius={2}
       boxShadow={3}
-      width="300px" // Adjust the width as needed
+      width="100%"
+      maxWidth="480px"
+      position="relative"
     >
-      <Grid container direction="column" spacing={1} alignItems="center">
-      {isSuccess &&(
-        <SuccessIcon width="35px" height="35px" color="green" borderColor="black" backgroundColor="white"/>
+      {isSuccess && (
+        <>
+          <Confetti style={{zIndex: 0, pointerEvents: "auto", width: "100%", maxHeight: "200px"}} />
+          <Typography variant="h5" component="div" color="green">
+            ניחוש נכון!
+          </Typography>
+        </>
       )}
-        <Grid item sx={{marginLeft: 'auto', marginRight: '20px'}}>
+      <Grid container direction="column" spacing={1} alignItems="center">
+        <Grid item sx={{ marginLeft: 'auto', marginRight: '20px' }}>
           <Typography variant="body1">
             <strong>שם השיר:</strong> {song.title}
           </Typography>
         </Grid>
-        <Grid item sx={{marginLeft: 'auto', marginRight: '20px'}}>
+        <Grid item sx={{ marginLeft: 'auto', marginRight: '20px' }}>
           <Typography variant="body1" gutterBottom>
             <strong>מספר צפיות:</strong> {song.views}
           </Typography>
