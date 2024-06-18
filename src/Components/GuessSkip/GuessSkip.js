@@ -26,7 +26,6 @@ const GuessSkip = ({
   const [alertOpen, setAlertOpen] = useState(false); // State for CustomSnackbar
 
   const handleGuessSubmit = () => {
-    // console.log(song, guess);
     if (guess.id === null || guess.title === null) {
       setAlertOpen(true); // Show alert if the guess is empty
       return;
@@ -43,7 +42,6 @@ const GuessSkip = ({
   const handleSongChange = useCallback(
     (newValue) => {
       const guessObject = songsList.find((x) => x.title === newValue) || { id: null, title: null };
-      console.log(guessObject, songsList);
       setGuess(guessObject);
     },
     [songsList, setGuess]

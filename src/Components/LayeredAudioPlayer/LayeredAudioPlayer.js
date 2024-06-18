@@ -92,17 +92,9 @@ const LayeredAudioPlayer = () => {
 
   const handleLayerClick = (index) => {
     if(!isPlaying){
-      console.log(levelsCounter.current);
-      if(levelsCounter.current === 4){
-        setSkipMessage("אנא הפעל את הרצועה");
+        setSkipMessage(levelsCounter.current < 4 ? "אנא הפעל את הרצועה לפני דילוג" : "אנא הפעל את הרצועה");
         setLayerClickAlert(true);
         return;
-      }
-      else{
-        setSkipMessage("אנא הפעל את הרצועה לפני דילוג");
-        setLayerClickAlert(true);
-        return;
-      }
     }
     if (index === activeLayerIndex + 1) {
       handleSkip();
