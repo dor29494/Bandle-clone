@@ -53,7 +53,7 @@ function CustomSnackbar({ alertOpen, handleCloseAlert, message }) {
       autoHideDuration={3000}
       onClose={handleCloseAlert}
       anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
-      sx={{ bottom: '20px' , marginBottom: isMobile ? '' : '150px', minWidth: isMobile ? "" : '350px'}}
+      sx={{ bottom: '20px' , marginBottom: isMobile ? undefined : '150px', minWidth: isMobile ? undefined : '350px'}}
     >
       <CustomAlert severity="success">
         <CloseButton
