@@ -31,7 +31,7 @@ const Result = ({ isSuccess, song }) => {
       mt={4}
       flexDirection="column"
       justifyContent="center"
-      alignItems="center"
+      alignItems="center"a
       p={2}
       bgcolor={
         isSuccess
