@@ -13,7 +13,7 @@ function HowToPlay({ open, onClose }) {
     <Dialog open={open} onClose={onClose}>
       <DialogTitle>
         <Box display="flex" justifyContent="space-between" alignItems="center">
-          <Typography variant="h6" sx={{ [theme.breakpoints.down('sm')]: { fontSize: theme.typography.h6.fontSize } }}>איך משחקים</Typography>
+          <Typography variant="h6" sx={{ [theme.breakpoints.down('sm')]: { fontSize: theme.typography.h6.fontSize } }}>איך לשחק</Typography>
           <IconButton
             aria-label="close"
             onClick={onClose}
@@ -36,7 +36,7 @@ function HowToPlay({ open, onClose }) {
           </Grid>
           <Grid item xs>
             <Typography gutterBottom sx={{ [theme.breakpoints.down('sm')]: { fontSize: theme.typography.h6.fontSize } }}>
-              הלהקה שלנו תנגוד פזמון של שיר פופולרי, אך חלק מהמוזיקאים מאחרים...
+                השיר שלנו מחולק לחמש שכבות שונות.
             </Typography>
           </Grid>
         </Grid>
@@ -50,7 +50,7 @@ function HowToPlay({ open, onClose }) {
           </Grid>
           <Grid item xs>
             <Typography gutterBottom sx={{ [theme.breakpoints.down('sm')]: { fontSize: theme.typography.h6.fontSize } }}>
-              נחשו את השיר לפי פעימות המתופף, אם לא, אולי קו הבס יעזור.
+              עליכם לזהות את השיר בכמה שפחות צעדים.
             </Typography>
           </Grid>
         </Grid>
@@ -64,7 +64,7 @@ function HowToPlay({ open, onClose }) {
           </Grid>
           <Grid item xs>
             <Typography gutterBottom sx={{ [theme.breakpoints.down('sm')]: { fontSize: theme.typography.h6.fontSize } }}>
-              ענו עם כמה שפחות מוזיקאים מנגנים ושתפו את התוצאה שלכם!
+                זהו את השיר ושתפו את התוצאה עם חבריכם!
             </Typography>
           </Grid>
         </Grid>
@@ -78,14 +78,14 @@ function HowToPlay({ open, onClose }) {
           </Grid>
           <Grid item xs>
             <Typography gutterBottom sx={{ [theme.breakpoints.down('sm')]: { fontSize: theme.typography.h6.fontSize } }}>
-              לעזרה נוספת, עקבו אחרי @BandleGame בטוויטר.
+                לעזרה נוספת, פנו ל-@Shirdle בטוויטר.
             </Typography>
           </Grid>
         </Grid>
       </DialogContent>
       <DialogActions>
         <Button onClick={onClose} variant="contained" color="primary">
-          לשחק
+          להתחיל לשחק
         </Button>
       </DialogActions>
     </Dialog>

@@ -27,6 +27,7 @@ const Result = ({ isSuccess, song }) => {
     <Box
       display="flex"
       margin="auto"
+      gap={2}
       mt={4}
       flexDirection="column"
       justifyContent="center"
@@ -38,7 +39,7 @@ const Result = ({ isSuccess, song }) => {
           : theme.palette.primary.failureBg
       }
       borderRadius={2}
-      boxShadow={3}
+      boxShadow={`0px 3px 3px -2px rgba(0, 0, 0, 0.2), 0px 3px 4px 0px rgba(0, 0, 0, 0.14), 0px 1px 8px 0px ${theme.palette.primary.songDetailsBoxShadow}`}
       width="100%"
       maxWidth="480px"
       position="relative"

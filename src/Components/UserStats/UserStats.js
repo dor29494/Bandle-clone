@@ -65,7 +65,7 @@ function UserStats({ open, onClose }) {
                         transform: 'translateX(-50%)',
                         width: '100%',
                         textAlign: 'center',
-                        color: (stats[key] / totalGuesses) * 100 > 0 ? '#FFFFFF' : '#000000',
+                        color: (stats[key] / totalGuesses) * 100 > 50 ? '#FFFFFF' : '#000000',
                       }}
                     >
                       <Typography variant="body2" sx={{ fontSize: '0.75rem' }}>
