@@ -66,11 +66,13 @@ const LayeredAudioPlayer = () => {
 
   const updateStatistics = (isSuccess) => {
     const stats = JSON.parse(localStorage.getItem('userStats')) || { 1: 0, 2: 0, 3: 0, 4: 0, 5: 0, 6: 0 };
+    console.log(failed);
     if (isSuccess) {
       stats[activeLayerIndex + 1]++;
-    } else {
-      stats[6]++;
-    }
+    } 
+      if(failed.state){
+        stats[6]++;
+      }
     localStorage.setItem('userStats', JSON.stringify(stats));
   };
 
