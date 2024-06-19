@@ -5,7 +5,7 @@ import { styled } from '@mui/system';
 const StyledTextField = styled(TextField)({
   "& .MuiInputLabel-root": {
     textAlign: "right",
-    right: "1rem",
+    right: "2rem",
     direction: "rtl",
     width: "100%",
     transformOrigin: "top right",

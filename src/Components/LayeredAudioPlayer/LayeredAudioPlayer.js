@@ -1,4 +1,3 @@
-// src/Components/LayeredAudioPlayer/LayeredAudioPlayer.js
 import React, { useState, useEffect, useRef } from "react";
 import { CardContent, Typography, Box, Grid, IconButton, Tooltip } from "@mui/material";
 import GuessSkip from "../GuessSkip/GuessSkip";
@@ -32,7 +31,7 @@ const LayeredAudioPlayer = () => {
   const [song] = useRecoilState(songState);
   const [success, setSuccess] = useRecoilState(successState);
   const [failed, setFailed] = useRecoilState(failedState);
-  const [showError,setShowError] = useRecoilState(showErrorState);
+  const [showError, setShowError] = useRecoilState(showErrorState);
   const [showPlayer, setShowPlayer] = useRecoilState(showPlayerState);
   const [tooltipMessage, setTooltipMessage] = useRecoilState(tooltipMessageState);
   const setAvailableSongs = useSetRecoilState(availableSongsState);
@@ -44,8 +43,10 @@ const LayeredAudioPlayer = () => {
   const [layerClickAlert, setLayerClickAlert] = useState(false);
   const [showTooltip, setShowTooltip] = useState(true);
   const [skipMessage, setSkipMessage] = useState("");
+  const [levelsArePlayed, setLevelsArePlayed] = useState({ 0: false, 1: false, 2: false, 3: false, 4: false });
   const isShow = !success.state && !failed.state;
   const levelsCounter = useRef(0);
+
   useEffect(() => {
     if (layers) {
       const initializedLayers = layers.map((layer, index) => ({
@@ -66,13 +67,12 @@ const LayeredAudioPlayer = () => {
 
   const updateStatistics = (isSuccess) => {
     const stats = JSON.parse(localStorage.getItem('userStats')) || { 1: 0, 2: 0, 3: 0, 4: 0, 5: 0, 6: 0 };
-    console.log(failed);
     if (isSuccess) {
       stats[activeLayerIndex + 1]++;
-    } 
-      if(failed.state){
-        stats[6]++;
-      }
+    }
+    if (activeLayerIndex === 4) {
+      stats[6]++;
+    }
     localStorage.setItem('userStats', JSON.stringify(stats));
   };
 
@@ -93,10 +93,15 @@ const LayeredAudioPlayer = () => {
   };
 
   const handleLayerClick = (index) => {
-    if(!isPlaying){
-        setSkipMessage(levelsCounter.current < 4 ? "אנא הפעל את הרצועה לפני דילוג" : "אנא הפעל את הרצועה");
-        setLayerClickAlert(true);
-        return;
+    if (success.state || failed.state) {
+      setSkipMessage("אין אפשרות לבצע דילוג בשלב זה")
+      setLayerClickAlert(true);
+      return;
+    }
+    if (!levelsArePlayed[activeLayerIndex]) {
+      setSkipMessage(levelsCounter.current < 4 ? "אנא הפעל את הרצועה לפני דילוג" : "אנא הפעל את הרצועה");
+      setLayerClickAlert(true);
+      return;
     }
     if (index === activeLayerIndex + 1) {
       handleSkip();
@@ -111,6 +116,7 @@ const LayeredAudioPlayer = () => {
       setIsFirstPlay(true);
       setIsPlaying(true);
       setShowPlayer(true);
+      setLevelsArePlayed(prev => ({ ...prev, [activeLayerIndex]: true }));
     } else {
       if (!isFirstPlay) {
         setIsFirstPlay(true);
@@ -118,6 +124,7 @@ const LayeredAudioPlayer = () => {
       setIsPlaying(prev => !prev);
       if (!isPlaying) {
         setShowPlayer(prev => true);
+        setLevelsArePlayed(prev => ({ ...prev, [activeLayerIndex]: true }));
       }
     }
   };
@@ -158,7 +165,9 @@ const LayeredAudioPlayer = () => {
   const handleCloseAlert = () => {
     setLayerClickAlert(false);
   };
+
   const activeLayer = activeLayers[activeLayerIndex];
+
   const getIcon = (layerIndex) => {
     switch (layerIndex) {
       case 0:
@@ -168,9 +177,9 @@ const LayeredAudioPlayer = () => {
       case 2:
         return <PianoGuitarIcon sx={{ fontSize: 40 }} />;
       case 3:
-        return <QueueMusicIcon sx={{ fontSize: 40, padding: '2px', color: 'black'}} />;
+        return <QueueMusicIcon sx={{ fontSize: 40, padding: '2px', color: 'black' }} />;
       case 4:
-        return <MicIcon sx={{ fontSize: 40, padding: '2px', color: 'black'}} />;
+        return <MicIcon sx={{ fontSize: 40, padding: '2px', color: 'black' }} />;
       default:
         return <MusicNoteIcon sx={{ fontSize: 40 }} />;
     }
@@ -179,7 +188,7 @@ const LayeredAudioPlayer = () => {
   return (
     <>
       <Box sx={{ minHeight: '100%' }}>
-        <CardContent sx={{paddingTop: '0'}}>
+        <CardContent sx={{ paddingTop: '0' }}>
           <Typography variant="h5" component="div" textAlign="center" mb={2}>
             שכבות שיר נוכחיות
           </Typography>
