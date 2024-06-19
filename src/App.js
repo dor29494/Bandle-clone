@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { Box } from '@mui/material';
+import { Box, CircularProgress } from '@mui/material';
 import { useRecoilState } from 'recoil';
 import {
   songDataState,
@@ -95,7 +95,7 @@ const App = ({ setDarkMode, darkMode }) => {
     }
   };
 
-  if (!songData) return <div>Loading...</div>;
+  if (!songData) return <CircularProgress/>;
 
   return (
     <>
