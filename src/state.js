@@ -55,3 +55,8 @@ export const songsListState = atom({
   key: 'songsListState',
   default: [],
 });
+
+export const timerExpiredState = atom({
+  key: 'timerExpiredState',
+  default: false,
+});
