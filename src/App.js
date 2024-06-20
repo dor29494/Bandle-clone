@@ -1,5 +1,5 @@
-import React, { useEffect, useCallback } from 'react';
-import { Box, CircularProgress } from '@mui/material';
+import React, { useEffect, useCallback, useState } from 'react';
+import { Box } from '@mui/material';
 import { useRecoilState, useRecoilValue, useResetRecoilState } from 'recoil';
 import {
   songDataState,
@@ -11,12 +11,14 @@ import {
   layersState,
   songsListState,
   timerExpiredState,
+  loaderState
 } from './state';
 import LayeredAudioPlayer from './Components/LayeredAudioPlayer/LayeredAudioPlayer';
 import SongDetails from './Components/SongDetails/SongDetails';
 import Header from './Components/Header/Header';
 import ErrorPopup from './Components/ErrorPopup/ErrorPopup';
-  
+import Loader from './Components/Loader/Loader';
+
 function getIndexFromStartDate(startDate) {
   const start = new Date(startDate);
   const now = new Date();
@@ -27,7 +29,6 @@ function getIndexFromStartDate(startDate) {
 
   const timeDifference = now - start;
   const dayDifference = Math.floor(timeDifference / (1000 * 60 * 60 * 24));
-  console.log(start, now, dayDifference);
   return dayDifference;
 }
 
@@ -42,7 +43,7 @@ const App = ({ setDarkMode, darkMode }) => {
   const [songsList, setSongsList] = useRecoilState(songsListState);
   const timerExpired = useRecoilValue(timerExpiredState);
   const resetTimerExpired = useResetRecoilState(timerExpiredState);
-
+  const [loading, setLoading] = useRecoilState(loaderState);
   const difficultyEnum = { 1: "קל", 2: "בינוני", 3: "קשה" };
 
   const fetchSongData = useCallback(() => {
@@ -57,9 +58,8 @@ const App = ({ setDarkMode, darkMode }) => {
       })
       .then((data) => {
         const index = getIndexFromStartDate(startDate);
-        console.log('Selected Index:', index); // Added for debugging
         const selectedSong = data[index % data.length];
-
+        console.log(index, startDate);
         selectedSong.difficulty = difficultyEnum[selectedSong.difficulty];
         setSong({ id: selectedSong.songId, title: selectedSong.songTitle, views: selectedSong.views, spotifyId: selectedSong.media.spotifyId, youtubeId: selectedSong.media.youtubeId });
         setSongData(selectedSong);
@@ -107,21 +107,25 @@ const App = ({ setDarkMode, darkMode }) => {
 
   useEffect(() => {
     if (timerExpired) {
+      setLoading(true);
       console.log('Timer expired, fetching new song data'); // Added for debugging
       // Reset success and failed states and clear local storage
       setSuccess({ index: 0, state: false });
       setFailed({ index: 0, state: false });
-      localStorage.clear();
-
+      localStorage.removeItem("layerIndex");
+      localStorage.removeItem("lastResult");
       // Fetch new song data
       fetchSongData();
 
       // Reset timerExpired state
       resetTimerExpired();
+      setLoading(false);
     }
   }, [timerExpired, fetchSongData, setSuccess, setFailed, resetTimerExpired]);
 
-  if (!songData) return <CircularProgress />;
+  if (!songData || loading) return (
+    <Loader setDarkMode={setDarkMode} darkMode={darkMode}/>
+  )
 
   return (
     <>

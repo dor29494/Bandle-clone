@@ -60,3 +60,8 @@ export const timerExpiredState = atom({
   key: 'timerExpiredState',
   default: false,
 });
+
+export const loaderState = atom({
+  key: 'loaderState',
+  default: false,
+});

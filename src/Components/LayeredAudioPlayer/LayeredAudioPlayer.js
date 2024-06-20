@@ -127,6 +127,13 @@ const LayeredAudioPlayer = () => {
         setLevelsArePlayed(prev => ({ ...prev, [activeLayerIndex]: true }));
       }
     }
+
+    if (isFirstPlay) {
+      window.gtag('event', 'played', {
+        "songId": "pink",
+        "step": 20
+      });
+    }
   };
 
   const getLayersColors = (index) => {

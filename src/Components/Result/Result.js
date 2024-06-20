@@ -4,7 +4,6 @@ import { Box, Grid, Typography } from "@mui/material";
 import SocialNetwork from "../SocialNetwork/SocialNetwork";
 import { useTheme } from "@emotion/react";
 import Confetti from "react-confetti";
-import zIndex from "@mui/material/styles/zIndex";
 
 const Result = ({ isSuccess, song }) => {
   useEffect(() => {
@@ -23,6 +22,8 @@ const Result = ({ isSuccess, song }) => {
 
   const theme = useTheme();
 
+  console.log('render Result');
+
   return (
     <Box
       display="flex"
@@ -31,7 +32,7 @@ const Result = ({ isSuccess, song }) => {
       mt={4}
       flexDirection="column"
       justifyContent="center"
-      alignItems="center"a
+      alignItems="center"
       p={2}
       bgcolor={
         isSuccess
@@ -46,7 +47,7 @@ const Result = ({ isSuccess, song }) => {
     >
       {isSuccess && (
         <>
-          <Confetti style={{zIndex: 0, pointerEvents: "auto", width: "100%", maxHeight: "200px"}} />
+          <Confetti style={{ zIndex: 0, pointerEvents: "auto", width: "100%", maxHeight: "200px" }} />
           <Typography variant="h5" component="div" color="green">
             ניחוש נכון!
           </Typography>
