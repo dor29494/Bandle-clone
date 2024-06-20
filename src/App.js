@@ -11,6 +11,7 @@ import {
   layersState,
   songsListState,
   timerExpiredState,
+  loaderState
 } from './state';
 import LayeredAudioPlayer from './Components/LayeredAudioPlayer/LayeredAudioPlayer';
 import SongDetails from './Components/SongDetails/SongDetails';
@@ -42,8 +43,7 @@ const App = ({ setDarkMode, darkMode }) => {
   const [songsList, setSongsList] = useRecoilState(songsListState);
   const timerExpired = useRecoilValue(timerExpiredState);
   const resetTimerExpired = useResetRecoilState(timerExpiredState);
-  const [loading, setLoading] = useState(false);
-
+  const [loading, setLoading] = useRecoilState(loaderState);
   const difficultyEnum = { 1: "קל", 2: "בינוני", 3: "קשה" };
 
   const fetchSongData = useCallback(() => {
@@ -59,6 +59,7 @@ const App = ({ setDarkMode, darkMode }) => {
       .then((data) => {
         const index = getIndexFromStartDate(startDate);
         const selectedSong = data[index % data.length];
+        console.log(index, startDate);
         selectedSong.difficulty = difficultyEnum[selectedSong.difficulty];
         setSong({ id: selectedSong.songId, title: selectedSong.songTitle, views: selectedSong.views, spotifyId: selectedSong.media.spotifyId, youtubeId: selectedSong.media.youtubeId });
         setSongData(selectedSong);
@@ -112,7 +113,7 @@ const App = ({ setDarkMode, darkMode }) => {
       setSuccess({ index: 0, state: false });
       setFailed({ index: 0, state: false });
       localStorage.removeItem("layerIndex");
-      localStorage.removeItem("lastIndex");
+      localStorage.removeItem("lastResult");
       // Fetch new song data
       fetchSongData();
 

@@ -13,6 +13,7 @@ const AudioPlayer = ({ file, isPlaying, setIsPlaying }) => {
         setProgress((audio.currentTime / audio.duration) * 100);
       }
     };
+
     if (audio) {
       audio.addEventListener('timeupdate', updateProgress);
       return () => {
@@ -22,11 +23,15 @@ const AudioPlayer = ({ file, isPlaying, setIsPlaying }) => {
   }, [audioRef, setProgress]);
 
   useEffect(() => {
+    // Reset progress when audioRef changes
+    setProgress(0);
+
+    // Pause and load new audio file when file changes
     if (audioRef.current) {
       audioRef.current.pause();
       audioRef.current.load();
     }
-  }, [file]);
+  }, [file, audioRef]);
 
   useEffect(() => {
     const audio = audioRef.current;
