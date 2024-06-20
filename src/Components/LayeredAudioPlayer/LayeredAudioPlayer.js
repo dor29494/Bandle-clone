@@ -1,5 +1,12 @@
 import React, { useState, useEffect, useRef } from "react";
-import { CardContent, Typography, Box, Grid, IconButton, Tooltip } from "@mui/material";
+import {
+  CardContent,
+  Typography,
+  Box,
+  Grid,
+  IconButton,
+  Tooltip,
+} from "@mui/material";
 import GuessSkip from "../GuessSkip/GuessSkip";
 import PauseIcon from "@mui/icons-material/Pause";
 import MusicNoteIcon from "@mui/icons-material/MusicNote";
@@ -21,8 +28,8 @@ import {
   tooltipMessageState,
   availableSongsState,
   layersState,
-  songsListState
-} from '../../state';
+  songsListState,
+} from "../../state";
 import { useRecoilState, useSetRecoilState } from "recoil";
 
 const LayeredAudioPlayer = () => {
@@ -33,7 +40,8 @@ const LayeredAudioPlayer = () => {
   const [failed, setFailed] = useRecoilState(failedState);
   const [showError, setShowError] = useRecoilState(showErrorState);
   const [showPlayer, setShowPlayer] = useRecoilState(showPlayerState);
-  const [tooltipMessage, setTooltipMessage] = useRecoilState(tooltipMessageState);
+  const [tooltipMessage, setTooltipMessage] =
+    useRecoilState(tooltipMessageState);
   const setAvailableSongs = useSetRecoilState(availableSongsState);
   const [activeLayerIndex, setActiveLayerIndex] = useState(0);
   const [activeLayers, setActiveLayers] = useState([]);
@@ -43,7 +51,13 @@ const LayeredAudioPlayer = () => {
   const [layerClickAlert, setLayerClickAlert] = useState(false);
   const [showTooltip, setShowTooltip] = useState(true);
   const [skipMessage, setSkipMessage] = useState("");
-  const [levelsArePlayed, setLevelsArePlayed] = useState({ 0: false, 1: false, 2: false, 3: false, 4: false });
+  const [levelsArePlayed, setLevelsArePlayed] = useState({
+    0: false,
+    1: false,
+    2: false,
+    3: false,
+    4: false,
+  });
   const isShow = !success.state && !failed.state;
   const levelsCounter = useRef(0);
 
@@ -66,18 +80,25 @@ const LayeredAudioPlayer = () => {
   }, [layers, songsList, setAvailableSongs]);
 
   const updateStatistics = (isSuccess) => {
-    const stats = JSON.parse(localStorage.getItem('userStats')) || { 1: 0, 2: 0, 3: 0, 4: 0, 5: 0, 6: 0 };
+    const stats = JSON.parse(localStorage.getItem("userStats")) || {
+      1: 0,
+      2: 0,
+      3: 0,
+      4: 0,
+      5: 0,
+      6: 0,
+    };
     if (isSuccess) {
       stats[activeLayerIndex + 1]++;
     }
     if (activeLayerIndex === 4) {
       stats[6]++;
     }
-    localStorage.setItem('userStats', JSON.stringify(stats));
+    localStorage.setItem("userStats", JSON.stringify(stats));
   };
 
   const onGuessSuccess = () => {
-    setSuccess(prev => ({ ...prev, state: true, index: activeLayerIndex }));
+    setSuccess((prev) => ({ ...prev, state: true, index: activeLayerIndex }));
     setShowError(false);
     updateStatistics(true);
   };
@@ -86,7 +107,11 @@ const LayeredAudioPlayer = () => {
     setShowPlayer(false);
     setIsPlaying(false);
     levelsCounter.current++;
-    setFailed(prev => ({ ...prev, state: levelsCounter.current === 5, index: activeLayerIndex }));
+    setFailed((prev) => ({
+      ...prev,
+      state: levelsCounter.current === 5,
+      index: activeLayerIndex,
+    }));
     updateStatistics(false);
     moveToNextLayer();
     setShowTooltip(true);
@@ -94,12 +119,16 @@ const LayeredAudioPlayer = () => {
 
   const handleLayerClick = (index) => {
     if (success.state || failed.state) {
-      setSkipMessage("אין אפשרות לבצע דילוג בשלב זה")
+      setSkipMessage("אין אפשרות לבצע דילוג בשלב זה");
       setLayerClickAlert(true);
       return;
     }
     if (!levelsArePlayed[activeLayerIndex]) {
-      setSkipMessage(levelsCounter.current < 4 ? "אנא הפעל את הרצועה לפני דילוג" : "אנא הפעל את הרצועה");
+      setSkipMessage(
+        levelsCounter.current < 4
+          ? "אנא הפעל את הרצועה לפני דילוג"
+          : "אנא הפעל את הרצועה"
+      );
       setLayerClickAlert(true);
       return;
     }
@@ -116,22 +145,22 @@ const LayeredAudioPlayer = () => {
       setIsFirstPlay(true);
       setIsPlaying(true);
       setShowPlayer(true);
-      setLevelsArePlayed(prev => ({ ...prev, [activeLayerIndex]: true }));
+      setLevelsArePlayed((prev) => ({ ...prev, [activeLayerIndex]: true }));
     } else {
       if (!isFirstPlay) {
         setIsFirstPlay(true);
       }
-      setIsPlaying(prev => !prev);
+      setIsPlaying((prev) => !prev);
       if (!isPlaying) {
-        setShowPlayer(prev => true);
-        setLevelsArePlayed(prev => ({ ...prev, [activeLayerIndex]: true }));
+        setShowPlayer((prev) => true);
+        setLevelsArePlayed((prev) => ({ ...prev, [activeLayerIndex]: true }));
       }
     }
 
     if (isFirstPlay) {
-      window.gtag('event', 'played', {
-        "songId": "pink",
-        "step": 20
+      window.gtag("event", "played", {
+        songId: "pink",
+        step: activeLayerIndex,
       });
     }
   };
@@ -165,7 +194,7 @@ const LayeredAudioPlayer = () => {
       });
       setActiveLayers(updatedLayers);
       setActiveLayerIndex(activeLayerIndex + 1);
-      localStorage.setItem('layerIndex', activeLayerIndex + 1);
+      localStorage.setItem("layerIndex", activeLayerIndex + 1);
     }
   };
 
@@ -184,9 +213,15 @@ const LayeredAudioPlayer = () => {
       case 2:
         return <PianoGuitarIcon sx={{ fontSize: 40 }} />;
       case 3:
-        return <QueueMusicIcon sx={{ fontSize: 40, padding: '2px', color: 'black' }} />;
+        return (
+          <QueueMusicIcon
+            sx={{ fontSize: 40, padding: "2px", color: "black" }}
+          />
+        );
       case 4:
-        return <MicIcon sx={{ fontSize: 40, padding: '2px', color: 'black' }} />;
+        return (
+          <MicIcon sx={{ fontSize: 40, padding: "2px", color: "black" }} />
+        );
       default:
         return <MusicNoteIcon sx={{ fontSize: 40 }} />;
     }
@@ -194,8 +229,8 @@ const LayeredAudioPlayer = () => {
 
   return (
     <>
-      <Box sx={{ minHeight: '100%' }}>
-        <CardContent sx={{ paddingTop: '0' }}>
+      <Box sx={{ minHeight: "100%" }}>
+        <CardContent sx={{ paddingTop: "0" }}>
           <Typography variant="h5" component="div" textAlign="center" mb={2}>
             שכבות שיר נוכחיות
           </Typography>
@@ -205,15 +240,16 @@ const LayeredAudioPlayer = () => {
                 <Box
                   onClick={() => handleLayerClick(index)}
                   sx={{
-                    display: 'flex',
-                    flexDirection: 'column',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    height: '76px',
+                    display: "flex",
+                    flexDirection: "column",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    height: "76px",
                     borderRadius: 1,
                     backgroundColor: getLayersColors(index).background,
                     border: `3px solid ${getLayersColors(index).border}`,
-                    cursor: index === activeLayerIndex + 1 ? 'pointer' : 'default',
+                    cursor:
+                      index === activeLayerIndex + 1 ? "pointer" : "default",
                   }}
                 >
                   {getIcon(index)}
@@ -221,7 +257,7 @@ const LayeredAudioPlayer = () => {
               </Grid>
             ))}
           </Grid>
-          {activeLayer && (!failed.state && !success.state) && (
+          {activeLayer && !failed.state && !success.state && (
             <Typography
               variant="h6"
               component="div"
