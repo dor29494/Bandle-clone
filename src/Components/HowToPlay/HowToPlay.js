@@ -13,16 +13,7 @@ function HowToPlay({ open, onClose }) {
     <Dialog open={open} onClose={onClose}>
       <DialogTitle>
         <Box display="flex" justifyContent="space-between" alignItems="center">
-          <Typography variant="h6" sx={{ [theme.breakpoints.down('sm')]: { fontSize: theme.typography.h6.fontSize } }}>איך לשחק</Typography>
-          <IconButton
-            aria-label="close"
-            onClick={onClose}
-            sx={{
-              color: (theme) => theme.palette.grey[500],
-            }}
-          >
-            <CloseIcon />
-          </IconButton>
+          <Typography variant="h6" textAlign="center" sx={{ [theme.breakpoints.down('sm')]: { fontSize: theme.typography.h6.fontSize }, width: "100%" }}>איך לשחק</Typography>
         </Box>
       </DialogTitle>
       <DialogContent dividers sx={{zIndex: '55'}}>
@@ -68,22 +59,8 @@ function HowToPlay({ open, onClose }) {
             </Typography>
           </Grid>
         </Grid>
-        <Grid container spacing={2} alignItems="center">
-          <Grid item>
-            <TwitterIcon
-              sx={{
-                fontSize: theme.breakpoints.down('sm') ? theme.icons.medium : theme.icons.large,
-              }}
-            />
-          </Grid>
-          <Grid item xs>
-            <Typography gutterBottom sx={{ [theme.breakpoints.down('sm')]: { fontSize: theme.typography.h6.fontSize } }}>
-                לעזרה נוספת, פנו ל-@Shirdle בטוויטר.
-            </Typography>
-          </Grid>
-        </Grid>
       </DialogContent>
-      <DialogActions>
+      <DialogActions sx={{display: 'flex', justifyContent: 'center', alignItems: 'center'}}>
         <Button onClick={onClose} variant="contained" color="primary">
           להתחיל לשחק
         </Button>
