@@ -17,10 +17,10 @@ function SocialNetwork({ youTubeId, spotifyId }) {
 
   return (
     <Box display="flex" justifyContent="center" mb={2} sx={{ flexBasis: "80%", margin: 'auto' }}>
-      <IconButton href={youtubeLink.current ? youtubeLink.current.toString() : ""} color="primary" aria-label="YouTube">
+      <IconButton target="_blank" href={youtubeLink.current ? youtubeLink.current.toString() : ""} color="primary" aria-label="YouTube">
         <YouTube fontSize="medium" />
       </IconButton>
-      <IconButton href={spotifyLink.current ? spotifyLink.current.toString() : ""} color="primary" aria-label="Music">
+      <IconButton target="_blank" href={spotifyLink.current ? spotifyLink.current.toString() : ""} color="primary" aria-label="Music">
         <MusicNote fontSize="medium" />
       </IconButton>
     </Box>
