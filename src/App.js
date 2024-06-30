@@ -61,7 +61,9 @@ const App = ({ setDarkMode, darkMode }) => {
       fileNames.map(async (fileName, index) => {
         const url = `${baseUrl}/${fileName}`;
         try {
-          const response = await fetch(url, { method: 'HEAD' });
+          const response = await fetch(url, { method: 'HEAD' , mode: 'cors', headers: {
+            "Access-Control-Allow-Origin": "*", 
+          }});
           if (response.ok) {
             return {
               title: layerTitles[index],
