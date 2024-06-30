@@ -22,7 +22,6 @@ const Result = ({ isSuccess, song }) => {
 
   const theme = useTheme();
 
-  console.log('render Result');
 
   return (
     <Box
