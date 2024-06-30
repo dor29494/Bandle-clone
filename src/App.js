@@ -1,4 +1,4 @@
-import React, { useEffect, useCallback, useState } from 'react';
+import React, { useEffect, useCallback } from 'react';
 import { Box } from '@mui/material';
 import { useRecoilState, useRecoilValue, useResetRecoilState } from 'recoil';
 import {
@@ -18,12 +18,12 @@ import SongDetails from './Components/SongDetails/SongDetails';
 import Header from './Components/Header/Header';
 import ErrorPopup from './Components/ErrorPopup/ErrorPopup';
 import Loader from './Components/Loader/Loader';
+import shirdle_songs from './shirdle_songs.json';
 
 function getIndexFromStartDate(startDate) {
   const start = new Date(startDate);
   const now = new Date();
 
-  // Normalize the time to avoid partial day issues
   start.setHours(0, 0, 0, 0);
   now.setHours(0, 0, 0, 0);
 
@@ -46,29 +46,73 @@ const App = ({ setDarkMode, darkMode }) => {
   const [loading, setLoading] = useRecoilState(loaderState);
   const difficultyEnum = { 1: "קל", 2: "בינוני", 3: "קשה" };
 
-  const fetchSongData = useCallback(() => {
-    const startDate = process.env.REACT_APP_START_DATE;
+  const fetchLayerData = async (selectedSongId) => {
+    // const baseUrl = `${process.env.REACT_APP_LAYERS_URL}${selectedSongId}`;
+    const baseUrl = '/assets/mp3';
+    const layerTitles = [
+      "תופים",
+      "תופים + בס",
+      "תופים + בס + ליווי מוזיקלי",
+      "תופים + בס + ליווי מוזיקלי + מלודיות נוספות",
+      "תופים + בס + ליווי מוזיקלי + מלודיות נוספות + שירה"
+    ];
+    // const fileNames = ["drums.mp3", "bass.mp3", "instrumental.mp3", "other.mp3", "vocals.mp3"];
+    const fileNames = ["drums.wav", "bass.wav", "instrumental.wav", "other.wav", "vocals.wav"];
 
-    fetch("/dummyData.json")
-      .then((response) => {
-        if (!response.ok) {
-          throw new Error("Network response was not ok");
+    const layerData = await Promise.all(
+      fileNames.map(async (fileName, index) => {
+        const url = `${baseUrl}/${fileName}`;
+        try {
+          const response = await fetch(url, { method: 'HEAD' });
+          if (response.ok) {
+            return {
+              title: layerTitles[index],
+              file: url,
+              isActive: false
+            };
+          } else {
+            console.error(`Error fetching ${fileName}: ${response.statusText}`);
+            return null;
+          }
+        } catch (error) {
+          console.error(`Error fetching ${fileName}:`, error);
+          return null;
         }
-        return response.json();
       })
-      .then((data) => {
-        const index = getIndexFromStartDate(startDate);
-        const selectedSong = data[index % data.length];
-        console.log(index, startDate);
-        selectedSong.difficulty = difficultyEnum[selectedSong.difficulty];
-        setSong({ id: selectedSong.songId, title: selectedSong.songTitle, views: selectedSong.views, spotifyId: selectedSong.media.spotifyId, youtubeId: selectedSong.media.youtubeId });
-        setSongData(selectedSong);
-        setLayers(selectedSong.layers);
-        setSongsList(selectedSong.songsList);
-        successTest();
-      })
-      .catch((error) => console.error("Error fetching the JSON:", error));
+    );
+
+    return layerData.filter(layer => layer !== null);
+  };
+
+  const fetchSongData = useCallback(async () => {
+    const startDate = process.env.REACT_APP_START_DATE;
+    const index = getIndexFromStartDate(startDate);
+    const selectedSong = shirdle_songs[index % shirdle_songs.length];
+    selectedSong.difficulty = difficultyEnum[selectedSong.difficulty];
+    setSong({ 
+      id: selectedSong.songId,
+      title: selectedSong.songTitle,
+      views: selectedSong.views,
+      spotifyId: selectedSong.media.spotifyId,
+      youtubeId: selectedSong.media.youtubeId
+    });
+
+    setSongData(selectedSong);
+
+    // Fetch layers and set them
+    const layers = await fetchLayerData(selectedSong.songId);
+    setLayers(layers);
+
+    setSongsList(createAutoCompleteList(shirdle_songs));
+    successTest();
   }, [setSong, setSongData, setLayers, setSongsList]);
+
+  const createAutoCompleteList = (songs) => {
+    return songs.map(song => ({
+      id: song.songId,
+      title: song.songTitle
+    }));
+  };
 
   const successTest = () => {
     const resultTime = localStorage.getItem("lastResultTime");
@@ -108,16 +152,12 @@ const App = ({ setDarkMode, darkMode }) => {
   useEffect(() => {
     if (timerExpired) {
       setLoading(true);
-      console.log('Timer expired, fetching new song data'); // Added for debugging
-      // Reset success and failed states and clear local storage
+      console.log('Timer expired, fetching new song data');
       setSuccess({ index: 0, state: false });
       setFailed({ index: 0, state: false });
       localStorage.removeItem("layerIndex");
       localStorage.removeItem("lastResult");
-      // Fetch new song data
       fetchSongData();
-
-      // Reset timerExpired state
       resetTimerExpired();
       setLoading(false);
     }
@@ -125,7 +165,7 @@ const App = ({ setDarkMode, darkMode }) => {
 
   if (!songData || loading) return (
     <Loader setDarkMode={setDarkMode} darkMode={darkMode}/>
-  )
+  );
 
   return (
     <>

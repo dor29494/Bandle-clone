@@ -1,9 +1,22 @@
 import React, { useEffect, useState } from 'react';
-import { Dialog, DialogTitle, DialogContent, Typography, IconButton, Box, Grid, LinearProgress } from '@mui/material';
+import {
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  Typography,
+  IconButton,
+  Box,
+  Grid,
+  LinearProgress,
+  Button,
+} from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
+import CustomSnackbar from '../CustomSnackbar/CustomSnackbar';
 
 function UserStats({ open, onClose }) {
   const [stats, setStats] = useState({ 1: 0, 2: 0, 3: 0, 4: 0, 5: 0, 6: 0 });
+  const [alertOpen, setAlertOpen] = useState(false);
+  const [alertMessage, setAlertMessage] = useState('');
 
   useEffect(() => {
     if (open) {
@@ -16,6 +29,26 @@ function UserStats({ open, onClose }) {
 
   const getProgressBarColor = (value) => {
     return value > 0 ? '#3f51b5' : 'lightgrey';
+  };
+
+  const handleShare = () => {
+    const shareText = `סטטיסטיקות ניחושים:
+${Object.keys(stats).map(key => `${key === '6' ? 'X' : key}: ${stats[key]} (${((stats[key] / totalGuesses) * 100).toFixed(2)}%)`).join('\n')}
+סה"כ ניחושים: ${totalGuesses}`;
+
+    navigator.clipboard.writeText(shareText)
+      .then(() => {
+        setAlertMessage("סטטיסטיקות הועתקו ללוח!");
+        setAlertOpen(true);
+      })
+      .catch(() => {
+        setAlertMessage("שגיאה בהעתקת הסטטיסטיקות.");
+        setAlertOpen(true);
+      });
+  };
+
+  const handleCloseAlert = () => {
+    setAlertOpen(false);
   };
 
   return (
@@ -39,12 +72,12 @@ function UserStats({ open, onClose }) {
         <Box mt={2}>
           <Grid container spacing={2}>
             {Object.keys(stats).map((key) => (
-              <Grid item xs={12} key={key} sx={{paddingLeft: '0 !important', paddingTop: '0 !important'}} >
-                <Box display="flex" alignItems="center" sx={{ py: 1, paddingTop: '1px !important',  paddingBottom: '1px !important'}}>
+              <Grid item xs={12} key={key} sx={{ paddingLeft: '0 !important', paddingTop: '0 !important' }}>
+                <Box display="flex" alignItems="center" sx={{ py: 1, paddingTop: '1px !important', paddingBottom: '1px !important' }}>
                   <Typography variant="body1" sx={{ width: '30px' }}>
                     {key === '6' ? 'X' : key}
                   </Typography>
-                  <Box sx={{ width: '100%', mr: 1,ml: 1, position: 'relative'}}>
+                  <Box sx={{ width: '100%', mr: 1, ml: 1, position: 'relative' }}>
                     <LinearProgress
                       variant="determinate"
                       value={(stats[key] / totalGuesses) * 100}
@@ -73,15 +106,25 @@ function UserStats({ open, onClose }) {
                       </Typography>
                     </Box>
                   </Box>
-                  <Typography variant="body1" sx={{ width: '30px', fontSize: '14px'}}>
+                  <Typography variant="body1" sx={{ width: '30px', fontSize: '14px' }}>
                     {`(${stats[key]})`}
                   </Typography>
                 </Box>
               </Grid>
             ))}
           </Grid>
+          <Box sx={{ mt: 2, textAlign: 'center' }}>
+            <Button variant="contained" color="primary" onClick={handleShare}>
+              שתף סטטיסטיקות
+            </Button>
+          </Box>
         </Box>
       </DialogContent>
+      <CustomSnackbar
+        alertOpen={alertOpen}
+        handleCloseAlert={handleCloseAlert}
+        message={alertMessage}
+      />
     </Dialog>
   );
 }
