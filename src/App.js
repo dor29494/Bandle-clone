@@ -47,8 +47,7 @@ const App = ({ setDarkMode, darkMode }) => {
   const difficultyEnum = { 1: "קל", 2: "בינוני", 3: "קשה" };
 
   const fetchLayerData = async (selectedSongId) => {
-    // const baseUrl = `${process.env.REACT_APP_LAYERS_URL}${selectedSongId}`;
-    const baseUrl = '/assets/mp3';
+    const baseUrl = `${process.env.REACT_APP_LAYERS_URL}${selectedSongId}`;
     const layerTitles = [
       "תופים",
       "תופים + בס",
@@ -56,8 +55,7 @@ const App = ({ setDarkMode, darkMode }) => {
       "תופים + בס + ליווי מוזיקלי + מלודיות נוספות",
       "תופים + בס + ליווי מוזיקלי + מלודיות נוספות + שירה"
     ];
-    // const fileNames = ["drums.mp3", "bass.mp3", "instrumental.mp3", "other.mp3", "vocals.mp3"];
-    const fileNames = ["drums.wav", "bass.wav", "instrumental.wav", "other.wav", "vocals.wav"];
+    const fileNames = ["drums.mp3", "bass.mp3", "instrumental.mp3", "other.mp3", "vocals.mp3"];
 
     const layerData = await Promise.all(
       fileNames.map(async (fileName, index) => {
