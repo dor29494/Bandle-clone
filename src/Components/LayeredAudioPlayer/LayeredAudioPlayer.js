@@ -78,6 +78,10 @@ const LayeredAudioPlayer = () => {
 
   const onGuessSuccess = () => {
     setSuccess(prev => ({ ...prev, state: true, index: activeLayerIndex }));
+    window.gtag('event', 'success', {
+      "songId": song.id,
+      "step": activeLayerIndex
+    });
     setShowError(false);
     updateStatistics(true);
   };
@@ -130,8 +134,8 @@ const LayeredAudioPlayer = () => {
 
     if (isFirstPlay) {
       window.gtag('event', 'played', {
-        "songId": "pink",
-        "step": 20
+        "songId": song.id,
+        "step": activeLayerIndex
       });
     }
   };
