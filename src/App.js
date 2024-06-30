@@ -1,5 +1,5 @@
 import React, { useEffect, useCallback } from 'react';
-import { Box } from '@mui/material';
+import { Box, Button } from '@mui/material';
 import { useRecoilState, useRecoilValue, useResetRecoilState } from 'recoil';
 import {
   songDataState,
@@ -26,10 +26,8 @@ function getIndexFromStartDate(startDate, queryIndex) {
   }
   const start = new Date(startDate);
   const now = new Date();
-
   start.setHours(0, 0, 0, 0);
   now.setHours(0, 0, 0, 0);
-
   const timeDifference = now - start;
   const dayDifference = Math.floor(timeDifference / (1000 * 60 * 60 * 24));
   return dayDifference;
@@ -131,6 +129,18 @@ const App = ({ setDarkMode, darkMode }) => {
     }
   };
 
+  const handleResetLocalStorage = () => {
+    localStorage.removeItem("lastResult");
+    localStorage.removeItem("localStorageTimer");
+    localStorage.removeItem("hasSeenHowToPlay");
+    localStorage.removeItem("lastResultTime");
+    localStorage.removeItem("userStats");
+    setSuccess({ index: 0, state: false });
+    setFailed({ index: 0, state: false });
+    setLayers(layers.map(layer => ({ ...layer, isActive: false })));
+    console.log('Local storage reset');
+  };
+
   useEffect(() => {
     fetchSongData();
   }, [fetchSongData]);
@@ -150,7 +160,7 @@ const App = ({ setDarkMode, darkMode }) => {
   }, [timerExpired, fetchSongData, setSuccess, setFailed, resetTimerExpired]);
 
   if (!songData || loading) return (
-    <Loader setDarkMode={setDarkMode} darkMode={darkMode}/>
+    <Loader setDarkMode={setDarkMode} darkMode={darkMode} />
   );
 
   return (
@@ -164,6 +174,11 @@ const App = ({ setDarkMode, darkMode }) => {
               views={songData.views}
               difficulty={songData.difficulty}
             />
+          </Box>
+          <Box sx={{width: "100%"}}>  
+            <Button onClick={handleResetLocalStorage} sx={{textAlign: 'center', fontSize: '16px'}}>
+              RESET YOUR LOCAL STORAGE!
+            </Button>
           </Box>
           <Box mt={4}>
             <LayeredAudioPlayer />
