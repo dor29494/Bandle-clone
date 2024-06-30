@@ -20,7 +20,10 @@ import ErrorPopup from './Components/ErrorPopup/ErrorPopup';
 import Loader from './Components/Loader/Loader';
 import shirdle_songs from './shirdle_songs.json';
 
-function getIndexFromStartDate(startDate) {
+function getIndexFromStartDate(startDate, queryIndex) {
+  if (queryIndex !== null && queryIndex >= 0 && queryIndex <= 400) {
+    return queryIndex;
+  }
   const start = new Date(startDate);
   const now = new Date();
 
@@ -46,7 +49,7 @@ const App = ({ setDarkMode, darkMode }) => {
   const [loading, setLoading] = useRecoilState(loaderState);
   const difficultyEnum = { 1: "קל", 2: "בינוני", 3: "קשה" };
 
-  const fetchLayerData = async (selectedSongId) => {
+  const fetchLayerData = (selectedSongId) => {
     const baseUrl = `${process.env.REACT_APP_LAYERS_URL}${selectedSongId}`;
     const layerTitles = [
       "תופים",
@@ -56,40 +59,24 @@ const App = ({ setDarkMode, darkMode }) => {
       "תופים + בס + ליווי מוזיקלי + מלודיות נוספות + שירה"
     ];
     const fileNames = ["drums.mp3", "bass.mp3", "instrumental.mp3", "other.mp3", "vocals.mp3"];
-
-    const layerData = await Promise.all(
-      fileNames.map(async (fileName, index) => {
-        const url = `${baseUrl}/${fileName}`;
-        try {
-          const response = await fetch(url, { method: 'HEAD' , mode: 'cors', headers: {
-            "Access-Control-Allow-Origin": "*", 
-          }});
-          if (response.ok) {
-            return {
-              title: layerTitles[index],
-              file: url,
-              isActive: false
-            };
-          } else {
-            console.error(`Error fetching ${fileName}: ${response.statusText}`);
-            return null;
-          }
-        } catch (error) {
-          console.error(`Error fetching ${fileName}:`, error);
-          return null;
-        }
-      })
-    );
-
-    return layerData.filter(layer => layer !== null);
+  
+    const layerData = fileNames.map((fileName, index) => ({
+      title: layerTitles[index],
+      file: `${baseUrl}/${fileName}`,
+      isActive: false
+    }));
+  
+    return layerData;
   };
-
+  
   const fetchSongData = useCallback(async () => {
+    const urlParams = new URLSearchParams(window.location.search);
+    const queryIndex = urlParams.has('index') ? parseInt(urlParams.get('index')) : null;
     const startDate = process.env.REACT_APP_START_DATE;
-    const index = getIndexFromStartDate(startDate);
+    const index = getIndexFromStartDate(startDate, queryIndex);
     const selectedSong = shirdle_songs[index % shirdle_songs.length];
     selectedSong.difficulty = difficultyEnum[selectedSong.difficulty];
-    setSong({ 
+    setSong({
       id: selectedSong.songId,
       title: selectedSong.songTitle,
       views: selectedSong.views,
@@ -99,7 +86,6 @@ const App = ({ setDarkMode, darkMode }) => {
 
     setSongData(selectedSong);
 
-    // Fetch layers and set them
     const layers = await fetchLayerData(selectedSong.songId);
     setLayers(layers);
 
