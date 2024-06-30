@@ -1,4 +1,3 @@
-// src/Components/GuessSkip/GuessSkip.js
 import React, { useCallback, useState } from "react";
 import { useRecoilState, useRecoilValue } from 'recoil';
 import { Box, Button, Tooltip } from "@mui/material";
@@ -16,25 +15,31 @@ const GuessSkip = ({
   onGuessSuccess,
   onSkip,
   show,
-  activeLayer, // Add activeLayer as a prop
+  activeLayer,
 }) => {
-  const availableSongs = useRecoilValue(availableSongsState); // Use useRecoilValue for read-only state
-  const songsList = useRecoilValue(songsListState); // Use useRecoilValue for read-only state
+  const [availableSongs, setAvailableSongs] = useRecoilState(availableSongsState);
+  const songsList = useRecoilValue(songsListState);
   const [guess, setGuess] = useRecoilState(guessState);
-  const song = useRecoilValue(songState); // Use useRecoilValue for read-only state
+  const song = useRecoilValue(songState);
   const setShowError = useRecoilState(showErrorState)[1];
-  const [alertOpen, setAlertOpen] = useState(false); // State for CustomSnackbar
+  const [alertOpen, setAlertOpen] = useState(false);
 
   const handleGuessSubmit = () => {
     if (guess.id === null || guess.title === null) {
-      setAlertOpen(true); // Show alert if the guess is empty
+      setAlertOpen(true);
       return;
     }
-    if (Number(guess.id) === Number(song.id)) {
+    if (guess.id === song.id) {
       onGuessSuccess();
     } else {
       setShowError(true);
       setGuess({ id: null, title: null });
+
+      // Remove the wrong guess from available songs
+      setAvailableSongs((prevSongs) =>
+        prevSongs.filter((song) => song !== guess.title)
+      );
+
       onSkip();
     }
   };
@@ -79,7 +84,7 @@ const GuessSkip = ({
             </Button>
             <Tooltip
               title="אם לא הצלחת לנחש יש ללחוץ על דלג על מנת לגלות את השיר"
-              open={activeLayer === 4} // Show tooltip only when activeLayer is 5
+              open={activeLayer === 4}
               arrow
             >
               <Button
