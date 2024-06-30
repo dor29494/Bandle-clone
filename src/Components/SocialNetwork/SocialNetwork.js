@@ -4,15 +4,13 @@ import React, { useEffect, useRef } from 'react'
 
 function SocialNetwork({ youTubeId, spotifyId }) {
   const spotifyLink = useRef(process.env.REACT_APP_SPOTIFY_BASE + spotifyId);
-  const youtubeLink = useRef(process.env.REACT_APP_SPOTIFY_BASE + youTubeId);
+  const youtubeLink = useRef(process.env.REACT_APP_YOUTUBE_BASE + youTubeId);
 
   useEffect(() => {
-    console.log(process.env.REACT_APP_SPOTIFY_BASE)
     spotifyLink.current = process.env.REACT_APP_SPOTIFY_BASE + spotifyId;
     youtubeLink.current = process.env.REACT_APP_YOUTUBE_BASE + youTubeId;
   }, [youTubeId, spotifyId]);
 
-  console.log(youtubeLink.current)
 
 
   return (

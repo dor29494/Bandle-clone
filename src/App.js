@@ -148,7 +148,6 @@ const App = ({ setDarkMode, darkMode }) => {
   useEffect(() => {
     if (timerExpired) {
       setLoading(true);
-      console.log('Timer expired, fetching new song data');
       setSuccess({ index: 0, state: false });
       setFailed({ index: 0, state: false });
       localStorage.removeItem("layerIndex");
