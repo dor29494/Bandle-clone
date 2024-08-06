@@ -1,24 +1,24 @@
-import React, { useEffect, useCallback } from 'react';
-import { Box } from '@mui/material';
-import { useRecoilState, useRecoilValue, useResetRecoilState } from 'recoil';
+import { Box } from "@mui/material";
+import React, { useCallback, useEffect } from "react";
+import { useRecoilState, useRecoilValue, useResetRecoilState } from "recoil";
+import ErrorPopup from "./Components/ErrorPopup/ErrorPopup";
+import Header from "./Components/Header/Header";
+import LayeredAudioPlayer from "./Components/LayeredAudioPlayer/LayeredAudioPlayer";
+import Loader from "./Components/Loader/Loader";
+import SongDetails from "./Components/SongDetails/SongDetails";
+import shirdle_songs from "./shirdle_songs.json";
 import {
-  songDataState,
-  songState,
-  successState,
   failedState,
+  layersState,
+  loaderState,
   showErrorState,
   showPlayerState,
-  layersState,
+  songDataState,
   songsListState,
+  songState,
+  successState,
   timerExpiredState,
-  loaderState
-} from './state';
-import LayeredAudioPlayer from './Components/LayeredAudioPlayer/LayeredAudioPlayer';
-import SongDetails from './Components/SongDetails/SongDetails';
-import Header from './Components/Header/Header';
-import ErrorPopup from './Components/ErrorPopup/ErrorPopup';
-import Loader from './Components/Loader/Loader';
-import shirdle_songs from './shirdle_songs.json';
+} from "./state";
 
 function getIndexFromStartDate(startDate, queryIndex) {
   if (queryIndex !== null && queryIndex >= 0 && queryIndex <= 400) {
@@ -56,22 +56,30 @@ const App = ({ setDarkMode, darkMode }) => {
       "תופים + בס",
       "תופים + בס + ליווי מוזיקלי",
       "תופים + בס + ליווי מוזיקלי + מלודיות נוספות",
-      "תופים + בס + ליווי מוזיקלי + מלודיות נוספות + שירה"
+      "תופים + בס + ליווי מוזיקלי + מלודיות נוספות + שירה",
     ];
-    const fileNames = ["drums.mp3", "bass.mp3", "instrumental.mp3", "other.mp3", "vocals.mp3"];
-  
+    const fileNames = [
+      "drums.mp3",
+      "bass.mp3",
+      "instrumental.mp3",
+      "other.mp3",
+      "vocals.mp3",
+    ];
+
     const layerData = fileNames.map((fileName, index) => ({
       title: layerTitles[index],
       file: `${baseUrl}/${fileName}`,
-      isActive: false
+      isActive: false,
     }));
-  
+
     return layerData;
   };
-  
+
   const fetchSongData = useCallback(async () => {
     const urlParams = new URLSearchParams(window.location.search);
-    const queryIndex = urlParams.has('index') ? parseInt(urlParams.get('index')) : null;
+    const queryIndex = urlParams.has("index")
+      ? parseInt(urlParams.get("index"))
+      : null;
     const startDate = process.env.REACT_APP_START_DATE;
     const index = getIndexFromStartDate(startDate, queryIndex);
     const selectedSong = shirdle_songs[index % shirdle_songs.length];
@@ -81,7 +89,7 @@ const App = ({ setDarkMode, darkMode }) => {
       title: selectedSong.songTitle,
       views: selectedSong.views,
       spotifyId: selectedSong.media.spotifyId,
-      youtubeId: selectedSong.media.youtubeId
+      youtubeId: selectedSong.media.youtubeId,
     });
 
     setSongData(selectedSong);
@@ -94,16 +102,19 @@ const App = ({ setDarkMode, darkMode }) => {
   }, [setSong, setSongData, setLayers, setSongsList]);
 
   const createAutoCompleteList = (songs) => {
-    return songs.map(song => ({
+    return songs.map((song) => ({
       id: song.songId,
-      title: song.songTitle
+      title: song.songTitle,
     }));
   };
 
   const successTest = () => {
     const resultTime = localStorage.getItem("lastResultTime");
     const isSuccess = localStorage.getItem("lastResult") === "true";
-    const lastLayerIndex = localStorage.getItem("layerIndex") != null ? Number(localStorage.getItem("layerIndex")) : 0;
+    const lastLayerIndex =
+      localStorage.getItem("layerIndex") != null
+        ? Number(localStorage.getItem("layerIndex"))
+        : 0;
     const resultDate = new Date(resultTime);
     const now = new Date();
     const compareDate = new Date(
@@ -116,17 +127,25 @@ const App = ({ setDarkMode, darkMode }) => {
     );
     if (resultDate && isSuccess) {
       if (resultDate.getTime() === compareDate.getTime() && isSuccess) {
-        setSuccess(prev => ({ ...prev, state: true, index: lastLayerIndex }));
-        setFailed(prev => ({ ...prev, state: false, index: lastLayerIndex }));
+        setSuccess((prev) => ({ ...prev, state: true, index: lastLayerIndex }));
+        setFailed((prev) => ({ ...prev, state: false, index: lastLayerIndex }));
       }
     } else {
       const isFailed = localStorage.getItem("lastResult") === "false";
       if (resultDate.getTime() === compareDate.getTime() && isFailed) {
-        setSuccess(prev => ({ ...prev, state: false, index: lastLayerIndex }));
-        setFailed(prev => ({ ...prev, state: true, index: lastLayerIndex }));
+        setSuccess((prev) => ({
+          ...prev,
+          state: false,
+          index: lastLayerIndex,
+        }));
+        setFailed((prev) => ({ ...prev, state: true, index: lastLayerIndex }));
       } else {
-        setFailed(prev => ({ ...prev, state: false, index: lastLayerIndex }));
-        setSuccess(prev => ({ ...prev, state: false, index: lastLayerIndex }));
+        setFailed((prev) => ({ ...prev, state: false, index: lastLayerIndex }));
+        setSuccess((prev) => ({
+          ...prev,
+          state: false,
+          index: lastLayerIndex,
+        }));
       }
     }
   };
@@ -138,7 +157,7 @@ const App = ({ setDarkMode, darkMode }) => {
   useEffect(() => {
     if (timerExpired) {
       setLoading(true);
-      console.log('Timer expired, fetching new song data');
+      console.log("Timer expired, fetching new song data");
       setSuccess({ index: 0, state: false });
       setFailed({ index: 0, state: false });
       localStorage.removeItem("layerIndex");
@@ -149,13 +168,12 @@ const App = ({ setDarkMode, darkMode }) => {
     }
   }, [timerExpired, fetchSongData, setSuccess, setFailed, resetTimerExpired]);
 
-  if (!songData || loading) return (
-    <Loader setDarkMode={setDarkMode} darkMode={darkMode}/>
-  );
+  if (!songData || loading)
+    return <Loader setDarkMode={setDarkMode} darkMode={darkMode} />;
 
   return (
     <>
-      <Box maxWidth="480px" margin="auto" minHeight='100%'>
+      <Box maxWidth="480px" margin="auto" minHeight="100%">
         <Header setDarkMode={setDarkMode} darkMode={darkMode} />
         <Box sx={{ marginTop: "20px" }}>
           <Box>
@@ -166,7 +184,7 @@ const App = ({ setDarkMode, darkMode }) => {
             />
           </Box>
           <Box mt={4}>
-            <LayeredAudioPlayer />
+            <LayeredAudioPlayer darkMode={darkMode} />
           </Box>
         </Box>
       </Box>

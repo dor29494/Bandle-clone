@@ -1,6 +1,6 @@
-import React, { useState, useCallback } from 'react';
-import { Autocomplete, TextField, Popper } from '@mui/material';
-import { styled } from '@mui/system';
+import { Autocomplete, Popper, TextField } from "@mui/material";
+import { styled } from "@mui/system";
+import React, { useCallback, useState } from "react";
 
 const StyledTextField = styled(TextField)({
   "& .MuiInputLabel-root": {
@@ -13,16 +13,17 @@ const StyledTextField = styled(TextField)({
   "& .MuiInputLabel-root.Mui-focused": {
     visibility: "hidden",
   },
-  '& .MuiInputBase-root': {
-    '& .MuiAutocomplete-popupIndicator': {
-      display: 'none',
+  "& .MuiInputBase-root": {
+    borderRadius: "60px",
+    "& .MuiAutocomplete-popupIndicator": {
+      display: "none",
     },
   },
 });
 
 const StyledAutocomplete = styled(Autocomplete)({
-  '& .MuiAutocomplete-listbox': {
-    direction: 'rtl',
+  "& .MuiAutocomplete-listbox": {
+    direction: "rtl",
   },
 });
 
@@ -33,7 +34,7 @@ function SongAutocomplete({ availableSongs, handleSongChange, sx }) {
     );
   };
 
-  const [inputValue, setInputValue] = useState('');
+  const [inputValue, setInputValue] = useState("");
 
   const handleInputChange = useCallback((event, newInputValue) => {
     setInputValue(newInputValue);
@@ -52,15 +53,43 @@ function SongAutocomplete({ availableSongs, handleSongChange, sx }) {
       options={inputValue.length > 0 ? availableSongs : []}
       disableClearable
       filterOptions={filterOptions}
-      renderInput={(params) => (
-        <StyledTextField {...params} label="בחר שיר" fullWidth />
-      )}
+      renderInput={(params) => {
+        const { InputProps, ...rest } = params;
+        return (
+          <StyledTextField
+            {...params}
+            placeholder="הכנס שם שיר/אמן ובחר"
+            fullWidth
+            sx={{
+              borderRadius: "60px",
+            }}
+            InputLabelProps={{ shrink: false }}
+            // InputProps={{
+            //   ...InputProps, // Merge the default InputProps
+            //   endAdornment: (
+            //     <>
+            //       {inputValue && (
+            //         <IconButton
+            //           size="small"
+            //           onClick={() => {
+            //             setInputValue("");
+            //             handleChange(null, "none");
+            //           }}
+            //         >
+            //           <ClearIcon />
+            //         </IconButton>
+            //       )}
+            //       {InputProps.endAdornment}
+            //     </>
+            //   ),
+            // }}
+          />
+        );
+      }}
       inputValue={inputValue}
       onInputChange={handleInputChange}
       onChange={handleChange}
-      PopperComponent={(props) => (
-        <Popper {...props} placement="top-start" />
-      )}
+      PopperComponent={(props) => <Popper {...props} placement="top-start" />}
       sx={sx}
     />
   );

@@ -1,22 +1,23 @@
-import React, { useState, useEffect } from 'react';
-import { AppBar, Toolbar, Typography, IconButton, Snackbar, Alert } from '@mui/material';
-import HelpOutlineIcon from '@mui/icons-material/HelpOutline';
-import BarChartIcon from '@mui/icons-material/BarChart';
-import ShareIcon from '@mui/icons-material/Share';
-import HowToPlay from '../HowToPlay/HowToPlay';
-import UserStats from '../UserStats/UserStats';
-import Brightness4Icon from '@mui/icons-material/Brightness4';
-import Brightness7Icon from '@mui/icons-material/Brightness7';
-import { useTheme } from '@mui/system';
-import CustomSnackbar from '../CustomSnackbar/CustomSnackbar';
-import { tooltipMessageState } from '../../state';
-import { useRecoilState } from 'recoil';
-function Header({ setDarkMode, darkMode}) {
-  const [tooltipMessage, setTooltipMessage] = useRecoilState(tooltipMessageState);
+import BarChartIcon from "@mui/icons-material/BarChart";
+import Brightness4Icon from "@mui/icons-material/Brightness4";
+import Brightness7Icon from "@mui/icons-material/Brightness7";
+import HelpOutlineIcon from "@mui/icons-material/HelpOutline";
+import ShareIcon from "@mui/icons-material/Share";
+import { Alert, AppBar, IconButton, Toolbar, Typography } from "@mui/material";
+import { useTheme } from "@mui/system";
+import React, { useEffect, useState } from "react";
+import { useRecoilState } from "recoil";
+import { tooltipMessageState } from "../../state";
+import CustomSnackbar from "../CustomSnackbar/CustomSnackbar";
+import HowToPlay from "../HowToPlay/HowToPlay";
+import UserStats from "../UserStats/UserStats";
+function Header({ setDarkMode, darkMode }) {
+  const [tooltipMessage, setTooltipMessage] =
+    useRecoilState(tooltipMessageState);
   const [modalsOpen, setModalsOpen] = useState({
     howToPlay: false,
     stats: false,
-    settings: false
+    settings: false,
   });
   const [alertOpen, setAlertOpen] = useState(false);
 
@@ -24,40 +25,51 @@ function Header({ setDarkMode, darkMode}) {
   const [stats, setStats] = useState({
     found: 0,
     currentStreak: 0,
-    maxStreak: 0
+    maxStreak: 0,
   });
 
   const handleDarkMode = () => {
     setDarkMode(!darkMode);
     if (!darkMode) {
-      localStorage.setItem('darkMode', 'true');
+      localStorage.setItem("darkMode", "true");
     } else {
-      localStorage.removeItem('darkMode');
+      localStorage.removeItem("darkMode");
     }
   };
 
   useEffect(() => {
-    const hasSeenHowToPlay = localStorage.getItem('hasSeenHowToPlay');
+    const hasSeenHowToPlay = localStorage.getItem("hasSeenHowToPlay");
     if (!hasSeenHowToPlay) {
-      setModalsOpen(prevState => ({ ...prevState, howToPlay: true }));
-      localStorage.setItem('hasSeenHowToPlay', 'true');
+      setModalsOpen((prevState) => ({ ...prevState, howToPlay: true }));
+      localStorage.setItem("hasSeenHowToPlay", "true");
     }
   }, []);
 
   const toggleModal = (modalName) => {
-    setModalsOpen(prevState => ({ ...prevState, [modalName]: !prevState[modalName] }));
-    if(modalName === 'howToPlay'){
-      setTooltipMessage("הגבר את השמע ולחץ על הפעל כדאי לנחש את השיר")
+    setModalsOpen((prevState) => ({
+      ...prevState,
+      [modalName]: !prevState[modalName],
+    }));
+    if (modalName === "howToPlay") {
+      setTooltipMessage("הגבר את השמע ולחץ על הפעל כדאי לנחש את השיר");
     }
   };
 
   const handleShareClick = () => {
     const message = `האם אתה יכול לזהות את השיר? ${window.location.href}`;
-    navigator.clipboard.writeText(message)
-      .then(() => {
-        setAlertOpen(true);
-      })
-      .catch(err => console.error('Error copying text: ', err));
+    if (navigator.share) {
+      navigator.share({
+        title: "שירדל - זהה את השיר",
+        text: message,
+      });
+    } else {
+      navigator.clipboard
+        .writeText(message)
+        .then(() => {
+          setAlertOpen(true);
+        })
+        .catch((err) => console.error("Error copying text: ", err));
+    }
   };
 
   const handleCloseAlert = () => {
@@ -66,55 +78,85 @@ function Header({ setDarkMode, darkMode}) {
 
   return (
     <>
-      <AppBar position="static" sx={{ backgroundColor: theme.palette.primary.headerBg, boxShadow: 'none', borderBottom: '1px solid #ccc2c2' }}>
-      <Toolbar>
-        <IconButton
+      <AppBar
+        position="static"
+        sx={{
+          backgroundColor: theme.palette.primary.headerBg,
+          boxShadow: "none",
+        }}
+      >
+        <Toolbar>
+          <IconButton
             sx={{ ml: 1 }}
             onClick={handleDarkMode}
             color={theme.palette.primary.headerIcons}
           >
             {darkMode ? <Brightness7Icon /> : <Brightness4Icon />}
           </IconButton>
-          <IconButton edge="start" color={theme.palette.primary.headerIcons} aria-label="help" onClick={() => toggleModal('howToPlay')}>
+          <IconButton
+            edge="start"
+            color={theme.palette.primary.headerIcons}
+            aria-label="help"
+            onClick={() => toggleModal("howToPlay")}
+          >
             <HelpOutlineIcon />
           </IconButton>
-       
-          <Typography variant="h1" color={theme.palette.primary.headerIcons} sx={{ flexGrow: 1, textAlign: 'center' }}>
+
+          <Typography
+            variant="h1"
+            color={theme.palette.primary.headerIcons}
+            sx={{ flexGrow: 1, textAlign: "center", fontWeight: "bold" }}
+          >
             שירדל
           </Typography>
-          <IconButton color={theme.palette.primary.headerIcons} aria-label="stats" onClick={() => toggleModal('stats')}>
+          <IconButton
+            color={theme.palette.primary.headerIcons}
+            aria-label="stats"
+            onClick={() => toggleModal("stats")}
+          >
             <BarChartIcon />
           </IconButton>
-          <IconButton color={theme.palette.primary.headerIcons} aria-label="share" onClick={handleShareClick}>
+          <IconButton
+            color={theme.palette.primary.headerIcons}
+            aria-label="share"
+            onClick={handleShareClick}
+          >
             <ShareIcon />
           </IconButton>
         </Toolbar>
       </AppBar>
-      <HowToPlay open={modalsOpen.howToPlay} onClose={() => toggleModal('howToPlay')}  />
-      <UserStats open={modalsOpen.stats} onClose={() => toggleModal('stats')} stats={stats} />
+      <HowToPlay
+        open={modalsOpen.howToPlay}
+        onClose={() => toggleModal("howToPlay")}
+      />
+      <UserStats
+        open={modalsOpen.stats}
+        onClose={() => toggleModal("stats")}
+        stats={stats}
+      />
       {/* <SettingsModal open={modalsOpen.settings} onClose={() => toggleModal('settings')} darkMode={darkMode} setDarkMode={setDarkMode} /> */}
       <CustomSnackbar
         alertOpen={alertOpen}
         handleCloseAlert={handleCloseAlert}
-        message="התוצאה שלך הועתקה ללוח, מוכן לשיתוף!"
+        message="הקישור הועתק!"
       >
         <Alert
           onClose={handleCloseAlert}
           severity="success"
           sx={{
-            width: '100%',
+            width: "100%",
             backgroundColor: "#ffffff",
-            color: '#4caf50',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'space-between',
-            gap: '5px',
-            padding: '10px 20px',
-            paddingLeft: '0',
-            boxShadow: '0 4px 6px rgba(0,0,0,0.1)'
+            color: "#4caf50",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "space-between",
+            gap: "5px",
+            padding: "10px 20px",
+            paddingLeft: "0",
+            boxShadow: "0 4px 6px rgba(0,0,0,0.1)",
           }}
         >
-          התוצאה שלך הועתקה ללוח, מוכן לשיתוף!
+          הקישור הועתק
         </Alert>
       </CustomSnackbar>
     </>
