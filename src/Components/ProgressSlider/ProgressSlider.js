@@ -11,7 +11,14 @@ const ProgressSlider = ({ audioRef, progress, setProgress }) => {
   };
 
   return (
-    <Box sx={{ width: "100%", display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+    <Box
+      sx={{
+        width: "100%",
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center",
+      }}
+    >
       <Slider
         value={progress}
         onChange={handleSliderChange}
@@ -19,10 +26,13 @@ const ProgressSlider = ({ audioRef, progress, setProgress }) => {
         sx={{
           color: theme.palette.primary.progressSliderBG,
           width: "90%",
-          mt: 2,
-          '& .MuiSlider-thumb': {
+          mt: 1,
+          "& .MuiSlider-thumb": {
             width: 0,
             height: 0,
+          },
+          "& .MuiSlider-rail": {
+            height: "6px",
           },
         }}
       />
