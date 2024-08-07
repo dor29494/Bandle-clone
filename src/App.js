@@ -151,7 +151,6 @@ const App = ({ setDarkMode, darkMode }) => {
   const handleResetLocalStorage = () => {
     localStorage.removeItem("lastResult");
     localStorage.removeItem("localStorageTimer");
-    localStorage.removeItem("hasSeenHowToPlay");
     localStorage.removeItem("lastResultTime");
     localStorage.removeItem("userStats");
     setSuccess({ index: 0, state: false });
@@ -161,6 +160,8 @@ const App = ({ setDarkMode, darkMode }) => {
   };
 
   const changeSong = (next) => {
+    handleResetLocalStorage();
+
     const urlParams = new URLSearchParams(window.location.search);
     const queryIndex = urlParams.has("index")
       ? parseInt(urlParams.get("index"))
@@ -212,13 +213,6 @@ const App = ({ setDarkMode, darkMode }) => {
               marginTop: "20px",
             }}
           >
-            <Button
-              onClick={handleResetLocalStorage}
-              variant="contained"
-              sx={{ textAlign: "center", fontSize: "16px" }}
-            >
-              RESET
-            </Button>
             <Button
               onClick={() => {
                 changeSong(true);
