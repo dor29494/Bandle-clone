@@ -19,13 +19,18 @@ function SocialNetwork({ youTubeId, spotifyId }) {
     const message = `האם אתה יכול לזהות את השיר? ${window.location.href}`;
 
     if (navigator.share) {
-      navigator.share({
-        title: "שירדל - זהה את השיר",
-        text: message,
-      });
+      navigator
+        .share({
+          title: "שירדל - זהה את השיר",
+          text: message,
+        })
+        .then(() => {
+          setAlertMessage("הקישור הועתק");
+          setAlertOpen(true);
+        });
     } else {
       navigator.clipboard
-        .writeText(shareText)
+        .writeText(message)
         .then(() => {
           setAlertMessage("הקישור הועתק");
           setAlertOpen(true);
