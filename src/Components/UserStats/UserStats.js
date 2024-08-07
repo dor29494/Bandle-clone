@@ -7,7 +7,7 @@ import {
   Grid,
   IconButton,
   LinearProgress,
-  Typography
+  Typography,
 } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import CustomSnackbar from "../CustomSnackbar/CustomSnackbar";
@@ -35,38 +35,6 @@ function UserStats({ open, onClose }) {
 
   const getProgressBarColor = (value) => {
     return value > 0 ? "#3f51b5" : "lightgrey";
-  };
-
-  const handleShare = () => {
-    const shareText = `סטטיסטיקות ניחושים:
-${Object.keys(stats)
-  .map(
-    (key) =>
-      `${key === "6" ? "X" : key}: ${stats[key]} (${(
-        (stats[key] / totalGuesses) *
-        100
-      ).toFixed(2)}%)`
-  )
-  .join("\n")}
-סה"כ ניחושים: ${totalGuesses}`;
-
-    if (navigator.share) {
-      navigator.share({
-        title: "שירדל - זהה את השיר",
-        text: shareText,
-      });
-    } else {
-      navigator.clipboard
-        .writeText(shareText)
-        .then(() => {
-          setAlertMessage("סטטיסטיקות הועתקו ללוח!");
-          setAlertOpen(true);
-        })
-        .catch(() => {
-          setAlertMessage("שגיאה בהעתקת הסטטיסטיקות.");
-          setAlertOpen(true);
-        });
-    }
   };
 
   const handleCloseAlert = () => {
@@ -158,11 +126,6 @@ ${Object.keys(stats)
               </Grid>
             ))}
           </Grid>
-          {/* <Box sx={{ mt: 2, textAlign: "center" }}>
-            <Button variant="contained" color="primary" onClick={handleShare}>
-              שתף סטטיסטיקות
-            </Button>
-          </Box> */}
         </Box>
       </DialogContent>
       <CustomSnackbar

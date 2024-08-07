@@ -16,31 +16,12 @@ function SocialNetwork({ youTubeId, spotifyId }) {
   }, [youTubeId, spotifyId]);
 
   const handleShare = () => {
-    const stats = JSON.parse(localStorage.getItem("userStats")) || {
-      1: 0,
-      2: 0,
-      3: 0,
-      4: 0,
-      5: 0,
-      6: 0,
-    };
-    const totalGuesses = Object.values(stats).reduce((a, b) => a + b, 0);
-    const shareText = `סטטיסטיקות ניחושים:
-${Object.keys(stats)
-  .map(
-    (key) =>
-      `${key === "6" ? "X" : key}: ${stats[key]} (${(
-        (stats[key] / totalGuesses) *
-        100
-      ).toFixed(2)}%)`
-  )
-  .join("\n")}
-סה"כ ניחושים: ${totalGuesses}`;
+    const message = `האם אתה יכול לזהות את השיר? ${window.location.href}`;
 
     if (navigator.share) {
       navigator.share({
         title: "שירדל - זהה את השיר",
-        text: shareText,
+        text: message,
       });
     } else {
       navigator.clipboard
