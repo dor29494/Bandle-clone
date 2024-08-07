@@ -1,6 +1,15 @@
-import { Autocomplete, Popper, TextField } from "@mui/material";
+import ClearIcon from "@mui/icons-material/Clear";
+import {
+  Autocomplete,
+  Box,
+  Chip,
+  IconButton,
+  Paper,
+  Popper,
+  TextField,
+} from "@mui/material";
 import { styled } from "@mui/system";
-import React, { useCallback, useState } from "react";
+import React, { useCallback } from "react";
 
 const StyledTextField = styled(TextField)({
   "& .MuiInputLabel-root": {
@@ -27,14 +36,18 @@ const StyledAutocomplete = styled(Autocomplete)({
   },
 });
 
-function SongAutocomplete({ availableSongs, handleSongChange, sx }) {
+function SongAutocomplete({
+  availableSongs,
+  handleSongChange,
+  sx,
+  inputValue,
+  setInputValue,
+}) {
   const filterOptions = (options, { inputValue }) => {
     return options.filter((option) =>
       option.toLowerCase().includes(inputValue.toLowerCase())
     );
   };
-
-  const [inputValue, setInputValue] = useState("");
 
   const handleInputChange = useCallback((event, newInputValue) => {
     setInputValue(newInputValue);
@@ -53,40 +66,48 @@ function SongAutocomplete({ availableSongs, handleSongChange, sx }) {
       options={inputValue.length > 0 ? availableSongs : []}
       disableClearable
       filterOptions={filterOptions}
-      renderInput={(params) => {
-        const { InputProps, ...rest } = params;
-        return (
-          <StyledTextField
-            {...params}
-            placeholder="הכנס שם שיר/אמן ובחר"
-            fullWidth
-            sx={{
-              borderRadius: "60px",
-            }}
-            InputLabelProps={{ shrink: false }}
-            // InputProps={{
-            //   ...InputProps, // Merge the default InputProps
-            //   endAdornment: (
-            //     <>
-            //       {inputValue && (
-            //         <IconButton
-            //           size="small"
-            //           onClick={() => {
-            //             setInputValue("");
-            //             handleChange(null, "none");
-            //           }}
-            //         >
-            //           <ClearIcon />
-            //         </IconButton>
-            //       )}
-            //       {InputProps.endAdornment}
-            //     </>
-            //   ),
-            // }}
-          />
-        );
-      }}
-      inputValue={inputValue}
+      PaperComponent={(props) => (
+        <Paper style={{ maxHeight: "180px" }} {...props} />
+      )}
+      renderOption={(props, option) => (
+        <li {...props}>
+          <Box display="flex" gap={"5px"}>
+            <Chip label={option.split("-")[0]} color="primary" />
+            <Chip label={option.split("-")[1]} color="secondary" />
+          </Box>
+        </li>
+      )}
+      renderInput={(params) => (
+        <StyledTextField
+          {...params}
+          placeholder="הכנס שם שיר/אמן ובחר"
+          fullWidth
+          sx={{
+            borderRadius: "60px",
+          }}
+          InputLabelProps={{ shrink: false }}
+          InputProps={{
+            ...params.InputProps, // Merge the default InputProps
+            endAdornment: (
+              <>
+                {inputValue && (
+                  <IconButton
+                    size="small"
+                    onClick={() => {
+                      setInputValue("");
+                      handleChange(null, "none");
+                    }}
+                  >
+                    <ClearIcon />
+                  </IconButton>
+                )}
+                {params.InputProps.endAdornment}
+              </>
+            ),
+          }}
+        />
+      )}
+      value={inputValue}
       onInputChange={handleInputChange}
       onChange={handleChange}
       PopperComponent={(props) => <Popper {...props} placement="top-start" />}

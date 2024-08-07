@@ -1,7 +1,7 @@
 import { Box } from "@mui/material";
 import React, { useCallback, useEffect } from "react";
 import { useRecoilState, useRecoilValue, useResetRecoilState } from "recoil";
-import ErrorPopup from "./Components/ErrorPopup/ErrorPopup";
+import CustomSnackbar from "./Components/CustomSnackbar/CustomSnackbar";
 import Header from "./Components/Header/Header";
 import LayeredAudioPlayer from "./Components/LayeredAudioPlayer/LayeredAudioPlayer";
 import Loader from "./Components/Loader/Loader";
@@ -189,10 +189,10 @@ const App = ({ setDarkMode, darkMode }) => {
         </Box>
       </Box>
       {showError && (
-        <ErrorPopup
+        <CustomSnackbar
+          alertOpen={true}
+          handleCloseAlert={() => setShowError(false)}
           message={"ניחוש שגוי"}
-          onClose={() => setShowError(false)}
-          setShowPlayer={setShowPlayer}
         />
       )}
     </>

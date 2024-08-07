@@ -19,6 +19,7 @@ const GuessSkip = ({ onGuessSuccess, onSkip, show, activeLayer }) => {
   const song = useRecoilValue(songState);
   const setShowError = useRecoilState(showErrorState)[1];
   const [alertOpen, setAlertOpen] = useState(false);
+  const [inputValue, setInputValue] = useState("");
 
   const handleGuessSubmit = () => {
     if (guess.id === null || guess.title === null) {
@@ -38,6 +39,8 @@ const GuessSkip = ({ onGuessSuccess, onSkip, show, activeLayer }) => {
 
       onSkip();
     }
+
+    setInputValue("");
   };
 
   const handleSongChange = useCallback(
@@ -71,6 +74,8 @@ const GuessSkip = ({ onGuessSuccess, onSkip, show, activeLayer }) => {
             availableSongs={availableSongs}
             handleSongChange={handleSongChange}
             sx={{ width: "100%", mb: 2 }}
+            inputValue={inputValue}
+            setInputValue={setInputValue}
           />
           <Box
             sx={{

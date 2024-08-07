@@ -1,6 +1,4 @@
-import MicIcon from "@mui/icons-material/Mic";
 import MusicNoteIcon from "@mui/icons-material/MusicNote";
-import QueueMusicIcon from "@mui/icons-material/QueueMusic";
 import { Box, CardContent, Grid, Tooltip, Typography } from "@mui/material";
 import React, { useEffect, useRef, useState } from "react";
 import { useRecoilState, useSetRecoilState } from "recoil";
@@ -22,8 +20,8 @@ import CustomSnackbar from "../CustomSnackbar/CustomSnackbar";
 import GuessSkip from "../GuessSkip/GuessSkip";
 import BassIcon from "../Icons/BassIcon";
 import DrumsIcon from "../Icons/DrumsIcon";
-import PianoGuitarIcon from "../Icons/PianoGuitarIcon";
 import OtherMelodicsIcon from "../Icons/OtherMelodicsIcon";
+import PianoGuitarIcon from "../Icons/PianoGuitarIcon";
 import VoiceIcon from "../Icons/VoiceIcon";
 import Result from "../Result/Result";
 
