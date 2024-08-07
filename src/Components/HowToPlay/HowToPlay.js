@@ -111,7 +111,7 @@ function HowToPlay({ open, onClose }) {
                 </svg>
               </Box>
               <Box color={"282827"} fontSize={"14px"} fontWeight={"600"}>
-                כדי להוסיף מכשיר, לחץ על המכשירים הלא פעילים
+                כדי להוסיף שכבה, לחץ על אחת השכבות הלא פעילות
               </Box>
             </Box>
             <Box
@@ -139,10 +139,10 @@ function HowToPlay({ open, onClose }) {
                 </svg>
               </Box>
               <Box color={"282827"} fontSize={"14px"} fontWeight={"600"}>
-                הקלד את הכותרת/האמנים ולחץ על נחש
+                הקלד את השיר/שם האומן ולחץ על נחש
               </Box>
             </Box>
-            <Box
+            {/* <Box
               display={"flex"}
               alignItems={"center"}
               gap={"8px"}
@@ -165,7 +165,7 @@ function HowToPlay({ open, onClose }) {
               <Box color={"282827"} fontSize={"14px"} fontWeight={"600"}>
                 לחץ על דלג אם אינך מזהה את השכבה
               </Box>
-            </Box>
+            </Box> */}
           </Box>
         </Box>
         <Box mt={3} display={"flex"} justifyContent={"center"}>
