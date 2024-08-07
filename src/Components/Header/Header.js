@@ -58,10 +58,14 @@ function Header({ setDarkMode, darkMode }) {
   const handleShareClick = () => {
     const message = `האם אתה יכול לזהות את השיר? ${window.location.href}`;
     if (navigator.share) {
-      navigator.share({
-        title: "שירדל - זהה את השיר",
-        text: message,
-      });
+      navigator
+        .share({
+          title: "שירדל - זהה את השיר",
+          text: message,
+        })
+        .then(() => {
+          setAlertOpen(true);
+        });
     } else {
       navigator.clipboard
         .writeText(message)
