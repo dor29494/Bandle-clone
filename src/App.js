@@ -90,7 +90,7 @@ const App = ({ setDarkMode, darkMode }) => {
       spotifyId: selectedSong.media.spotifyId,
       youtubeId: selectedSong.media.youtubeId,
     });
-
+    setSpecificIndex(index);
     setSongData(selectedSong);
 
     const layers = await fetchLayerData(selectedSong.songId);
@@ -182,10 +182,6 @@ const App = ({ setDarkMode, darkMode }) => {
 
     window.location.href = "/?index=" + newIndex;
   };
-  
-  const handleInputChange = (event) => {
-    setSpecificIndex(event.target.value);
-  };
 
   useEffect(() => {
     fetchSongData();
@@ -224,44 +220,78 @@ const App = ({ setDarkMode, darkMode }) => {
             sx={{
               width: "100%",
               display: "flex",
-              justifyContent: "center",
-              alignContent: "center",
+              flexDirection: "column",
+              alignItems: "center",
               gap: "10px",
               marginTop: "20px",
             }}
           >
-            <Button
-              onClick={() => changeSong(parseInt(specificIndex), true)}
-              variant="contained"
-              sx={{ textAlign: "center", fontSize: "16px" }}
-            >
-              GO
-            </Button>
-            <TextField
-              type="number"
-              value={specificIndex}
-              onChange={handleInputChange}
-              placeholder="Enter specific index"
-              sx={{ textAlign: "center", fontSize: "16px", margin: "0 10px" }}
-            />
-            <Button
-              onClick={() => {
-                changeSong(1);
+            <Box
+              sx={{
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
+                gap: "10px",
               }}
-              variant="contained"
-              sx={{ textAlign: "center", fontSize: "16px" }}
             >
-              NEXT
-            </Button>
-            <Button
-              onClick={() => {
-                changeSong(-1);
+              <Button
+                onClick={() => {
+                  changeSong(1);
+                }}
+                variant="contained"
+                sx={{ textAlign: "center", fontSize: "16px" }}
+              >
+                NEXT
+              </Button>
+              <Button
+                onClick={() => {
+                  changeSong(-1);
+                }}
+                variant="contained"
+                sx={{ textAlign: "center", fontSize: "16px" }}
+              >
+                PREV
+              </Button>
+            </Box>
+            <Box
+              sx={{
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
+                gap: "10px",
               }}
-              variant="contained"
-              sx={{ textAlign: "center", fontSize: "16px" }}
             >
-              PREV
-            </Button>
+              <Button
+                onClick={() => changeSong(parseInt(specificIndex), true)}
+                variant="contained"
+                sx={{ textAlign: "center", fontSize: "16px", height: "40px" }}
+              >
+                GO
+              </Button>
+              <TextField
+                type="number"
+                value={specificIndex}
+                onChange={(event) => setSpecificIndex(event.target.value)}
+                placeholder="Enter specific index"
+                sx={{
+                  width: "80px",  // Adjust the width as needed
+                  textAlign: "center",
+                  fontSize: "16px",
+                  height: "40px",
+                  marginLeft: "-9px"
+                }}
+                inputProps={{
+                  style: {
+                    textAlign: "center",
+                    fontSize: "16px",
+                    padding: "5px",
+                    height: "40px",
+                    boxSizing: "border-box",
+                  },
+                }}
+              />
+
+            </Box>
           </Box>
           <Box mt={4}>
             <LayeredAudioPlayer darkMode={darkMode} />
