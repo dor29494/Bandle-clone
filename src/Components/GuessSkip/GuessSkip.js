@@ -139,7 +139,7 @@ const GuessSkip = ({ onGuessSuccess, onSkip, show, activeLayer }) => {
             {activeLayer === 4 && (
               <Box>
                 <Tooltip
-                  title="אם לא הצלחת לנחש יש ללחוץ על דלג על מנת לגלות את השיר"
+                  title="אם לא הצלחת לנחש יש ללחוץ כאן"
                   open={activeLayer === 4}
                   arrow
                 >

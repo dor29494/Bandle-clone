@@ -57,6 +57,16 @@ function SongAutocomplete({
     handleSongChange(newValue);
   };
 
+  const splitByLastDash = (option) => {
+    const lastDashIndex = option.lastIndexOf("-");
+    if (lastDashIndex === -1) {
+      return [option, ""]; // if there's no dash, return the whole string as the first part and an empty string as the second part
+    }
+    const part1 = option.substring(0, lastDashIndex).trim();
+    const part2 = option.substring(lastDashIndex + 1).trim();
+    return [part1, part2];
+  };
+
   return (
     <StyledAutocomplete
       noOptionsText="אנא בחר שיר"
@@ -72,8 +82,8 @@ function SongAutocomplete({
       renderOption={(props, option) => (
         <li {...props}>
           <Box display="flex" gap={"5px"}>
-            <Chip label={option.split("-")[0]} color="primary" />
-            <Chip label={option.split("-")[1]} color="secondary" />
+            <Chip label={splitByLastDash(option)[0]} color="primary" />
+            <Chip label={splitByLastDash(option)[1]} color="secondary" />
           </Box>
         </li>
       )}
