@@ -1,5 +1,5 @@
-import { Box, Button } from "@mui/material";
-import React, { useCallback, useEffect } from "react";
+import { Box, Button, TextField } from "@mui/material";
+import React, { useCallback, useEffect, useState } from "react";
 import { useRecoilState, useRecoilValue, useResetRecoilState } from "recoil";
 import CustomSnackbar from "./Components/CustomSnackbar/CustomSnackbar";
 import Header from "./Components/Header/Header";
@@ -46,6 +46,7 @@ const App = ({ setDarkMode, darkMode }) => {
   const resetTimerExpired = useResetRecoilState(timerExpiredState);
   const [loading, setLoading] = useRecoilState(loaderState);
   const difficultyEnum = { 1: "קל", 2: "בינוני", 3: "קשה" };
+  const [specificIndex, setSpecificIndex] = useState("");
 
   const fetchLayerData = (selectedSongId) => {
     const baseUrl = `${process.env.REACT_APP_LAYERS_URL}${selectedSongId}`;
@@ -159,15 +160,31 @@ const App = ({ setDarkMode, darkMode }) => {
     console.log("Local storage reset");
   };
 
-  const changeSong = (next) => {
+  const changeSong = (indexChange, isSpecific = false) => {
     handleResetLocalStorage();
 
     const urlParams = new URLSearchParams(window.location.search);
-    const queryIndex = urlParams.has("index")
-      ? parseInt(urlParams.get("index"))
-      : 0;
-    window.location.href =
-      "/?index=" + ((queryIndex + (next ? 1 : -1)) % shirdle_songs.length);
+    const queryIndex = urlParams.has("index") ? parseInt(urlParams.get("index")) : 0;
+
+    let newIndex;
+    if (isSpecific) {
+      if (indexChange >= shirdle_songs.length) {
+        alert("האינדקס שרשמת גדול מכמות השירים הקיימים");
+        return;
+      }
+      newIndex = indexChange;
+    } else {
+      newIndex = (queryIndex + indexChange + shirdle_songs.length) % shirdle_songs.length;
+    }
+
+    // Ensuring the newIndex is within valid range
+    newIndex = Math.max(0, Math.min(newIndex, shirdle_songs.length - 1));
+
+    window.location.href = "/?index=" + newIndex;
+  };
+  
+  const handleInputChange = (event) => {
+    setSpecificIndex(event.target.value);
   };
 
   useEffect(() => {
@@ -214,8 +231,22 @@ const App = ({ setDarkMode, darkMode }) => {
             }}
           >
             <Button
+              onClick={() => changeSong(parseInt(specificIndex), true)}
+              variant="contained"
+              sx={{ textAlign: "center", fontSize: "16px" }}
+            >
+              GO
+            </Button>
+            <TextField
+              type="number"
+              value={specificIndex}
+              onChange={handleInputChange}
+              placeholder="Enter specific index"
+              sx={{ textAlign: "center", fontSize: "16px", margin: "0 10px" }}
+            />
+            <Button
               onClick={() => {
-                changeSong(true);
+                changeSong(1);
               }}
               variant="contained"
               sx={{ textAlign: "center", fontSize: "16px" }}
@@ -224,7 +255,7 @@ const App = ({ setDarkMode, darkMode }) => {
             </Button>
             <Button
               onClick={() => {
-                changeSong(false);
+                changeSong(-1);
               }}
               variant="contained"
               sx={{ textAlign: "center", fontSize: "16px" }}
