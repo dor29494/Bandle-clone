@@ -17,6 +17,7 @@ const PlayButton = () => {
       flexDirection={"row"}
       backgroundColor={"#1EDB19"}
       style={{ cursor: "pointer" }}
+      className={"zoom-in-out-box"}
     >
       <Box display={"inline-flex"}>
         <svg
