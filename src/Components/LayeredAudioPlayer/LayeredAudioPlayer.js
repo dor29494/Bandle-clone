@@ -343,7 +343,11 @@ const LayeredAudioPlayer = ({ darkMode }) => {
                 onClose={() => setShowTooltip(false)}
               >
                 <Box onClick={() => handlePlayPause()}>
-                  {isPlaying ? <PauseButton /> : <PlayButton />}
+                  {isPlaying ? (
+                    <PauseButton />
+                  ) : (
+                    <PlayButton isAnimate={isShow && activeLayerIndex === 0} />
+                  )}
                 </Box>
               </Tooltip>
             </Box>

@@ -1,7 +1,7 @@
 import { Box } from "@mui/material";
 import React from "react";
 
-const PlayButton = () => {
+const PlayButton = ({ isAnimate }) => {
   return (
     <Box
       display={"flex"}
@@ -17,7 +17,7 @@ const PlayButton = () => {
       flexDirection={"row"}
       backgroundColor={"#1EDB19"}
       style={{ cursor: "pointer" }}
-      className={"zoom-in-out-box"}
+      className={isAnimate ? "zoom-in-out-box" : ""}
     >
       <Box display={"inline-flex"}>
         <svg
