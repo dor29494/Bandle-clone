@@ -145,7 +145,12 @@ const LayeredAudioPlayer = ({ darkMode }) => {
     // }
   };
 
+  const isFirstPlaySessionRef = useRef(true);
   const handlePlayPause = (forcePlay = false) => {
+    if (isFirstPlaySessionRef.current) {
+      isFirstPlaySessionRef.current = false;
+    }
+
     if (forcePlay) {
       setIsFirstPlay(true);
       setIsPlaying(true);
@@ -346,7 +351,13 @@ const LayeredAudioPlayer = ({ darkMode }) => {
                   {isPlaying ? (
                     <PauseButton />
                   ) : (
-                    <PlayButton isAnimate={isShow && activeLayerIndex === 0} />
+                    <PlayButton
+                      isAnimate={
+                        isShow &&
+                        activeLayerIndex === 0 &&
+                        isFirstPlaySessionRef.current
+                      }
+                    />
                   )}
                 </Box>
               </Tooltip>
