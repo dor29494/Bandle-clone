@@ -11,12 +11,17 @@ import {
 import CustomSnackbar from "../CustomSnackbar/CustomSnackbar";
 import SongAutocomplete from "../SongAutoComplete/SongAutoComplete";
 
-const GuessSkip = ({ onGuessSuccess, onSkip, show, activeLayer }) => {
-  const [availableSongs, setAvailableSongs] =
-    useRecoilState(availableSongsState);
-  const songsList = useRecoilValue(songsListState);
+const GuessSkip = ({
+  onGuessSuccess,
+  onSkip,
+  show,
+  activeLayer,
+  availableSongs,
+  setAvailableSongs,
+  song,
+  songsList,
+}) => {
   const [guess, setGuess] = useRecoilState(guessState);
-  const song = useRecoilValue(songState);
   const setShowError = useRecoilState(showErrorState)[1];
   const [alertOpen, setAlertOpen] = useState(false);
   const [inputValue, setInputValue] = useState("");

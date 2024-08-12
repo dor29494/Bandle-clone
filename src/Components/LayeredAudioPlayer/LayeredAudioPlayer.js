@@ -25,17 +25,22 @@ import PianoGuitarIcon from "../Icons/PianoGuitarIcon";
 import VoiceIcon from "../Icons/VoiceIcon";
 import Result from "../Result/Result";
 
-const LayeredAudioPlayer = ({ darkMode }) => {
-  const [layers] = useRecoilState(layersState);
-  const [songsList] = useRecoilState(songsListState);
-  const [song] = useRecoilState(songState);
-  const [success, setSuccess] = useRecoilState(successState);
-  const [failed, setFailed] = useRecoilState(failedState);
+const LayeredAudioPlayer = ({
+  darkMode,
+  layers,
+  songsList,
+  success,
+  setSuccess,
+  failed,
+  song,
+  setFailed,
+  onFinish
+}) => {
   const [showError, setShowError] = useRecoilState(showErrorState);
-  const [showPlayer, setShowPlayer] = useRecoilState(showPlayerState);
+  const [showPlayer, setShowPlayer] = useState(false);
   const [tooltipMessage, setTooltipMessage] =
     useRecoilState(tooltipMessageState);
-  const setAvailableSongs = useSetRecoilState(availableSongsState);
+  const [availableSongs, setAvailableSongs] = useState([]);
   const [activeLayerIndex, setActiveLayerIndex] = useState(0);
   const [activeLayers, setActiveLayers] = useState([]);
   const [isPlaying, setIsPlaying] = useState(false);
@@ -100,6 +105,7 @@ const LayeredAudioPlayer = ({ darkMode }) => {
     updateStatistics(true);
 
     setIsPlaying(true);
+    onFinish(song.id);
   };
 
   const handleSkip = () => {
@@ -392,9 +398,13 @@ const LayeredAudioPlayer = ({ darkMode }) => {
           {isFirstPlay && showPlayer && (
             <GuessSkip
               show={isShow}
+              availableSongs={availableSongs}
+              setAvailableSongs={setAvailableSongs}
               onGuessSuccess={onGuessSuccess}
               onSkip={handleSkip}
               activeLayer={activeLayerIndex}
+              song={song}
+              songsList={songsList}
             />
           )}
         </CardContent>
