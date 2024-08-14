@@ -1,0 +1,119 @@
+[
+  {
+    "title": "רנדומאלי",
+    "id": "random",
+    "style": {
+      "borderColor": "#FA276E",
+      "backgroundColor": "#FB4F78",
+      "hoverBorderColor": "#FB4F78",
+      "hoverBackgroundColor": "#FA276E"
+    },
+    "allSongIds": true,
+    "songIds": []
+  },
+  {
+    "title": "מזרחית",
+    "id": "mizrahit",
+    "style": {
+      "borderColor": "#FF6300",
+      "backgroundColor": "#FEBA00",
+      "hoverBorderColor": "#FEBA00",
+      "hoverBackgroundColor": "#FF6300"
+    },
+    "songIds": [
+      "bfdd796d-f66e-4b14-988c-1c088ddfb105",
+      "d313c961-6d05-4f08-a8dd-0802a3d4c2d3",
+      "8ead98e9-d48d-41b2-8ecb-504f5d015de4"
+    ]
+  },
+  {
+    "title": "רוק",
+    "id": "rock",
+    "style": {
+      "borderColor": "#0AAA43",
+      "backgroundColor": "#1EDB19",
+      "hoverBorderColor": "#1EDB19",
+      "hoverBackgroundColor": "#0AAA43"
+    },
+    "songIds": [
+      "bfdd796d-f66e-4b14-988c-1c088ddfb105",
+      "d313c961-6d05-4f08-a8dd-0802a3d4c2d3",
+      "8ead98e9-d48d-41b2-8ecb-504f5d015de4"
+    ]
+  },
+  {
+    "title": "פופ",
+    "id": "pop",
+    "style": {
+      "borderColor": "#0450CC",
+      "backgroundColor": "#3894F4",
+      "hoverBorderColor": "#3894F4",
+      "hoverBackgroundColor": "#0450CC"
+    },
+    "songIds": [
+      "bfdd796d-f66e-4b14-988c-1c088ddfb105",
+      "d313c961-6d05-4f08-a8dd-0802a3d4c2d3",
+      "8ead98e9-d48d-41b2-8ecb-504f5d015de4"
+    ]
+  },
+  {
+    "title": "היפ הופ",
+    "id": "hiphop",
+    "style": {
+      "borderColor": "#522EBC",
+      "backgroundColor": "#9F61D4",
+      "hoverBorderColor": "#9F61D4",
+      "hoverBackgroundColor": "#522EBC"
+    },
+    "songIds": [
+      "bfdd796d-f66e-4b14-988c-1c088ddfb105",
+      "d313c961-6d05-4f08-a8dd-0802a3d4c2d3",
+      "8ead98e9-d48d-41b2-8ecb-504f5d015de4"
+    ]
+  },
+  {
+    "title": "קלאסיקות",
+    "id": "classics",
+    "style": {
+      "borderColor": "#0096A0",
+      "backgroundColor": "#11C8CA",
+      "hoverBorderColor": "#11C8CA",
+      "hoverBackgroundColor": "#0096A0"
+    },
+    "songIds": [
+      "bfdd796d-f66e-4b14-988c-1c088ddfb105",
+      "d313c961-6d05-4f08-a8dd-0802a3d4c2d3",
+      "8ead98e9-d48d-41b2-8ecb-504f5d015de4"
+    ]
+  },
+  {
+    "title": "מסיבות",
+    "id": "party",
+    "style": {
+      "borderColor": "#0450CC",
+      "backgroundColor": "#3894F4",
+      "hoverBorderColor": "#3894F4",
+      "hoverBackgroundColor": "#0450CC"
+    },
+    "songIds": [
+      "bfdd796d-f66e-4b14-988c-1c088ddfb105",
+      "d313c961-6d05-4f08-a8dd-0802a3d4c2d3",
+      "8ead98e9-d48d-41b2-8ecb-504f5d015de4"
+    ]
+  },
+  {
+    "title": "שירי אהבה",
+    "id": "lovesongs",
+    "style": {
+      "borderColor": "#FA276E",
+      "backgroundColor": "#FB4F78",
+      "hoverBorderColor": "#FB4F78",
+      "hoverBackgroundColor": "#FA276E"
+    },
+    "songIds": [
+      "bfdd796d-f66e-4b14-988c-1c088ddfb105",
+      "d313c961-6d05-4f08-a8dd-0802a3d4c2d3",
+      "8ead98e9-d48d-41b2-8ecb-504f5d015de4"
+    ]
+  }
+]

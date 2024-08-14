@@ -13,10 +13,16 @@ const PlayButton = ({ isAnimate }) => {
       gap={"5px"}
       borderRadius={"60px"}
       padding={"12px 24px"}
-      border={"0px 0px 2px 0px"}
       flexDirection={"row"}
       backgroundColor={"#1EDB19"}
+      borderBottom={"2px solid #0AAA43"}
       style={{ cursor: "pointer" }}
+      sx={{
+        ":hover": {
+          backgroundColor: "#0AAA43",
+          borderBottom: "2px solid #1EDB19",
+        },
+      }}
       className={isAnimate ? "zoom-in-out-box" : ""}
     >
       <Box display={"inline-flex"}>

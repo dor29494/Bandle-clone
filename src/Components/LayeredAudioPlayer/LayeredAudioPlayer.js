@@ -34,7 +34,8 @@ const LayeredAudioPlayer = ({
   failed,
   song,
   setFailed,
-  onFinish
+  onFinish,
+  isDaily,
 }) => {
   const [showError, setShowError] = useRecoilState(showErrorState);
   const [showPlayer, setShowPlayer] = useState(false);
@@ -92,7 +93,8 @@ const LayeredAudioPlayer = ({
     if (activeLayerIndex === 4) {
       stats[6]++;
     }
-    localStorage.setItem("userStats", JSON.stringify(stats));
+
+    if (isDaily) localStorage.setItem("userStats", JSON.stringify(stats));
   };
 
   const onGuessSuccess = () => {
@@ -183,19 +185,19 @@ const LayeredAudioPlayer = ({
 
   const getLayersColors = (index) => {
     if (success.state && index === success.index) {
-      return { border: "#6A9D6A", background: "#E761F7" };
+      return { border: "#522EBC", background: "#9F61D4" };
     }
     if (failed.state && index === failed.index) {
-      return { border: "#974C50", background: "#E761F7" };
+      return { border: "#522EBC", background: "#9F61D4" };
     }
     if (success.state || failed.state) {
       if (index < (success.state ? success.index : failed.index)) {
-        return { border: "#FFD700", background: "#E761F7" };
+        return { border: "#522EBC", background: "#9F61D4" };
       }
       return { border: "#FFFFFF", background: "#D3D3D3" };
     }
     if (index <= activeLayerIndex) {
-      return { border: "#FFD700", background: "#E761F7" };
+      return { border: "#522EBC", background: "#9F61D4" };
     }
     return { border: "#A9A9A9", background: "#C2C7D1" };
   };
@@ -210,7 +212,7 @@ const LayeredAudioPlayer = ({
       });
       setActiveLayers(updatedLayers);
       setActiveLayerIndex(activeLayerIndex + 1);
-      localStorage.setItem("layerIndex", activeLayerIndex + 1);
+      if (isDaily) localStorage.setItem("layerIndex", activeLayerIndex + 1);
     }
   };
 
@@ -390,10 +392,20 @@ const LayeredAudioPlayer = ({
             />
           )}
           {success.state && (
-            <Result song={song} isSuccess={true} darkMode={darkMode} />
+            <Result
+              song={song}
+              isSuccess={true}
+              darkMode={darkMode}
+              isDaily={isDaily}
+            />
           )}
           {failed.state && (
-            <Result song={song} isSuccess={false} darkMode={darkMode} />
+            <Result
+              song={song}
+              isSuccess={false}
+              darkMode={darkMode}
+              isDaily={isDaily}
+            />
           )}
           {isFirstPlay && showPlayer && (
             <GuessSkip

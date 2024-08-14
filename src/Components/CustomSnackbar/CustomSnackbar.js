@@ -50,7 +50,7 @@ const AlertSnackbar = styled(Snackbar)(({ theme }) => ({
   },
 }));
 
-function CustomSnackbar({ alertOpen, handleCloseAlert, message }) {
+function CustomSnackbar({ alertOpen, handleCloseAlert, message, success }) {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
   return (
@@ -72,10 +72,12 @@ function CustomSnackbar({ alertOpen, handleCloseAlert, message }) {
         alignItems={"center"}
         justifyContent={"space-between"}
         padding={"12px 20px"}
-        gap={"5px"}
+        gap={"15px"}
         color={"#fff"}
-        style={{ backgroundColor: "#FB4F78" }}
+        style={{ backgroundColor: success ? "#3894F4" : "#FB4F78" }}
       >
+        {message}
+
         <CloseButton
           size="small"
           aria-label="close"
@@ -84,7 +86,6 @@ function CustomSnackbar({ alertOpen, handleCloseAlert, message }) {
         >
           <CloseIcon fontSize="small" />
         </CloseButton>
-        {message}
       </Box>
     </AlertSnackbar>
   );

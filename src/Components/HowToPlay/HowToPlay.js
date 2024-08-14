@@ -7,7 +7,15 @@ function HowToPlay({ open, onClose }) {
   const darkMode = localStorage.getItem("darkMode") === "true";
 
   return (
-    <Dialog open={open} onClose={onClose}>
+    <Dialog
+      open={open}
+      onClose={onClose}
+      sx={{
+        "& .MuiPaper-root": {
+          borderRadius: "20px",
+        },
+      }}
+    >
       <DialogContent dividers sx={{ zIndex: "55" }}>
         <Box
           display={"flex"}
@@ -139,10 +147,10 @@ function HowToPlay({ open, onClose }) {
                 </svg>
               </Box>
               <Box color={"282827"} fontSize={"14px"} fontWeight={"600"}>
-                הקלד את השיר/שם האומן ולחץ על נחש
+                הקלד את שם השיר/שם האומן ולחץ על נחש
               </Box>
             </Box>
-            {/* <Box
+            <Box
               display={"flex"}
               alignItems={"center"}
               gap={"8px"}
@@ -157,15 +165,21 @@ function HowToPlay({ open, onClose }) {
                   xmlns="http://www.w3.org/2000/svg"
                 >
                   <path
-                    d="M4.96883 5.60984C3.47155 4.64493 1.5 5.71986 1.5 7.50112V16.4988C1.5 18.2801 3.47155 19.355 4.96883 18.3901L11.75 14.02V16.4988C11.75 18.2801 13.7216 19.355 15.2188 18.3901L22.1998 13.8912C23.5747 13.0052 23.5747 10.9947 22.1998 10.1087L15.2188 5.60984C13.7216 4.64493 11.75 5.71986 11.75 7.50112V9.97993L4.96883 5.60984Z"
+                    d="M14.5 12C14.5 13.3807 13.3807 14.5 12 14.5C10.6193 14.5 9.49998 13.3807 9.49998 12C9.49998 10.6193 10.6193 9.5 12 9.5C13.3807 9.5 14.5 10.6193 14.5 12Z"
+                    fill="inherit"
+                  />
+                  <path
+                    fillRule="evenodd"
+                    clipRule="evenodd"
+                    d="M1.55252 9.6947C4.42155 5.75695 7.89512 3.25 12 3.25C16.1049 3.25 19.5784 5.75695 22.4475 9.6947C23.4486 11.0688 23.4486 12.9312 22.4475 14.3053C19.5784 18.243 16.1049 20.75 12 20.75C7.89512 20.75 4.42154 18.243 1.55252 14.3053C0.551341 12.9312 0.55134 11.0688 1.55252 9.6947ZM12 16C14.2091 16 16 14.2091 16 12C16 9.79086 14.2091 8 12 8C9.79084 8 7.99998 9.79086 7.99998 12C7.99998 14.2091 9.79084 16 12 16Z"
                     fill="inherit"
                   />
                 </svg>
               </Box>
               <Box color={"282827"} fontSize={"14px"} fontWeight={"600"}>
-                לחץ על דלג אם אינך מזהה את השכבה
+                לחצו על גלה אם אינך מזהה את השיר
               </Box>
-            </Box> */}
+            </Box>
           </Box>
         </Box>
         <Box mt={3} display={"flex"} justifyContent={"center"}>

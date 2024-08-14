@@ -168,9 +168,14 @@ const DailyGame = ({ setDarkMode, darkMode }) => {
       setFailed({ index: 0, state: false });
       localStorage.removeItem("layerIndex");
       localStorage.removeItem("lastResult");
-      fetchSongData();
-      resetTimerExpired();
-      setLoading(false);
+      localStorage.removeItem("lastResultTime");
+
+      // bug fix because when its in the same second something wrong is happening!
+      setTimeout(() => {
+        fetchSongData();
+        resetTimerExpired();
+        setLoading(false);
+      }, 250);
     }
   }, [timerExpired, fetchSongData, setSuccess, setFailed, resetTimerExpired]);
 
@@ -198,6 +203,7 @@ const DailyGame = ({ setDarkMode, darkMode }) => {
             setFailed={setFailed}
             song={song}
             onFinish={() => {}}
+            isDaily={true}
           />
         </Box>
       </Box>

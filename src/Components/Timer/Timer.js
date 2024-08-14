@@ -52,7 +52,11 @@ const Timer = () => {
     }, 1000);
 
     // Check if the timer has reached zero
-    if (Object.keys(timeLeft).length === 0 && timeLeft.constructor === Object) {
+    if (
+      timeLeft.hours === 0 &&
+      timeLeft.minutes === 0 &&
+      timeLeft.seconds === 0
+    ) {
       // Introduce a small delay to ensure the date rolls over
       setTimeout(() => {
         setTimerExpired(true); // Set timer expired state to true

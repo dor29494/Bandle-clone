@@ -4,13 +4,14 @@ import { Box, Button } from "@mui/material";
 import DailyGame from "./Components/DailyGame/DailyGame";
 import Categories from "./Components/Categories/Categories";
 import Header from "./Components/Header/Header";
+import Home from "./Components/Home/Home";
 
 const App = ({ setDarkMode, darkMode }) => {
   return (
     <Router>
       <Box maxWidth="480px" margin="auto" minHeight="100%">
         <Header setDarkMode={setDarkMode} darkMode={darkMode} />
-        <Box display="flex" justifyContent="space-between" p={2}>
+        {/* <Box display="flex" justifyContent="space-between" p={2}>
           <Button
             variant="contained"
             onClick={() => {
@@ -22,10 +23,11 @@ const App = ({ setDarkMode, darkMode }) => {
           <Button variant="contained" component={Link} to="/categories">
             Categories
           </Button>
-        </Box>
+        </Box> */}
         <Routes>
+          <Route path="/" element={<Home />} />
           <Route
-            path="/"
+            path="/daily"
             element={
               <DailyGame darkMode={darkMode} setDarkMode={setDarkMode} />
             }

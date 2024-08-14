@@ -111,6 +111,11 @@ const GuessSkip = ({
                   marginRight: "-16px",
                   width: "150px",
                   height: "41px",
+                  ":hover": {
+                    backgroundColor: "#0096A0",
+                    borderBottom: "2px solid #11C8CA",
+                    borderLeft: "2px solid #11C8CA",
+                  },
                 }}
               >
                 <Box
@@ -161,35 +166,46 @@ const GuessSkip = ({
                       alignItems: "center",
                       gap: "8px",
                       borderRadius: "0 60px 60px 0",
-                      borderBottom: "2px solid #FA276E",
-                      borderRight: "2px solid #FA276E",
-                      backgroundColor: "#FB4F78",
+                      borderBottom: "2px solid #0450CC",
+                      borderRight: "2px solid #0450CC",
+                      backgroundColor: "#3894F4",
                       marginLeft: "-16px",
                       width: "150px",
                       height: "41px",
+                      ":hover": {
+                        borderBottom: "2px solid #3894F4",
+                        borderRight: "2px solid #3894F4",
+                        backgroundColor: "#0450CC",
+                      },
                     }}
                   >
+                    <Box display={"inline-flex"}>
+                      <svg
+                        width="25"
+                        height="24"
+                        viewBox="0 0 25 24"
+                        fill="none"
+                        xmlns="http://www.w3.org/2000/svg"
+                      >
+                        <path
+                          d="M15 12C15 13.3807 13.8807 14.5 12.5 14.5C11.1193 14.5 9.99998 13.3807 9.99998 12C9.99998 10.6193 11.1193 9.5 12.5 9.5C13.8807 9.5 15 10.6193 15 12Z"
+                          fill="white"
+                        />
+                        <path
+                          fillRule="evenodd"
+                          clipRule="evenodd"
+                          d="M2.05252 9.6947C4.92155 5.75695 8.39512 3.25 12.5 3.25C16.6049 3.25 20.0784 5.75695 22.9475 9.6947C23.9486 11.0688 23.9486 12.9312 22.9475 14.3053C20.0784 18.243 16.6049 20.75 12.5 20.75C8.39512 20.75 4.92154 18.243 2.05252 14.3053C1.05134 12.9312 1.05134 11.0688 2.05252 9.6947ZM12.5 16C14.7091 16 16.5 14.2091 16.5 12C16.5 9.79086 14.7091 8 12.5 8C10.2908 8 8.49998 9.79086 8.49998 12C8.49998 14.2091 10.2908 16 12.5 16Z"
+                          fill="white"
+                        />
+                      </svg>
+                    </Box>
                     <Box
                       color="#fff"
                       textAlign={"right"}
                       fontSize={"18px"}
                       fontWeight={"bold"}
                     >
-                      {activeLayer === 4 ? "גלה את השיר" : "הוסף שכבה"}
-                    </Box>
-                    <Box display={"inline-flex"}>
-                      <svg
-                        width="24"
-                        height="24"
-                        viewBox="0 0 24 24"
-                        fill="none"
-                        xmlns="http://www.w3.org/2000/svg"
-                      >
-                        <path
-                          d="M10.75 20.5C10.75 21.1904 11.3096 21.75 12 21.75C12.6904 21.75 13.25 21.1904 13.25 20.5V13.25H20.5C21.1904 13.25 21.75 12.6904 21.75 12C21.75 11.3096 21.1904 10.75 20.5 10.75H13.25V3.5C13.25 2.80964 12.6904 2.25 12 2.25C11.3096 2.25 10.75 2.80964 10.75 3.5V10.75H3.5C2.80964 10.75 2.25 11.3096 2.25 12C2.25 12.6904 2.80964 13.25 3.5 13.25H10.75V20.5Z"
-                          fill="#fff"
-                        />
-                      </svg>
+                      גלה
                     </Box>
                   </Button>
                 </Tooltip>

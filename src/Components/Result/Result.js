@@ -7,8 +7,10 @@ import Timer from "../Timer/Timer";
 const darkColor = "#fff";
 const lightColor = "#282827";
 
-const Result = ({ isSuccess, song, darkMode }) => {
+const Result = ({ isSuccess, song, isDaily }) => {
   useEffect(() => {
+    if (!isDaily) return;
+
     const now = new Date();
     const lastResultTime = new Date(
       now.getFullYear(),
@@ -18,11 +20,12 @@ const Result = ({ isSuccess, song, darkMode }) => {
       59,
       59
     ).toISOString();
+
     localStorage.setItem("lastResultTime", lastResultTime);
     localStorage.setItem("lastResult", isSuccess ? "true" : "false");
   }, []);
 
-  const theme = useTheme();
+  const darkMode = localStorage.getItem("darkMode") === "true";
 
   return (
     <Box
@@ -96,7 +99,7 @@ const Result = ({ isSuccess, song, darkMode }) => {
       </Box>
       <Box
         display={"flex"}
-        justifyContent={"space-between"}
+        justifyContent={!isDaily ? "center" : "space-between"}
         alignItems={"flex-start"}
         alignSelf={"stretch"}
       >
@@ -117,37 +120,23 @@ const Result = ({ isSuccess, song, darkMode }) => {
             />
           </Box>
         </Box>
-        <Box
-          display={"flex"}
-          flexDirection={"column"}
-          justifyContent={"center"}
-          alignItems={"center"}
-          gap={"8px"}
-        >
-          <Box fontSize={"12px"} fontWeight={"bold"}>
-            שיר הבא בעוד:
+        {isDaily && (
+          <Box
+            display={"flex"}
+            flexDirection={"column"}
+            justifyContent={"center"}
+            alignItems={"center"}
+            gap={"8px"}
+          >
+            <Box fontSize={"12px"} fontWeight={"bold"}>
+              שיר הבא בעוד:
+            </Box>
+            <Box>
+              <Timer />
+            </Box>
           </Box>
-          <Box>
-            <Timer />
-          </Box>
-        </Box>
+        )}
       </Box>
-      {/* <Grid container direction="column" spacing={1} alignItems="center">
-        <Grid item sx={{ marginLeft: "auto", marginRight: "20px" }}>
-          <Typography variant="body1">
-            <strong>שם השיר:</strong> {song.title}
-          </Typography>
-        </Grid>
-        <Grid item sx={{ marginLeft: "auto", marginRight: "20px" }}>
-          <Typography variant="body1" gutterBottom>
-            <strong>מספר צפיות:</strong> {song.views}
-          </Typography>
-        </Grid>
-        <Grid item></Grid>
-        <Grid item>
-          <Timer />
-        </Grid>
-      </Grid> */}
     </Box>
   );
 };
