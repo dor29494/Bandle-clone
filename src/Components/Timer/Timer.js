@@ -32,13 +32,31 @@ const Timer = () => {
 
   const getEndTime = () => {
     const savedTime = localStorage.getItem("localStorageTimer");
+
     if (savedTime) {
-      return new Date(savedTime);
-    } else {
-      const nextDay = initializeTimer();
-      localStorage.setItem("localStorageTimer", nextDay);
-      return nextDay;
+      const savedDate = new Date(savedTime);
+      const now = new Date();
+
+      // Check if the saved date is today and not midnight (00:00:00)
+      if (
+        savedDate.getDate() === now.getDate() &&
+        savedDate.getMonth() === now.getMonth() &&
+        savedDate.getFullYear() === now.getFullYear() &&
+        (savedDate.getHours() !== 0 ||
+          savedDate.getMinutes() !== 0 ||
+          savedDate.getSeconds() !== 0)
+      ) {
+        return savedDate;
+      } else {
+        // If the saved date is not today or it's midnight, remove it from localStorage
+        localStorage.removeItem("localStorageTimer");
+      }
     }
+
+    // Only save a new timer if there's no valid saved time
+    const nextDay = initializeTimer();
+    localStorage.setItem("localStorageTimer", nextDay.toString());
+    return nextDay;
   };
 
   const [endTime, setEndTime] = useState(getEndTime());
