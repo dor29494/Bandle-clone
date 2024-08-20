@@ -13,10 +13,16 @@ const PauseButton = () => {
       gap={"5px"}
       borderRadius={"60px"}
       padding={"12px 24px"}
-      border={"0px 0px 2px 0px"}
       flexDirection={"row"}
       backgroundColor={"#FEBA00"}
+      borderBottom={"2px solid #FF6300"}
       style={{ cursor: "pointer" }}
+      sx={{
+        ":hover": {
+          backgroundColor: "#FF6300",
+          borderBottom: "2px solid #FEBA00",
+        },
+      }}
     >
       <Box display={"inline-flex"}>
         <svg

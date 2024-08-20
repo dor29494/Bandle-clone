@@ -25,29 +25,60 @@ const AudioPlayer = ({ file, isPlaying, setIsPlaying }) => {
         audio.removeEventListener("timeupdate", updateProgress);
       };
     }
-  }, [audioRef, setProgress]);
+  }, [setProgress]);
 
   useEffect(() => {
     // Reset progress when audioRef changes
     setProgress(0);
 
-    // Pause and load new audio file when file changes
-    if (audioRef.current) {
-      audioRef.current.pause();
-      audioRef.current.load();
+    const audio = audioRef.current;
+
+    if (audio) {
+      const handleLoadedMetadata = () => {
+        if (isPlaying) {
+          audio.play().catch((error) => {
+            console.warn("Play interrupted: ", error);
+          });
+        }
+      };
+
+      // Pause the current audio if playing
+      audio.pause();
+
+      // Update the source directly and let the browser load the audio file
+      audio.src = file;
+
+      // Attach the metadata loaded handler
+      audio.addEventListener("loadedmetadata", handleLoadedMetadata);
+
+      return () => {
+        audio.removeEventListener("loadedmetadata", handleLoadedMetadata);
+        // Pause and clear the audio source on unmount to prevent play errors
+        audio.pause();
+        audio.src = "";
+      };
     }
-  }, [file, audioRef]);
+  }, [file, isPlaying]);
 
   useEffect(() => {
     const audio = audioRef.current;
 
-    if (audio) {
-      if (isPlaying) {
-        audio.play();
-      } else {
+    if (audio && !audio.src) return; // Return if the audio src is not set yet
+
+    if (isPlaying) {
+      audio.play().catch((error) => {
+        console.warn("Play interrupted: ", error);
+      });
+    } else {
+      audio.pause();
+    }
+
+    return () => {
+      if (audio) {
+        // Cleanup on unmount to prevent errors
         audio.pause();
       }
-    }
+    };
   }, [isPlaying]);
 
   return (

@@ -121,6 +121,7 @@ function SocialNetwork({ youTubeId, spotifyId }) {
         alertOpen={alertOpen}
         handleCloseAlert={handleCloseAlert}
         message={alertMessage}
+        success={true}
       />
     </>
   );

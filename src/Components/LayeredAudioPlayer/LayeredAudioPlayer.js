@@ -25,17 +25,23 @@ import PianoGuitarIcon from "../Icons/PianoGuitarIcon";
 import VoiceIcon from "../Icons/VoiceIcon";
 import Result from "../Result/Result";
 
-const LayeredAudioPlayer = ({ darkMode }) => {
-  const [layers] = useRecoilState(layersState);
-  const [songsList] = useRecoilState(songsListState);
-  const [song] = useRecoilState(songState);
-  const [success, setSuccess] = useRecoilState(successState);
-  const [failed, setFailed] = useRecoilState(failedState);
+const LayeredAudioPlayer = ({
+  darkMode,
+  layers,
+  songsList,
+  success,
+  setSuccess,
+  failed,
+  song,
+  setFailed,
+  onFinish,
+  isDaily,
+}) => {
   const [showError, setShowError] = useRecoilState(showErrorState);
-  const [showPlayer, setShowPlayer] = useRecoilState(showPlayerState);
+  const [showPlayer, setShowPlayer] = useState(false);
   const [tooltipMessage, setTooltipMessage] =
     useRecoilState(tooltipMessageState);
-  const setAvailableSongs = useSetRecoilState(availableSongsState);
+  const [availableSongs, setAvailableSongs] = useState([]);
   const [activeLayerIndex, setActiveLayerIndex] = useState(0);
   const [activeLayers, setActiveLayers] = useState([]);
   const [isPlaying, setIsPlaying] = useState(false);
@@ -87,7 +93,8 @@ const LayeredAudioPlayer = ({ darkMode }) => {
     if (activeLayerIndex === 4) {
       stats[6]++;
     }
-    localStorage.setItem("userStats", JSON.stringify(stats));
+
+    if (isDaily) localStorage.setItem("userStats", JSON.stringify(stats));
   };
 
   const onGuessSuccess = () => {
@@ -100,6 +107,7 @@ const LayeredAudioPlayer = ({ darkMode }) => {
     updateStatistics(true);
 
     setIsPlaying(true);
+    onFinish(song.id);
   };
 
   const handleSkip = () => {
@@ -116,6 +124,10 @@ const LayeredAudioPlayer = ({ darkMode }) => {
     // setShowTooltip(true);
     // because of autoplay need to set that level is played
     setLevelsArePlayed((prev) => ({ ...prev, [activeLayerIndex + 1]: true }));
+
+    if (levelsCounter.current === 5) {
+      onFinish(song.id);
+    }
   };
 
   const handleLayerClick = (index) => {
@@ -177,19 +189,19 @@ const LayeredAudioPlayer = ({ darkMode }) => {
 
   const getLayersColors = (index) => {
     if (success.state && index === success.index) {
-      return { border: "#6A9D6A", background: "#E761F7" };
+      return { border: "#522EBC", background: "#9F61D4" };
     }
     if (failed.state && index === failed.index) {
-      return { border: "#974C50", background: "#E761F7" };
+      return { border: "#522EBC", background: "#9F61D4" };
     }
     if (success.state || failed.state) {
       if (index < (success.state ? success.index : failed.index)) {
-        return { border: "#FFD700", background: "#E761F7" };
+        return { border: "#522EBC", background: "#9F61D4" };
       }
       return { border: "#FFFFFF", background: "#D3D3D3" };
     }
     if (index <= activeLayerIndex) {
-      return { border: "#FFD700", background: "#E761F7" };
+      return { border: "#522EBC", background: "#9F61D4" };
     }
     return { border: "#A9A9A9", background: "#C2C7D1" };
   };
@@ -204,7 +216,7 @@ const LayeredAudioPlayer = ({ darkMode }) => {
       });
       setActiveLayers(updatedLayers);
       setActiveLayerIndex(activeLayerIndex + 1);
-      localStorage.setItem("layerIndex", activeLayerIndex + 1);
+      if (isDaily) localStorage.setItem("layerIndex", activeLayerIndex + 1);
     }
   };
 
@@ -384,17 +396,31 @@ const LayeredAudioPlayer = ({ darkMode }) => {
             />
           )}
           {success.state && (
-            <Result song={song} isSuccess={true} darkMode={darkMode} />
+            <Result
+              song={song}
+              isSuccess={true}
+              darkMode={darkMode}
+              isDaily={isDaily}
+            />
           )}
           {failed.state && (
-            <Result song={song} isSuccess={false} darkMode={darkMode} />
+            <Result
+              song={song}
+              isSuccess={false}
+              darkMode={darkMode}
+              isDaily={isDaily}
+            />
           )}
           {isFirstPlay && showPlayer && (
             <GuessSkip
               show={isShow}
+              availableSongs={availableSongs}
+              setAvailableSongs={setAvailableSongs}
               onGuessSuccess={onGuessSuccess}
               onSkip={handleSkip}
               activeLayer={activeLayerIndex}
+              song={song}
+              songsList={songsList}
             />
           )}
         </CardContent>
