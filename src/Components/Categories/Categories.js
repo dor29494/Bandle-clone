@@ -2,6 +2,7 @@ import { Box, Button } from "@mui/material";
 import React, { useRef, useState } from "react";
 import { useRecoilState } from "recoil";
 import shirdle_songs from "../../shirdle_songs.json";
+import top120songs from "../../top120songs.json";
 import { showErrorState } from "../../state";
 import {
   addPlayedSong,
@@ -14,6 +15,10 @@ import SongDetails from "../SongDetails/SongDetails";
 import categories from "./categories.json";
 
 const difficultyEnum = { 1: "קל", 2: "בינוני", 3: "קשה" };
+
+const filteredSongs = shirdle_songs.filter(
+  (song) => top120songs.indexOf(song.songId) === -1
+);
 
 const createAutoCompleteList = (songs) => {
   return songs.map((song) => ({
@@ -39,7 +44,7 @@ const Categories = () => {
   const [showError, setShowError] = useRecoilState(showErrorState);
   const currentCategory = useRef(null);
 
-  const songListIdsRef = useRef(shirdle_songs.map((song) => song.songId));
+  const songListIdsRef = useRef(filteredSongs.map((song) => song.songId));
 
   const fetchLayerData = (selectedSongId) => {
     const baseUrl = `${process.env.REACT_APP_LAYERS_URL}${selectedSongId}`;
@@ -88,7 +93,7 @@ const Categories = () => {
     const randomSongId =
       remainingSongs[Math.floor(Math.random() * remainingSongs.length)];
 
-    const selectedSong = shirdle_songs.find(
+    const selectedSong = filteredSongs.find(
       (song) => song.songId === randomSongId
     );
     selectedSong.difficulty = difficultyEnum[selectedSong.difficulty];

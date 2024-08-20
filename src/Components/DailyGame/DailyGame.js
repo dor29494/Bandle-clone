@@ -1,24 +1,20 @@
 import { Box } from "@mui/material";
 import React, { useCallback, useEffect, useState } from "react";
 import { useRecoilState, useRecoilValue, useResetRecoilState } from "recoil";
-import CustomSnackbar from "../CustomSnackbar/CustomSnackbar";
-import Header from "../Header/Header";
-import Loader from "../Loader/Loader";
-import SongDetails from "../SongDetails/SongDetails";
-import LayeredAudioPlayer from "../LayeredAudioPlayer/LayeredAudioPlayer";
 import shirdle_songs from "../../shirdle_songs.json";
+import top120songs from "../../top120songs.json";
 import {
-  failedState,
   layersState,
   loaderState,
   showErrorState,
-  showPlayerState,
   songDataState,
   songsListState,
-  songState,
-  successState,
   timerExpiredState,
 } from "../../state";
+import CustomSnackbar from "../CustomSnackbar/CustomSnackbar";
+import LayeredAudioPlayer from "../LayeredAudioPlayer/LayeredAudioPlayer";
+import Loader from "../Loader/Loader";
+import SongDetails from "../SongDetails/SongDetails";
 
 function getIndexFromStartDate(startDate, queryIndex) {
   if (queryIndex !== null && queryIndex >= 0 && queryIndex <= 400) {
@@ -36,6 +32,10 @@ function getIndexFromStartDate(startDate, queryIndex) {
 }
 
 const difficultyEnum = { 1: "קל", 2: "בינוני", 3: "קשה" };
+
+const filteredSongs = shirdle_songs.filter(
+  (song) => top120songs.indexOf(song.songId) > -1
+);
 
 const DailyGame = ({ setDarkMode, darkMode }) => {
   const [songData, setSongData] = useRecoilState(songDataState);
@@ -88,7 +88,7 @@ const DailyGame = ({ setDarkMode, darkMode }) => {
       : null;
     const startDate = process.env.REACT_APP_START_DATE;
     const index = getIndexFromStartDate(startDate, queryIndex);
-    const selectedSong = shirdle_songs[index % shirdle_songs.length];
+    const selectedSong = filteredSongs[index % filteredSongs.length];
     selectedSong.difficulty = difficultyEnum[selectedSong.difficulty];
     setSong({
       id: selectedSong.songId,
