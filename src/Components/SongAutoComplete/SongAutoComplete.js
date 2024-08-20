@@ -1,13 +1,14 @@
-import React, { useCallback } from "react";
 import ClearIcon from "@mui/icons-material/Clear";
 import {
   Autocomplete,
   Box,
   IconButton,
+  Paper,
   Popper,
   TextField,
 } from "@mui/material";
 import { styled } from "@mui/system";
+import React, { useCallback } from "react";
 
 const StyledTextField = styled(TextField)({
   "& .MuiInputLabel-root": {
@@ -28,10 +29,8 @@ const StyledTextField = styled(TextField)({
   },
 });
 
-const StyledBox = styled(Box)({
+const StyledAutocomplete = styled(Autocomplete)({
   "& .MuiAutocomplete-listbox": {
-    maxHeight: "180px !important",
-    overflowY: "auto",
     direction: "rtl",
   },
 });
@@ -62,7 +61,7 @@ function SongAutocomplete({
   const splitByLastDash = (option) => {
     const lastDashIndex = option.lastIndexOf("-");
     if (lastDashIndex === -1) {
-      return [option, ""];
+      return [option, ""]; // if there's no dash, return the whole string as the first part and an empty string as the second part
     }
     const part1 = option.substring(0, lastDashIndex).trim();
     const part2 = option.substring(lastDashIndex + 1).trim();
