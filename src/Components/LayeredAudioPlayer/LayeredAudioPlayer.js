@@ -124,6 +124,10 @@ const LayeredAudioPlayer = ({
     // setShowTooltip(true);
     // because of autoplay need to set that level is played
     setLevelsArePlayed((prev) => ({ ...prev, [activeLayerIndex + 1]: true }));
+
+    if (levelsCounter.current === 5) {
+      onFinish(song.id);
+    }
   };
 
   const handleLayerClick = (index) => {

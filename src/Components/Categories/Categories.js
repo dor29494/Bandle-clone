@@ -1,14 +1,16 @@
 import { Box, Button } from "@mui/material";
 import React, { useRef, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { useRecoilState } from "recoil";
 import shirdle_songs from "../../shirdle_songs.json";
-import top120songs from "../../top120songs.json";
 import { showErrorState } from "../../state";
+import top120songs from "../../top120songs.json";
 import {
   addPlayedSong,
   clearPlayedSongsByCategory,
   getPlayedSongsByCategory,
 } from "../../utils/indexedDBUtils"; // Import the utility
+import CloseHeader from "../CloseHeader/CloseHeader";
 import CustomSnackbar from "../CustomSnackbar/CustomSnackbar";
 import LayeredAudioPlayer from "../LayeredAudioPlayer/LayeredAudioPlayer";
 import SongDetails from "../SongDetails/SongDetails";
@@ -43,6 +45,8 @@ const Categories = () => {
   const [failed, setFailed] = useState({ index: 0, state: false });
   const [showError, setShowError] = useRecoilState(showErrorState);
   const currentCategory = useRef(null);
+  const [isFinish, setIsFinish] = useState(false);
+  const navigate = useNavigate();
 
   const songListIdsRef = useRef(filteredSongs.map((song) => song.songId));
 
@@ -93,10 +97,10 @@ const Categories = () => {
     const randomSongId =
       remainingSongs[Math.floor(Math.random() * remainingSongs.length)];
 
-    const selectedSong = filteredSongs.find(
+    let selectedSong = filteredSongs.find(
       (song) => song.songId === randomSongId
     );
-    selectedSong.difficulty = difficultyEnum[selectedSong.difficulty];
+
     setSong({
       id: selectedSong.songId,
       title: selectedSong.songTitle,
@@ -105,7 +109,10 @@ const Categories = () => {
       youtubeId: selectedSong.media.youtubeId,
     });
 
-    setSelectedSong(selectedSong);
+    setSelectedSong({
+      ...selectedSong,
+      difficulty: difficultyEnum[selectedSong.difficulty],
+    });
 
     const layers = fetchLayerData(selectedSong.songId);
     setLayers(layers);
@@ -116,15 +123,37 @@ const Categories = () => {
     setLayers([]);
     setSuccess({ index: 0, state: false });
     setFailed({ index: 0, state: false });
+    setIsFinish(false);
   };
 
   const onFinish = (songId) => {
     const categoryId = currentCategory.current.id;
     addPlayedSong(songId, categoryId);
+    setIsFinish(true);
+  };
+
+  const handleClick = () => {
+    if (selectedSong) {
+      resetCategories();
+    } else {
+      navigate("/");
+    }
+  };
+
+  const nextSongClick = () => {
+    setLayers([]);
+    setSuccess({ index: 0, state: false });
+    setFailed({ index: 0, state: false });
+    setIsFinish(false);
+    handleCategoryClick(currentCategory.current, selectedSong.songId);
   };
 
   return (
     <Box>
+      <CloseHeader
+        handleClick={handleClick}
+        nextSongClick={isFinish ? nextSongClick : null}
+      />
       {!selectedSong ? (
         <Box
           marginTop="10px"
@@ -204,27 +233,8 @@ const Categories = () => {
         <CustomSnackbar
           alertOpen={true}
           handleCloseAlert={() => setShowError(false)}
-          message={"ניחוש שגוי"}
+          message={"ניחוש שגוי, נסו שנית"}
         />
-      )}
-
-      {(success.state || failed.state) && (
-        <Box>
-          <Button
-            variant="contained"
-            onClick={() => {
-              setLayers([]);
-              setSuccess({ index: 0, state: false });
-              setFailed({ index: 0, state: false });
-              handleCategoryClick(currentCategory.current, selectedSong.songId);
-            }}
-          >
-            שיר הבא
-          </Button>
-          <Button variant="contained" onClick={resetCategories}>
-            חזרה לקטגוריות
-          </Button>
-        </Box>
       )}
     </Box>
   );

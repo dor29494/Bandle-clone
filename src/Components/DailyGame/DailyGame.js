@@ -1,8 +1,8 @@
 import { Box } from "@mui/material";
 import React, { useCallback, useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { useRecoilState, useRecoilValue, useResetRecoilState } from "recoil";
 import shirdle_songs from "../../shirdle_songs.json";
-import top120songs from "../../top120songs.json";
 import {
   layersState,
   loaderState,
@@ -11,6 +11,8 @@ import {
   songsListState,
   timerExpiredState,
 } from "../../state";
+import top120songs from "../../top120songs.json";
+import CloseHeader from "../CloseHeader/CloseHeader";
 import CustomSnackbar from "../CustomSnackbar/CustomSnackbar";
 import LayeredAudioPlayer from "../LayeredAudioPlayer/LayeredAudioPlayer";
 import Loader from "../Loader/Loader";
@@ -54,6 +56,7 @@ const DailyGame = ({ setDarkMode, darkMode }) => {
   const timerExpired = useRecoilValue(timerExpiredState);
   const resetTimerExpired = useResetRecoilState(timerExpiredState);
   const [loading, setLoading] = useRecoilState(loaderState);
+  const navigate = useNavigate();
 
   const fetchLayerData = (selectedSongId) => {
     const baseUrl = `${process.env.REACT_APP_LAYERS_URL}${selectedSongId}`;
@@ -88,8 +91,8 @@ const DailyGame = ({ setDarkMode, darkMode }) => {
       : null;
     const startDate = process.env.REACT_APP_START_DATE;
     const index = getIndexFromStartDate(startDate, queryIndex);
-    const selectedSong = filteredSongs[index % filteredSongs.length];
-    selectedSong.difficulty = difficultyEnum[selectedSong.difficulty];
+    let selectedSong = filteredSongs[index % filteredSongs.length];
+    // selectedSong.difficulty = difficultyEnum[selectedSong.difficulty];
     setSong({
       id: selectedSong.songId,
       title: selectedSong.songTitle,
@@ -98,7 +101,10 @@ const DailyGame = ({ setDarkMode, darkMode }) => {
       youtubeId: selectedSong.media.youtubeId,
     });
 
-    setSongData(selectedSong);
+    setSongData({
+      ...selectedSong,
+      difficulty: difficultyEnum[selectedSong.difficulty],
+    });
 
     const layers = await fetchLayerData(selectedSong.songId);
     setLayers(layers);
@@ -179,12 +185,18 @@ const DailyGame = ({ setDarkMode, darkMode }) => {
     }
   }, [timerExpired, fetchSongData, setSuccess, setFailed, resetTimerExpired]);
 
+  const backClick = () => {
+    navigate("/");
+  };
+
   if (!songData || loading)
     return <Loader setDarkMode={setDarkMode} darkMode={darkMode} />;
 
   return (
     <>
       <Box sx={{ marginTop: "20px" }}>
+        <CloseHeader handleClick={backClick} />
+
         <Box>
           <SongDetails
             releaseDate={songData.releaseDate}
@@ -211,7 +223,7 @@ const DailyGame = ({ setDarkMode, darkMode }) => {
         <CustomSnackbar
           alertOpen={true}
           handleCloseAlert={() => setShowError(false)}
-          message={"ניחוש שגוי"}
+          message={"ניחוש שגוי, נסו שנית"}
         />
       )}
     </>

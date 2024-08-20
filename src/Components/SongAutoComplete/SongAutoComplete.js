@@ -2,7 +2,6 @@ import ClearIcon from "@mui/icons-material/Clear";
 import {
   Autocomplete,
   Box,
-  Chip,
   IconButton,
   Paper,
   Popper,
@@ -43,6 +42,8 @@ function SongAutocomplete({
   inputValue,
   setInputValue,
 }) {
+  const darkMode = localStorage.getItem("darkMode") === "true";
+
   const filterOptions = (options, { inputValue }) => {
     return options.filter((option) =>
       option.toLowerCase().includes(inputValue.toLowerCase())
@@ -69,7 +70,7 @@ function SongAutocomplete({
 
   return (
     <StyledAutocomplete
-      noOptionsText="אנא בחר שיר"
+      noOptionsText="הכנסו שם שיר/אומן ובחרו"
       disablePortal
       fullWidth
       id="songsAutocomplete"
@@ -77,20 +78,37 @@ function SongAutocomplete({
       disableClearable
       filterOptions={filterOptions}
       PaperComponent={(props) => (
-        <Paper style={{ maxHeight: "180px" }} {...props} />
+        <Paper
+          style={{
+            maxHeight: "180px",
+            borderRadius: "20px",
+            backgroundColor: darkMode ? "#585B93" : "#BABACF",
+            color: darkMode ? "fff" : "#282827",
+            fontSize: "14px",
+            fontWeight: "bold",
+          }}
+          sx={{
+            "& .MuiAutocomplete-option:hover": {
+              backgroundColor: `${darkMode ? "#BABACF" : "#585B93"} !important`,
+              color: `${darkMode ? "#282827" : "#fff"} !important`,
+            },
+          }}
+          {...props}
+        />
       )}
       renderOption={(props, option) => (
         <li {...props}>
-          <Box display="flex" gap={"5px"}>
-            <Chip label={splitByLastDash(option)[0]} color="primary" />
-            <Chip label={splitByLastDash(option)[1]} color="secondary" />
+          <Box display="flex" width="100%" gap={"5px"} height="24px">
+            <Box sx={{ color: "inherit" }}>{splitByLastDash(option)[0]}</Box>
+            <Box sx={{ color: "inherit" }}>-</Box>
+            <Box sx={{ color: "inherit" }}>{splitByLastDash(option)[1]}</Box>
           </Box>
         </li>
       )}
       renderInput={(params) => (
         <StyledTextField
           {...params}
-          placeholder="הכנס שם שיר/אמן ובחר"
+          placeholder="הכנסו שם שיר/אומן ובחרו"
           fullWidth
           sx={{
             borderRadius: "60px",
@@ -121,7 +139,18 @@ function SongAutocomplete({
       onInputChange={handleInputChange}
       onChange={handleChange}
       PopperComponent={(props) => <Popper {...props} placement="top-start" />}
-      sx={sx}
+      sx={{
+        ...sx,
+        "& .MuiInputBase-input::placeholder": {
+          color: darkMode ? "#BABACF" : "#585B93",
+          opacity: 1,
+          fontSize: "15px",
+          fontWeight: "bold",
+        },
+        "& .MuiInputBase-root": {
+          border: `1px solid ${darkMode ? "#BABACF" : "#585B93"}`,
+        },
+      }}
     />
   );
 }
