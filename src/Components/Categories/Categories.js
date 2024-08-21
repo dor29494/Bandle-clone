@@ -119,7 +119,6 @@ const Categories = () => {
   };
 
   const resetCategories = () => {
-    setSelectedSong(null);
     setLayers([]);
     setSuccess({ index: 0, state: false });
     setFailed({ index: 0, state: false });
@@ -141,6 +140,7 @@ const Categories = () => {
   };
 
   const nextSongClick = () => {
+    setSelectedSong(null);
     setLayers([]);
     setSuccess({ index: 0, state: false });
     setFailed({ index: 0, state: false });
