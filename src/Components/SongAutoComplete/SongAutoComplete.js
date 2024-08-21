@@ -92,7 +92,6 @@ function SongAutocomplete({
           sx={{
             "& .MuiAutocomplete-option": {
               minHeight: "30px !important",
-              borderBottom: `1px solid ${darkMode ? "gray" : "#282827"}`,
             },
             "& .MuiAutocomplete-listbox": {
               maxHeight: isMobile ? "150px" : "200px",
@@ -181,9 +180,10 @@ function SongAutocomplete({
           fontSize: "15px",
           fontWeight: "bold",
         },
-        "& .MuiInputBase-root": {
-          border: `1px solid ${darkMode ? "#BABACF" : "#585B93"}`,
-        },
+        "& .MuiInputBase-root, & .MuiInputBase-root:hover, & .MuiInputBase-root:active":
+          {
+            border: `1px solid ${darkMode ? "#BABACF" : "#585B93"}`,
+          },
       }}
     />
   );

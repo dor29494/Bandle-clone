@@ -50,6 +50,7 @@ const CloseHeader = ({ handleClick, nextSongClick = null }) => {
         flexDirection={"row"}
         justifyContent={"center"}
         alignContent={"center"}
+        paddingLeft="20px"
         alignItems={"center"}
         gap="8px"
         onClick={handleClick}

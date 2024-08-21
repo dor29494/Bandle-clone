@@ -17,6 +17,8 @@ import CustomSnackbar from "../CustomSnackbar/CustomSnackbar";
 import LayeredAudioPlayer from "../LayeredAudioPlayer/LayeredAudioPlayer";
 import Loader from "../Loader/Loader";
 import SongDetails from "../SongDetails/SongDetails";
+import Confetti from "react-confetti";
+import { useWindowSize } from "react-use";
 
 function getIndexFromStartDate(startDate, queryIndex) {
   if (queryIndex !== null && queryIndex >= 0 && queryIndex <= 400) {
@@ -40,6 +42,7 @@ const filteredSongs = shirdle_songs.filter(
 );
 
 const DailyGame = ({ setDarkMode, darkMode }) => {
+  const { width, height } = useWindowSize();
   const [songData, setSongData] = useRecoilState(songDataState);
   const [song, setSong] = useState({
     id: null,
@@ -57,6 +60,7 @@ const DailyGame = ({ setDarkMode, darkMode }) => {
   const resetTimerExpired = useResetRecoilState(timerExpiredState);
   const [loading, setLoading] = useRecoilState(loaderState);
   const navigate = useNavigate();
+  const [showConfetti, setShowConfetti] = useState(false);
 
   const fetchLayerData = (selectedSongId) => {
     const baseUrl = `${process.env.REACT_APP_LAYERS_URL}${selectedSongId}`;
@@ -189,12 +193,29 @@ const DailyGame = ({ setDarkMode, darkMode }) => {
     navigate("/");
   };
 
+  const onFinish = (_, isSuccess) => {
+    if (isSuccess) setShowConfetti(true);
+  };
+
   if (!songData || loading)
     return <Loader setDarkMode={setDarkMode} darkMode={darkMode} />;
 
   return (
     <>
       <Box sx={{ marginTop: "20px" }}>
+        {showConfetti && (
+          <Confetti
+            width={Math.min(width - 20, 480)} // Limits the width to 480px on desktop
+            height={height}
+            style={{
+              position: "absolute",
+              top: 0,
+              bottom: 0,
+              right: "auto",
+              left: "auto",
+            }}
+          />
+        )}
         <CloseHeader handleClick={backClick} />
 
         <Box>
@@ -214,7 +235,7 @@ const DailyGame = ({ setDarkMode, darkMode }) => {
             failed={failed}
             setFailed={setFailed}
             song={song}
-            onFinish={() => {}}
+            onFinish={onFinish}
             isDaily={true}
           />
         </Box>

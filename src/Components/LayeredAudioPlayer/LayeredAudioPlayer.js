@@ -1,21 +1,12 @@
 import MusicNoteIcon from "@mui/icons-material/MusicNote";
 import { Box, CardContent, Grid, Tooltip, Typography } from "@mui/material";
 import React, { useEffect, useRef, useState } from "react";
-import { useRecoilState, useSetRecoilState } from "recoil";
-import {
-  availableSongsState,
-  failedState,
-  layersState,
-  showErrorState,
-  showPlayerState,
-  songsListState,
-  songState,
-  successState,
-  tooltipMessageState,
-} from "../../state";
+import { useRecoilState } from "recoil";
+import { showErrorState, tooltipMessageState } from "../../state";
 import AudioPlayer from "../AudioPlayer/AudioPlayer";
 import PauseButton from "../Buttons/PauseButton";
 import PlayButton from "../Buttons/PlayButton";
+import PlayNextButton from "../Buttons/PlayNextButton";
 import CustomSnackbar from "../CustomSnackbar/CustomSnackbar";
 import GuessSkip from "../GuessSkip/GuessSkip";
 import BassIcon from "../Icons/BassIcon";
@@ -36,6 +27,7 @@ const LayeredAudioPlayer = ({
   setFailed,
   onFinish,
   isDaily,
+  nextSongClick,
 }) => {
   const [showError, setShowError] = useRecoilState(showErrorState);
   const [showPlayer, setShowPlayer] = useState(false);
@@ -107,7 +99,7 @@ const LayeredAudioPlayer = ({
     updateStatistics(true);
 
     setIsPlaying(true);
-    onFinish(song.id);
+    onFinish(song.id, true);
   };
 
   const handleSkip = () => {
@@ -126,7 +118,7 @@ const LayeredAudioPlayer = ({
     setLevelsArePlayed((prev) => ({ ...prev, [activeLayerIndex + 1]: true }));
 
     if (levelsCounter.current === 5) {
-      onFinish(song.id);
+      onFinish(song.id, false);
     }
   };
 
@@ -395,6 +387,7 @@ const LayeredAudioPlayer = ({
               setIsPlaying={setIsPlaying}
             />
           )}
+          {nextSongClick && <PlayNextButton handleClick={nextSongClick} />}
           {success.state && (
             <Result
               song={song}
