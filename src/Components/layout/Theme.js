@@ -32,7 +32,7 @@ const lightTheme = createTheme({
     },
   },
   typography: {
-    fontFamily: "Geist,sans-serif,Roboto,Helvetica,Arial",
+    fontFamily: "Arial",
     h1: {
       fontSize: "22px",
       fontWeight: 500,
@@ -95,6 +95,7 @@ const darkTheme = createTheme({
     },
   },
   typography: {
+    fontFamily: "Arial",
     h1: {
       fontSize: "22px",
       fontWeight: 500,
