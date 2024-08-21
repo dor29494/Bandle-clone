@@ -6,6 +6,8 @@ import {
   Paper,
   Popper,
   TextField,
+  useMediaQuery, // Add this
+  useTheme,
 } from "@mui/material";
 import { styled } from "@mui/system";
 import React, { useCallback } from "react";
@@ -43,6 +45,7 @@ function SongAutocomplete({
   setInputValue,
 }) {
   const darkMode = localStorage.getItem("darkMode") === "true";
+  const isMobile = useMediaQuery(useTheme().breakpoints.down("sm"));
 
   const filterOptions = (options, { inputValue }) => {
     return options.filter((option) =>
@@ -87,6 +90,13 @@ function SongAutocomplete({
             fontWeight: "bold",
           }}
           sx={{
+            "& .MuiAutocomplete-option": {
+              minHeight: "30px !important",
+              borderBottom: `1px solid ${darkMode ? "gray" : "#282827"}`,
+            },
+            "& .MuiAutocomplete-listbox": {
+              maxHeight: isMobile ? "150px" : "200px",
+            },
             "& .MuiAutocomplete-option:hover": {
               backgroundColor: `${darkMode ? "#BABACF" : "#585B93"} !important`,
               color: `${darkMode ? "#282827" : "#fff"} !important`,
@@ -97,7 +107,7 @@ function SongAutocomplete({
       )}
       renderOption={(props, option) => (
         <li {...props}>
-          <Box width="100%" gap={"5px"} height="24px">
+          <Box width="100%" height="24px">
             {splitByLastDash(option)[0]}
             <span style={{ margin: "0 5px" }}>-</span>
             {splitByLastDash(option)[1]}
@@ -150,14 +160,16 @@ function SongAutocomplete({
               name: "preventOverflow",
               options: {
                 altBoundary: true,
-                padding: 8,
+                padding: 0,
               },
             },
           ]}
           style={{
-            width: props.anchorEl ? props.anchorEl.clientWidth : undefined, // Match the width of the input
-            maxHeight: "300px",
+            width: props.anchorEl ? props.anchorEl.clientWidth : undefined,
+            maxHeight: isMobile ? "150px" : "200px",
             overflowY: "auto",
+            padding: "0",
+            borderRadius: "20px",
           }}
         />
       )}
