@@ -61,7 +61,7 @@ function SongAutocomplete({
   const splitByLastDash = (option) => {
     const lastDashIndex = option.lastIndexOf("-");
     if (lastDashIndex === -1) {
-      return [option, ""]; // if there's no dash, return the whole string as the first part and an empty string as the second part
+      return [option, ""];
     }
     const part1 = option.substring(0, lastDashIndex).trim();
     const part2 = option.substring(lastDashIndex + 1).trim();
@@ -80,7 +80,6 @@ function SongAutocomplete({
       PaperComponent={(props) => (
         <Paper
           style={{
-            maxHeight: "180px",
             borderRadius: "20px",
             backgroundColor: darkMode ? "#585B93" : "#BABACF",
             color: darkMode ? "fff" : "#282827",
@@ -98,10 +97,10 @@ function SongAutocomplete({
       )}
       renderOption={(props, option) => (
         <li {...props}>
-          <Box display="flex" width="100%" gap={"5px"} height="24px">
-            <Box sx={{ color: "inherit" }}>{splitByLastDash(option)[0]}</Box>
-            <Box sx={{ color: "inherit" }}>-</Box>
-            <Box sx={{ color: "inherit" }}>{splitByLastDash(option)[1]}</Box>
+          <Box width="100%" gap={"5px"} height="24px">
+            {splitByLastDash(option)[0]}
+            <span style={{ margin: "0 5px" }}>-</span>
+            {splitByLastDash(option)[1]}
           </Box>
         </li>
       )}
@@ -115,7 +114,7 @@ function SongAutocomplete({
           }}
           InputLabelProps={{ shrink: false }}
           InputProps={{
-            ...params.InputProps, // Merge the default InputProps
+            ...params.InputProps,
             endAdornment: (
               <>
                 {inputValue && (
@@ -138,7 +137,30 @@ function SongAutocomplete({
       value={inputValue}
       onInputChange={handleInputChange}
       onChange={handleChange}
-      PopperComponent={(props) => <Popper {...props} placement="top-start" />}
+      PopperComponent={(props) => (
+        <Popper
+          {...props}
+          placement="top-start"
+          modifiers={[
+            {
+              name: "flip",
+              enabled: false,
+            },
+            {
+              name: "preventOverflow",
+              options: {
+                altBoundary: true,
+                padding: 8,
+              },
+            },
+          ]}
+          style={{
+            width: props.anchorEl ? props.anchorEl.clientWidth : undefined, // Match the width of the input
+            maxHeight: "300px",
+            overflowY: "auto",
+          }}
+        />
+      )}
       sx={{
         ...sx,
         "& .MuiInputBase-input::placeholder": {
