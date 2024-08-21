@@ -161,6 +161,7 @@ const Categories = () => {
           flexWrap="wrap"
           justifyContent="center"
           gap={2}
+          paddingBottom={"30px"}
         >
           {categories.map((category, index) => (
             <Button
