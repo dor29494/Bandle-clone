@@ -18,6 +18,19 @@ const lightTheme = createTheme({
       main: "#ff4081",
     },
   },
+  components: {
+    MuiTooltip: {
+      styleOverrides: {
+        tooltip: {
+          borderRadius: "60px",
+          backgroundColor: "#000",
+        },
+        arrow: {
+          color: "#000",
+        },
+      },
+    },
+  },
   typography: {
     h1: {
       fontSize: "22px",
@@ -64,6 +77,20 @@ const darkTheme = createTheme({
     },
     secondary: {
       main: "#ff4081",
+    },
+  },
+  components: {
+    MuiTooltip: {
+      styleOverrides: {
+        tooltip: {
+          borderRadius: "60px",
+          backgroundColor: "#fff",
+          color: "#000",
+        },
+        arrow: {
+          color: "#fff",
+        },
+      },
     },
   },
   typography: {
