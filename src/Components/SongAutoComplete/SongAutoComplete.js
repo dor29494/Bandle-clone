@@ -107,7 +107,7 @@ function SongAutocomplete({
       )}
       renderOption={(props, option) => (
         <li {...props}>
-          <Box width="100%" height="24px">
+          <Box width="100%" minHeight="24px">
             {splitByLastDash(option)[0]}
             <span style={{ margin: "0 5px" }}>-</span>
             {splitByLastDash(option)[1]}
