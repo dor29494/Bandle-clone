@@ -32,6 +32,7 @@ const lightTheme = createTheme({
     },
   },
   typography: {
+    fontFamily: "Geist,sans-serif,Roboto,Helvetica,Arial",
     h1: {
       fontSize: "22px",
       fontWeight: 500,
@@ -71,7 +72,7 @@ const darkTheme = createTheme({
       headerBg: "#000",
       headerIcons: "#E0E0E0",
       successBg: "#2B2929",
-      progressSliderBG: "#FBF6D7",
+      progressSliderBG: "#1976d2",
       snackBarBG: "#D3D3D3",
       songDetailsBoxShadow: "#666060",
     },

@@ -15,6 +15,8 @@ import CustomSnackbar from "../CustomSnackbar/CustomSnackbar";
 import LayeredAudioPlayer from "../LayeredAudioPlayer/LayeredAudioPlayer";
 import SongDetails from "../SongDetails/SongDetails";
 import categories from "./categories.json";
+import Confetti from "react-confetti";
+import { useWindowSize } from "react-use";
 
 const difficultyEnum = { 1: "קל", 2: "בינוני", 3: "קשה" };
 
@@ -30,6 +32,8 @@ const createAutoCompleteList = (songs) => {
 };
 
 const Categories = () => {
+  const { width, height } = useWindowSize();
+
   const [song, setSong] = useState({
     id: null,
     title: null,
@@ -47,6 +51,7 @@ const Categories = () => {
   const currentCategory = useRef(null);
   const [isFinish, setIsFinish] = useState(false);
   const navigate = useNavigate();
+  const [showConfetti, setShowConfetti] = useState(false);
 
   const songListIdsRef = useRef(filteredSongs.map((song) => song.songId));
 
@@ -90,9 +95,9 @@ const Categories = () => {
     }
 
     // Filter out played songs
-    const remainingSongs = songIds.filter(
-      (id) => !playedSongs.some((song) => song.songId === id)
-    );
+    const remainingSongs = songIds
+      .filter((id) => !playedSongs.some((song) => song.songId === id))
+      .filter((id) => top120songs.indexOf(id) === -1);
 
     const randomSongId =
       remainingSongs[Math.floor(Math.random() * remainingSongs.length)];
@@ -122,13 +127,16 @@ const Categories = () => {
     setLayers([]);
     setSuccess({ index: 0, state: false });
     setFailed({ index: 0, state: false });
+    setSelectedSong(null);
     setIsFinish(false);
+    setShowConfetti(false);
   };
 
-  const onFinish = (songId) => {
+  const onFinish = (songId, isSuccess) => {
     const categoryId = currentCategory.current.id;
     addPlayedSong(songId, categoryId);
     setIsFinish(true);
+    if (isSuccess) setShowConfetti(true);
   };
 
   const handleClick = () => {
@@ -140,20 +148,30 @@ const Categories = () => {
   };
 
   const nextSongClick = () => {
-    setSelectedSong(null);
     setLayers([]);
     setSuccess({ index: 0, state: false });
     setFailed({ index: 0, state: false });
     setIsFinish(false);
+    setShowConfetti(false);
     handleCategoryClick(currentCategory.current, selectedSong.songId);
   };
 
   return (
     <Box>
-      <CloseHeader
-        handleClick={handleClick}
-        nextSongClick={isFinish ? nextSongClick : null}
-      />
+      {showConfetti && (
+        <Confetti
+          width={Math.min(width - 20, 480)} // Limits the width to 480px on desktop
+          height={height}
+          style={{
+            position: "absolute",
+            top: 0,
+            bottom: 0,
+            right: "auto",
+            left: "auto",
+          }}
+        />
+      )}
+      <CloseHeader handleClick={handleClick} nextSongClick={null} />
       {!selectedSong ? (
         <Box
           marginTop="10px"
@@ -226,6 +244,7 @@ const Categories = () => {
               setFailed={setFailed}
               song={song}
               onFinish={onFinish}
+              nextSongClick={isFinish ? nextSongClick : null}
             />
           </Box>
         </Box>
