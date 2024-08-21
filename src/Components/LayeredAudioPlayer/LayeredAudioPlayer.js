@@ -131,7 +131,7 @@ const LayeredAudioPlayer = ({
     if (!levelsArePlayed[activeLayerIndex]) {
       setSkipMessage(
         levelsCounter.current < 4
-          ? "אנא הפעל את הרצועה לפני דילוג"
+          ? "לחץ על נגן כדי להתחיל"
           : "אנא הפעל את הרצועה"
       );
       setLayerClickAlert(true);
@@ -253,8 +253,6 @@ const LayeredAudioPlayer = ({
     }
   };
 
-  const icon = <b>↓</b>;
-
   const rightStyle = {
     borderTopLeftRadius: "20px",
     borderBottomLeftRadius: "20px",
@@ -286,8 +284,30 @@ const LayeredAudioPlayer = ({
             textAlign="center"
             mb={2}
             fontSize={"1.2rem !important"}
+            sx={{
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+            }}
           >
-            לחץ על הקטע בשביל להוסיף שכבה נוספת {icon}
+            <svg
+              width="21"
+              height="20"
+              viewBox="0 0 21 20"
+              fill="white"
+              style={{ marginLeft: "8px" }}
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="M9.04175 2.91665C9.04175 2.11123 9.69467 1.45831 10.5001 1.45831C11.3055 1.45831 11.9584 2.11123 11.9584 2.91665C11.9584 3.72206 11.3055 4.37498 10.5001 4.37498C9.69467 4.37498 9.04175 3.72206 9.04175 2.91665Z"
+                fill="inherit"
+              />
+              <path
+                d="M5.29175 17.0833C5.29175 16.508 5.75812 16.0416 6.33341 16.0416H9.45841V7.70831L6.33341 7.70831C5.75812 7.70831 5.29175 7.24194 5.29175 6.66665C5.29175 6.09135 5.75812 5.62498 6.33341 5.62498H10.5001C10.7763 5.62498 11.0413 5.73473 11.2366 5.93008C11.432 6.12543 11.5417 6.39038 11.5417 6.66665V16.0416H14.6667C15.242 16.0416 15.7084 16.508 15.7084 17.0833C15.7084 17.6586 15.242 18.125 14.6667 18.125H6.33341C5.75812 18.125 5.29175 17.6586 5.29175 17.0833Z"
+                fill="inherit"
+              />
+            </svg>{" "}
+            לחצו על הכלים הלא פעילים על מנת להוסיפם
           </Typography>
           <Grid
             container
