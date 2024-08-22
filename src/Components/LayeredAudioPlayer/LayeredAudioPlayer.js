@@ -279,11 +279,12 @@ const LayeredAudioPlayer = ({
       <Box sx={{ minHeight: "100%" }}>
         <CardContent sx={{ paddingTop: "0" }}>
           <Typography
-            variant="h6"
+            variant="subtitle1"
             component="div"
             textAlign="center"
             mb={2}
-            fontSize={"1.2rem !important"}
+            fontSize={"0.9rem !important"}
+            lineHeight={"1.2"}
             sx={{
               display: "flex",
               justifyContent: "center",
@@ -294,7 +295,7 @@ const LayeredAudioPlayer = ({
               width="21"
               height="20"
               viewBox="0 0 21 20"
-              fill="white"
+              fill={darkMode ? "#fff" : "#282827"}
               style={{ marginLeft: "8px" }}
               xmlns="http://www.w3.org/2000/svg"
             >

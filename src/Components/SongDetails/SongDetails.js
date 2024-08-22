@@ -5,7 +5,7 @@ import React from "react";
 const SongDetails = ({ releaseDate, views, difficulty }) => {
   const theme = useTheme();
   return (
-    <Box sx={{ maxWidth: "95%", margin: "auto" }}>
+    <Box sx={{ margin: "auto", padding: "0 16px" }}>
       <Typography
         variant="h6"
         textAlign="center"

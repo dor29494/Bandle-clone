@@ -25,7 +25,7 @@ const ProgressSlider = ({ audioRef, progress, setProgress }) => {
         aria-labelledby="continuous-slider"
         sx={{
           color: theme.palette.primary.progressSliderBG,
-          width: "90%",
+          // width: "90%",
           mt: 1,
           "& .MuiSlider-thumb": {
             width: 0,
