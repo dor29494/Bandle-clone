@@ -32,6 +32,7 @@ function HowToPlay({ open, onClose }) {
               backgroundColor="black"
               component={Link}
               display={"inline-block"}
+              target="_blank"
               to="https://acum.org.il/"
             >
               <img
