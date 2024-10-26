@@ -1,5 +1,6 @@
 import { Box, Button, Dialog, DialogContent, useTheme } from "@mui/material";
 import React from "react";
+import { Link } from "react-router-dom";
 
 function HowToPlay({ open, onClose }) {
   const theme = useTheme();
@@ -26,6 +27,23 @@ function HowToPlay({ open, onClose }) {
           borderRadius={"20px"}
           borderBottom={"2px #C2C7D1"}
         >
+          <Box position={"absolute"} left={10} top={10}>
+            <Box
+              backgroundColor="black"
+              component={Link}
+              display={"inline-block"}
+              to="https://acum.org.il/"
+            >
+              <img
+                src={
+                  "https://sp-ao.shortpixel.ai/client/to_webp,q_glossy,ret_img/https://acum.org.il/wp-content/uploads/2018/07/logo.png"
+                }
+                width={"60px"}
+                height={"66px"}
+                alt="akum"
+              />
+            </Box>
+          </Box>
           <Box
             color={darkMode ? "#fff" : "#000000de"}
             fontSize={"16px"}

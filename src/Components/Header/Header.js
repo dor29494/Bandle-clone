@@ -67,7 +67,7 @@ function Header({ setDarkMode, darkMode }) {
     if (navigator.share) {
       navigator
         .share({
-          title: "שירדל - זהה את השיר",
+          title: "נחשיר - זהה את השיר",
           text: message,
         })
         .then(() => {
@@ -200,7 +200,7 @@ function Header({ setDarkMode, darkMode }) {
             color={theme.palette.primary.headerIcons}
             sx={{ textAlign: "center", fontWeight: "bold", flexShrink: 0 }}
           >
-            שירדל
+            נחשיר
           </Typography>
           <Box
             sx={{

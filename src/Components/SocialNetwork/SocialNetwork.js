@@ -21,7 +21,7 @@ function SocialNetwork({ youTubeId, spotifyId }) {
     if (navigator.share) {
       navigator
         .share({
-          title: "שירדל - זהה את השיר",
+          title: "נחשיר - זהה את השיר",
           text: message,
         })
         .then(() => {
