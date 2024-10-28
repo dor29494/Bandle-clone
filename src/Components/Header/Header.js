@@ -195,13 +195,25 @@ function Header({ setDarkMode, darkMode }) {
             </IconButton>
           </Box>
 
-          <Typography
+          {/* <img
+            src="/Logo_header.png"
+            alt="Logo"
+            style={{ width: "50px", height: "50px" }}
+          /> */}
+          <Box sx={{ display: "flex" }}>
+            <img
+              src="/Logo_header.png"
+              alt="Logo"
+              style={{ width: "100%", height: "auto" }}
+            />
+          </Box>
+          {/* <Typography
             variant="h1"
             color={theme.palette.primary.headerIcons}
             sx={{ textAlign: "center", fontWeight: "bold", flexShrink: 0 }}
           >
             נחשיר
-          </Typography>
+          </Typography> */}
           <Box
             sx={{
               display: "flex",
