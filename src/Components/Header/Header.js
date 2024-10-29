@@ -210,14 +210,13 @@ function Header({ setDarkMode, darkMode }) {
               </svg>
             </IconButton>
           </Box>
-
-          <Typography
-            variant="h1"
-            color={theme.palette.primary.headerIcons}
-            sx={{ textAlign: "center", fontWeight: "bold", flexShrink: 0 }}
-          >
-            נחשיר
-          </Typography>
+          <Box sx={{ display: "flex" }}>
+            <img
+              src="/logo_header.png"
+              alt="Logo"
+              style={{ width: "100%", height: "auto" }}
+            />
+          </Box>
           <Box
             sx={{
               display: "flex",

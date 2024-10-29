@@ -29,16 +29,13 @@ function HowToPlay({ open, onClose }) {
         >
           <Box position={"absolute"} left={10} top={10}>
             <Box
-              backgroundColor="black"
               component={Link}
               display={"inline-block"}
               target="_blank"
               to="https://acum.org.il/"
             >
               <img
-                src={
-                  "https://sp-ao.shortpixel.ai/client/to_webp,q_glossy,ret_img/https://acum.org.il/wp-content/uploads/2018/07/logo.png"
-                }
+                src={"/acum_logo.svg"}
                 width={"60px"}
                 height={"66px"}
                 alt="akum"
