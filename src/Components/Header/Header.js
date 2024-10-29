@@ -18,11 +18,13 @@ import { tooltipMessageState } from "../../state";
 import CustomSnackbar from "../CustomSnackbar/CustomSnackbar";
 import HowToPlay from "../HowToPlay/HowToPlay";
 import UserStats from "../UserStats/UserStats";
+import BetaGuide from "../BetaGuide/BetaGuide";
 function Header({ setDarkMode, darkMode }) {
   const [tooltipMessage, setTooltipMessage] =
     useRecoilState(tooltipMessageState);
   const [modalsOpen, setModalsOpen] = useState({
     howToPlay: false,
+    betaGuide: false,
     stats: false,
     settings: false,
   });
@@ -45,13 +47,27 @@ function Header({ setDarkMode, darkMode }) {
   };
 
   useEffect(() => {
+    const hasSeenBetaGuide = localStorage.getItem("hasSeenBetaGuide");
     const hasSeenHowToPlay = localStorage.getItem("hasSeenHowToPlay");
-    if (!hasSeenHowToPlay) {
+    if (!hasSeenBetaGuide) {
+      setModalsOpen((prevState) => ({ ...prevState, betaGuide: true }));
+      localStorage.setItem("hasSeenBetaGuide", "true");
+    } else if (!hasSeenHowToPlay) {
       setModalsOpen((prevState) => ({ ...prevState, howToPlay: true }));
       localStorage.setItem("hasSeenHowToPlay", "true");
     }
   }, []);
 
+  const closeBetaGuide = () => {
+    setModalsOpen((prevState) => ({
+      ...prevState,
+      betaGuide: false,
+      howToPlay: !modalsOpen.howToPlay,
+    }));
+    localStorage.setItem("hasSeenHowToPlay", "true");
+  };
+  
+  
   const toggleModal = (modalName) => {
     setModalsOpen((prevState) => ({
       ...prevState,
@@ -221,6 +237,10 @@ function Header({ setDarkMode, darkMode }) {
           </Box>
         </Toolbar>
       </AppBar>
+      <BetaGuide 
+      open={modalsOpen.betaGuide}
+      onClose={closeBetaGuide}
+      />
       <HowToPlay
         open={modalsOpen.howToPlay}
         onClose={() => toggleModal("howToPlay")}
