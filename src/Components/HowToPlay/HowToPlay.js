@@ -135,7 +135,7 @@ function HowToPlay({ open, onClose }) {
                 </svg>
               </Box>
               <Box color={"282827"} fontSize={"14px"} fontWeight={"600"}>
-                כדי להוסיף שכבה, לחץ על אחת השכבות הלא פעילות
+                כדי להוסיף שכבה, לחצו על אחת השכבות הלא פעילות
               </Box>
             </Box>
             <Box
@@ -163,7 +163,7 @@ function HowToPlay({ open, onClose }) {
                 </svg>
               </Box>
               <Box color={"282827"} fontSize={"14px"} fontWeight={"600"}>
-                הקלד את שם השיר/שם האומן ולחץ על נחש
+                הקלידו את שם השיר/שם האומן ולחצו על נחש
               </Box>
             </Box>
             <Box
@@ -193,7 +193,7 @@ function HowToPlay({ open, onClose }) {
                 </svg>
               </Box>
               <Box color={"282827"} fontSize={"14px"} fontWeight={"600"}>
-                לחצו על גלה אם אינך מזהה את השיר
+                לחצו על גלה אם אינכם מזהים את השיר
               </Box>
             </Box>
           </Box>
