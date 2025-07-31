@@ -37,9 +37,11 @@ function getIndexFromStartDate(startDate, queryIndex) {
 
 const difficultyEnum = { 1: "קל", 2: "בינוני", 3: "קשה" };
 
-const filteredSongs = shirdle_songs.filter(
-  (song) => top120songs.indexOf(song.songId) > -1
-);
+// const filteredSongs = shirdle_songs.filter(
+//   (song) => top120songs.indexOf(song.songId) > -1
+// );
+
+const filteredSongs = shirdle_songs;
 
 const DailyGame = ({ setDarkMode, darkMode }) => {
   const { width, height } = useWindowSize();
@@ -96,6 +98,7 @@ const DailyGame = ({ setDarkMode, darkMode }) => {
     const startDate = process.env.REACT_APP_START_DATE;
     const index = getIndexFromStartDate(startDate, queryIndex);
     let selectedSong = filteredSongs[index % filteredSongs.length];
+    console.log(filteredSongs.length);
     // selectedSong.difficulty = difficultyEnum[selectedSong.difficulty];
     setSong({
       id: selectedSong.songId,
